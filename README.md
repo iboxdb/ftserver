@@ -1,5 +1,8 @@
 ## Lightweight Full Text Search Server 
 
+
+![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts.png)
+
 ###dependencies
 [iBoxDB](http://www.iboxdb.com/)
 
