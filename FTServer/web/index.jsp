@@ -42,7 +42,7 @@
                 <h2 class="ui teal header" > 
                     <i class="disk outline icon" style="font-size:82px"></i> Full Text Search Server
                 </h2>
-                <form class="ui large form"  action="/s"  onsubmit="formsubmit()"  >
+                <form class="ui large form"  action="s"  onsubmit="formsubmit()"  >
                     <div class="ui label input">
                         <div class="ui action input">
                             <input name="q"  value=""  required onfocus="formfocus()" />
@@ -62,7 +62,7 @@
 
                 <div class="ui message" style="text-align: left">
                     Input [KeyWrod] to search， input [URL] to index <br> 
-                    Input [delete URL] to delete.   <a  href="/">Refresh</a> 
+                    Input [delete URL] to delete.   <a  href="./">Refresh</a> 
                     <br>
                     Recent Searches:<br>
                     <%

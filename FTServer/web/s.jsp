@@ -95,11 +95,11 @@
     <body onload="hightlight()"> 
         <div class="ui left aligned grid">
             <div class="column"  style="max-width: 600px;"> 
-                <form class="ui large form"  action="/s" onsubmit="formsubmit()">
+                <form class="ui large form"  action="s" onsubmit="formsubmit()">
                     <div class="ui label input">
 
                         <div class="ui action input">
-                            <a href="/"><i class="teal disk outline icon" style="font-size:42px"></i> </a>
+                            <a href="./"><i class="teal disk outline icon" style="font-size:42px"></i> </a>
                             <input name="q"  value="<%=name%>" required onfocus="formfocus()" />
                             <input id="btnsearch" type="submit"  class="ui teal right button" value="Search" /> 
                         </div>
