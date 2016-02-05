@@ -97,8 +97,8 @@ public class Engine {
     }
 
     private void RemoveMinMax(LinkedHashMap<Integer, KeyWord> map) {
-        for (Map.Entry<Short, KeyWord> e
-                : ((Map<Short, KeyWord>) map.clone()).entrySet()) {
+        for (Map.Entry<Integer, KeyWord> e
+                : ((Map<Integer, KeyWord>) map.clone()).entrySet()) {
             if (e.getValue().isWord && e.getValue().getKeyWord().length() < 1) {
                 map.remove(e.getKey());
             }
