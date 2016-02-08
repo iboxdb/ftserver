@@ -1,4 +1,4 @@
-## Lightweight Full Text Search Server 
+## Lightweight Full Text Search Server for Java
 
 ### Setup
 
