@@ -1,9 +1,15 @@
-## Lightweight Full Text Search Server 
+## Lightweight Full Text Search Server for Java
 
+### Setup
+
+```
+Use Netbeans to build or download WAR from Release
+Deploy to tomcat
+```
 
 ![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts.png)
 
-###dependencies
+### Dependencies
 [iBoxDB](http://www.iboxdb.com/)
 
 [FTS Engine](https://github.com/iboxdb/full-text-search)
