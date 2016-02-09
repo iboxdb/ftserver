@@ -19,7 +19,7 @@ public class Page {
 
     public UString content;
 
-    public static Page get(String url, HashSet<String> subUrls) {
+    public static Page get(String url) {
         try {
             if (url == null || url.length() > 100 || url.length() < 8) {
                 return null;
@@ -62,15 +62,7 @@ public class Page {
             doc.$("style").text("");
             doc.$("Script").text("");
             doc.$("Style").text("");
-
-            if (subUrls != null) {
-                for (Jerry a : doc.$("a")) {
-                    String ss = getFullUrl(url, a.attr("href"));
-                    if (ss != null) {
-                        subUrls.add(ss);
-                    }
-                }
-            }
+         
             page.title = doc.$("title").text();
             if (page.title == null) {
                 page.title = doc.$("Title").text();
@@ -131,73 +123,7 @@ public class Page {
             return null;
         }
     }
-
-    private static String getFullUrl(String base, String url) {
-        try {
-            if (base == null || url == null) {
-                return null;
-            }
-            base = base.trim().toLowerCase();
-            url = url.trim().toLowerCase();
-            if (base.length() < 2 || url.length() < 2) {
-                return null;
-            }
-            int si = url.indexOf("#");
-            if (si > 0) {
-                url = url.substring(0, si);
-            }
-            if (url.startsWith("./")) {
-                url = url.substring(2);
-            }
-
-            if (url.startsWith("javascript")) {
-                return null;
-            }
-            if (url.contains("download")) {
-                return null;
-            }
-
-            if (url.startsWith("http:") || url.startsWith("https:")) {
-                return url;
-            }
-            if ((!base.startsWith("http:")) && (!base.startsWith("https:"))) {
-                return null;
-            }
-
-            int t = base.indexOf("//");
-            t = base.indexOf("/", t + 2);
-            String domain = base;
-            if (t > 0) {
-                domain = domain.substring(0, t);
-            }
-            if (!domain.endsWith("/")) {
-                domain += "/";
-            }
-            if (url.startsWith("/")) {
-                url = domain + url.substring(1);
-            } else {
-                url = domain + url;
-            }
-
-            t = url.lastIndexOf("/");
-            if (t > 0) {
-                String tu = url.substring(t);
-                if (tu.contains(".")) {
-                    if ((!tu.contains(".html")) && (!tu.contains(".htm"))
-                            && (!tu.contains(".shtml"))
-                            && (!tu.contains(".asp"))
-                            && (!tu.contains(".aspx")) && (!tu.contains(".php"))
-                            && (!tu.contains(".jsp"))) {
-                        return null;
-                    }
-                }
-            }
-            return url;
-        } catch (Throwable ex) {
-            return null;
-        }
-    }
-
+ 
     @NotColumn
     public KeyWord keyWord;
 }

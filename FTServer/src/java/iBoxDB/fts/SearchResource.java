@@ -29,10 +29,8 @@ public class SearchResource {
         }
         if (isDelete) {
             return "deleted";
-        }
-        HashSet<String> suburls = new HashSet< String>();
-
-        Page p = Page.get(url, suburls);
+        } 
+        Page p = Page.get(url);
         if (p == null) {
             return "temporarily unreachable";
         } else {
