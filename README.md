@@ -3,7 +3,7 @@
 ### Setup
 
 ```
-Use Netbeans to build or download WAR from Release
+Use Netbeans to build or download fts.zip(WAR) from Release
 Deploy to tomcat
 ```
 
