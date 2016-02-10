@@ -4,32 +4,25 @@ package iBoxDB.fulltext;
 import iBoxDB.LocalServer.DatabaseConfig;
 import iBoxDB.LocalServer.NotColumn;
 
-public class KeyWord {
+public abstract class KeyWord {
 
     public final static int MAX_WORD_LENGTH = 16;
 
     public static void config(DatabaseConfig c) {
 
         // English Language or Word (max=16)              
-        c.EnsureTable(KeyWord.class, "E", "K(" + MAX_WORD_LENGTH + ")", "I");
+        c.EnsureTable(KeyWordE.class, "E", "K(" + MAX_WORD_LENGTH + ")", "I");
 
         // Non-English Language or Character
-        c.EnsureTable(KeyWord.class, "N", "K(1)", "I", "P");
+        c.EnsureTable(KeyWordN.class, "N", "K", "I", "P");
 
-    }
-
-    //Key Word
-    public String K;
-
-    @NotColumn
-    public String getKeyWord() {
-        return K;
     }
 
     @NotColumn
-    public void setKeyWord(String k) {
-        K = k;
-    }
+    public abstract Object getKeyWord();
+
+    @NotColumn
+    public abstract void setKeyWord(Object k);
 
     //Position
     public int P;
@@ -58,13 +51,12 @@ public class KeyWord {
     }
 
     @NotColumn
-    public boolean isWord;
-    @NotColumn
     public KeyWord previous;
 
     @Override
     public String toString() {
-        return K + ", Pos=" + P + ", ID=" + I + " " + (isWord ? "1" : "0");
+        return getKeyWord() + ", Pos=" + P + ", ID=" + I + " "
+                + (this instanceof KeyWordE ? "E" : "N");
     }
 
     public String toFullString() {

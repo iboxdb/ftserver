@@ -21,8 +21,7 @@ class Util {
                 k = null;
             } else if (sUtil.isWord(c)) {
                 if (k == null && c != '-' && c != '#') {
-                    k = new KeyWord();
-                    k.isWord = true;
+                    k = new KeyWordE();
                     k.setID(id);
                     k.setKeyWord("");
                     k.setPosition(i);
@@ -34,10 +33,9 @@ class Util {
                 if (k != null) {
                     kws.put(k.getPosition(), k);
                 }
-                k = new KeyWord();
-                k.isWord = false;
+                k = new KeyWordN();
                 k.setID(id);
-                k.setKeyWord(Character.toString(c));
+                k.setKeyWord(c);
                 k.setPosition(i);
                 kws.put(k.getPosition(), k);
                 k = null;

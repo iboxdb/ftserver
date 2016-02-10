@@ -20,22 +20,17 @@ public class Engine {
 
         char[] cs = sUtil.clear(str);
         LinkedHashMap<Integer, KeyWord> map = util.fromString(id, cs);
-        RemoveMinMax(map);
 
         HashSet<String> words = new HashSet<String>();
         for (KeyWord kw : map.values()) {
             Binder binder;
-            if (kw.isWord) {
-                if (words.contains(kw.getKeyWord())) {
+            if (kw instanceof KeyWordE) {
+                if (words.contains(kw.getKeyWord().toString())) {
                     continue;
                 }
-                words.add(kw.getKeyWord());
+                words.add(kw.getKeyWord().toString());
                 binder = box.d("E", kw.getKeyWord(), kw.getID());
             } else {
-                if (map.get(kw.getPosition() - 1) == null
-                        && map.get(kw.getPosition() + 1) == null) {
-                    continue;
-                }
                 binder = box.d("N", kw.getKeyWord(), kw.getID(), kw.getPosition());
             }
             if (isRemove) {
@@ -88,7 +83,6 @@ public class Engine {
     public Iterable<KeyWord> search(final Box box, String str) {
         char[] cs = sUtil.clear(str);
         LinkedHashMap<Integer, KeyWord> map = util.fromString(-1, cs);
-        RemoveMinMax(map);
 
         if (map.size() > KeyWord.MAX_WORD_LENGTH || map.isEmpty()) {
             return new ArrayList();
@@ -96,23 +90,10 @@ public class Engine {
         return search(box, map.values().toArray(new KeyWord[0]));
     }
 
-    private void RemoveMinMax(LinkedHashMap<Integer, KeyWord> map) {
-        for (Map.Entry<Integer, KeyWord> e
-                : ((Map<Integer, KeyWord>) map.clone()).entrySet()) {
-            if (e.getValue().isWord && e.getValue().getKeyWord().length() < 1) {
-                map.remove(e.getKey());
-            }
-            if (e.getValue().isWord && e.getValue().getKeyWord().length()
-                    > KeyWord.MAX_WORD_LENGTH) {
-                map.remove(e.getKey());
-            }
-        }
-    }
-
     // Base
     private Iterable<KeyWord> search(final Box box, final KeyWord[] kws) {
         if (kws.length == 1) {
-            return search(box, kws[0], (KeyWord) null);
+            return search(box, kws[0], (KeyWord) null, false);
         }
 
         return search(box, kws[kws.length - 1],
@@ -146,8 +127,7 @@ public class Engine {
                                 }
                             }
                             r1_id = r1_con.getID();
-                            r1_con.isWord = isWord;
-                            r1 = search(box, nw, r1_con).iterator();
+                            r1 = search(box, nw, r1_con, isWord).iterator();
                             if (r1.hasNext()) {
                                 return true;
                             }
@@ -168,22 +148,22 @@ public class Engine {
 
     }
 
-    private Iterable<KeyWord> search(Box box, KeyWord kw, KeyWord condition) {
+    private Iterable<KeyWord> search(Box box, KeyWord kw, KeyWord condition, boolean asWord) {
 
-        if (kw.isWord) {
+        if (kw instanceof KeyWordE) {
             if (condition == null) {
-                return box.select(KeyWord.class, "from E where K==?", kw.getKeyWord());
+                return (Iterable<KeyWord>) (Object) box.select(KeyWordE.class, "from E where K==?", kw.getKeyWord());
             } else {
-                return box.select(KeyWord.class, "from E where K==? &  I==?",
+                return (Iterable<KeyWord>) (Object) box.select(KeyWordE.class, "from E where K==? &  I==?",
                         kw.getKeyWord(), condition.getID());
             }
         } else if (condition == null) {
-            return box.select(KeyWord.class, "from N where K==?", kw.getKeyWord());
-        } else if (condition.isWord) {
-            return box.select(KeyWord.class, "from N where K==? &  I==?",
+            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==?", kw.getKeyWord());
+        } else if (asWord) {
+            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==? &  I==?",
                     kw.getKeyWord(), condition.getID());
         } else {
-            return box.select(KeyWord.class, "from N where K==? & I==? & P==?",
+            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==? & I==? & P==?",
                     kw.getKeyWord(), condition.getID(), (condition.getPosition() + 1));
         }
     }

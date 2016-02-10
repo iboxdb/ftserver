@@ -62,7 +62,7 @@ public class Page {
             doc.$("style").text("");
             doc.$("Script").text("");
             doc.$("Style").text("");
-         
+
             page.title = doc.$("title").text();
             if (page.title == null) {
                 page.title = doc.$("Title").text();
@@ -116,14 +116,15 @@ public class Page {
             page.content = UString.S((content
                     + " " + page.url
                     + " " + page.description).replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " "));
+                    .replaceAll(">", " ").replaceAll("\\$", " ")
+                    .replaceAll("　", " "));
 
             return page;
         } catch (Throwable e) {
             return null;
         }
     }
- 
+
     @NotColumn
     public KeyWord keyWord;
 }

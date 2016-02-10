@@ -41,6 +41,9 @@ class StringUtil {
             if (set.contains(cs[i])) {
                 cs[i] = ' ';
             }
+            if (cs[i] == 0) {
+                cs[i] = ' ';
+            }
         }
         return cs;
     }
@@ -65,7 +68,8 @@ class StringUtil {
         int end = -1;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ps.length; i++) {
-            if ((ps[i].getPosition() + ps[i].getKeyWord().length()) < end) {
+            if ((ps[i].getPosition() + ps[i].getKeyWord()
+                    .toString().length()) < end) {
                 continue;
             }
             start = ps[i].getPosition();
