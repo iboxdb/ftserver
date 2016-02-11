@@ -19,10 +19,10 @@ public class Engine {
         }
 
         char[] cs = sUtil.clear(str);
-        LinkedHashMap<Integer, KeyWord> map = util.fromString(id, cs);
+        ArrayList<KeyWord> map = util.fromString(id, cs, true);
 
         HashSet<String> words = new HashSet<String>();
-        for (KeyWord kw : map.values()) {
+        for (KeyWord kw : map) {
             Binder binder;
             if (kw instanceof KeyWordE) {
                 if (words.contains(kw.getKeyWord().toString())) {
@@ -82,12 +82,12 @@ public class Engine {
 
     public Iterable<KeyWord> search(final Box box, String str) {
         char[] cs = sUtil.clear(str);
-        LinkedHashMap<Integer, KeyWord> map = util.fromString(-1, cs);
+        ArrayList<KeyWord> map = util.fromString(-1, cs, false);
 
         if (map.size() > KeyWord.MAX_WORD_LENGTH || map.isEmpty()) {
             return new ArrayList();
         }
-        return search(box, map.values().toArray(new KeyWord[0]));
+        return search(box, map.toArray(new KeyWord[0]));
     }
 
     // Base

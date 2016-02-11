@@ -3,7 +3,9 @@ package iBoxDB.fts;
 import iBoxDB.LocalServer.NotColumn;
 import iBoxDB.LocalServer.UString;
 import iBoxDB.fulltext.KeyWord;
-import java.util.HashSet;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.zip.GZIPInputStream;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
@@ -19,6 +21,22 @@ public class Page {
 
     public UString content;
 
+    public static byte[] decompress(byte[] is) {
+        try {
+            GZIPInputStream gis = new GZIPInputStream(new java.io.ByteArrayInputStream(is));
+            java.io.ByteArrayOutputStream os = new java.io.ByteArrayOutputStream();
+            int count;
+            byte data[] = new byte[1024 * 8];
+            while ((count = gis.read(data, 0, 1024 * 8)) != -1) {
+                os.write(data, 0, count);
+            }
+            gis.close();
+            return os.toByteArray();
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
     public static Page get(String url) {
         try {
             if (url == null || url.length() > 100 || url.length() < 8) {
@@ -33,10 +51,27 @@ public class Page {
             if (response.statusCode() != 200) {
                 return null;
             }
-            try {
-                if (response.charset() == null) {
-                    String t = new String(response.bodyBytes());
-                    String cs = "charset=";
+
+            byte[] result = response.bodyBytes();
+            if ("gzip".equalsIgnoreCase(response.contentEncoding())) {
+                result = decompress(result);
+            }
+            String charset = response.charset();
+            if (charset == null) {
+
+                ArrayList<Charset> tests = new ArrayList<Charset>();
+                tests.add(Charset.forName("UTF-8"));
+                tests.add(Charset.forName("ISO-8859-1"));
+                tests.add(Charset.forName("UTF-16"));
+                try {
+                    tests.add(Charset.forName("GBK"));
+                } catch (Throwable e) {
+
+                }
+
+                for (Charset cset : tests) {
+                    String t = new String(result, cset);
+                    final String cs = "charset=";
                     int p = t.indexOf(cs);
                     if (p > 0) {
                         int e = t.indexOf("\"", p + cs.length() + 2);
@@ -45,19 +80,21 @@ public class Page {
 
                             t = t.replaceAll("\"", "").trim();
 
-                            if (t.length() < 8) {
-                                response.charset(t);
+                            if (t.length() < 10) {
+                                charset = t;
+                                break;
                             }
                         }
                     }
                 }
-            } catch (Throwable e) {
             }
-            if (response.charset() == null) {
-                response.charset("utf-8");
+            if (charset == null) {
+                charset = "UTF-8";
             }
+            charset = charset.trim();
+            String resultS = new String(result, charset);
 
-            Jerry doc = jerry(response.bodyText());
+            Jerry doc = jerry(resultS);
             doc.$("script").text("");
             doc.$("style").text("");
             doc.$("Script").text("");
@@ -100,7 +137,7 @@ public class Page {
             doc.$("Script").text("");
             doc.$("Style").text("");
 
-            String content = doc.text();
+            String content = doc.text().trim();
             if (content.length() < 10) {
                 return null;
             }

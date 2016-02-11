@@ -14,6 +14,7 @@ class StringUtil {
         for (char c : s.toCharArray()) {
             set.add(c);
         }
+        set.add((char) 0);
     }
 
     public boolean isWord(char c) {
@@ -32,6 +33,7 @@ class StringUtil {
         if (c >= 0xc0 && c <= 0xff) {
             return true;
         }
+        //Korean [uAC00-uD7A3]
         return c == '-' || c == '#';
     }
 
@@ -40,10 +42,7 @@ class StringUtil {
         for (int i = 0; i < cs.length; i++) {
             if (set.contains(cs[i])) {
                 cs[i] = ' ';
-            }
-            if (cs[i] == 0) {
-                cs[i] = ' ';
-            }
+            } 
         }
         return cs;
     }

@@ -7,16 +7,22 @@ class Util {
 
     final StringUtil sUtil = new StringUtil();
 
-    public LinkedHashMap<Integer, KeyWord> fromString(long id, char[] str) {
+    public ArrayList<KeyWord> fromString(long id, char[] str, boolean includeOF) {
 
-        LinkedHashMap<Integer, KeyWord> kws = new LinkedHashMap<Integer, KeyWord>();
+        ArrayList<KeyWord> kws = new ArrayList<KeyWord>();
 
-        KeyWord k = null;
+        KeyWordE k = null;
         for (int i = 0; i < str.length; i++) {
             char c = str[i];
             if (c == ' ') {
                 if (k != null) {
-                    kws.put(k.getPosition(), k);
+                    kws.add(k);
+                    if (includeOF) {
+                        k = k.getOriginalForm();
+                        if (k != null) {
+                            kws.add(k);
+                        }
+                    }
                 }
                 k = null;
             } else if (sUtil.isWord(c)) {
@@ -31,14 +37,20 @@ class Util {
                 }
             } else {
                 if (k != null) {
-                    kws.put(k.getPosition(), k);
+                    kws.add(k);
+                    if (includeOF) {
+                        k = k.getOriginalForm();
+                        if (k != null) {
+                            kws.add(k);
+                        }
+                    }
                 }
-                k = new KeyWordN();
-                k.setID(id);
-                k.setKeyWord(c);
-                k.setPosition(i);
-                kws.put(k.getPosition(), k);
                 k = null;
+                KeyWordN n = new KeyWordN();
+                n.setID(id);
+                n.setKeyWord(c);
+                n.setPosition(i);
+                kws.add(n);
             }
         }
 
