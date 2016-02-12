@@ -11,7 +11,7 @@ public class SListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
-        String path = System.getProperty("user.home") + "/ftsdata2/";
+        String path = System.getProperty("user.home") + "/ftsdata3/";
         new File(path).mkdirs();
 
         String tmpPath = sce.getServletContext().getRealPath("/")

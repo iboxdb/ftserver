@@ -127,6 +127,9 @@
                             if (content.length() < 200) {
                                 content += p.description;
                             }
+                            if (content.length() < 200) {
+                                content += p.title;
+                            }
                         }
                 %>
                 <h3>

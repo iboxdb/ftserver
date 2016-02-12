@@ -29,7 +29,7 @@ public class Engine {
                     continue;
                 }
                 words.add(kw.getKeyWord().toString());
-                binder = box.d("E", kw.getKeyWord(), kw.getID());
+                binder = box.d("E", kw.getKeyWord(), kw.getID(), kw.getPosition());
             } else {
                 binder = box.d("N", kw.getKeyWord(), kw.getID(), kw.getPosition());
             }
@@ -152,20 +152,85 @@ public class Engine {
 
         if (kw instanceof KeyWordE) {
             if (condition == null) {
-                return (Iterable<KeyWord>) (Object) box.select(KeyWordE.class, "from E where K==?", kw.getKeyWord());
+                return new Index2KeyWordEIterable(box.select(Object.class, "from E where K==?", kw.getKeyWord()));
             } else {
-                return (Iterable<KeyWord>) (Object) box.select(KeyWordE.class, "from E where K==? &  I==?",
-                        kw.getKeyWord(), condition.getID());
+                return new Index2KeyWordEIterable(box.select(Object.class, "from E where K==? &  I==?",
+                        kw.getKeyWord(), condition.getID()));
             }
         } else if (condition == null) {
-            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==?", kw.getKeyWord());
+            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==?", kw.getKeyWord()));
         } else if (asWord) {
-            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==? &  I==?",
-                    kw.getKeyWord(), condition.getID());
+            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? &  I==?",
+                    kw.getKeyWord(), condition.getID()));
         } else {
-            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from N where K==? & I==? & P==?",
-                    kw.getKeyWord(), condition.getID(), (condition.getPosition() + 1));
+            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? & I==? & P==?",
+                    kw.getKeyWord(), condition.getID(), (condition.getPosition() + 1)));
         }
+    }
+
+    private static final class Index2KeyWordEIterable extends Index2KeyWordIterable {
+
+        public Index2KeyWordEIterable(Iterable<Object> findex) {
+            super(findex);
+        }
+
+        @Override
+        protected KeyWord create() {
+            return new KeyWordE();
+        }
+    }
+
+    private static final class Index2KeyWordNIterable extends Index2KeyWordIterable {
+
+        public Index2KeyWordNIterable(Iterable<Object> findex) {
+            super(findex);
+        }
+
+        @Override
+        protected KeyWord create() {
+            return new KeyWordN();
+        }
+
+    }
+
+    // faster than box.select(KeyWordX.class,...);
+    private static abstract class Index2KeyWordIterable
+            implements Iterable<KeyWord> {
+
+        final Iterator<KeyWord> iterator;
+
+        protected Index2KeyWordIterable(final Iterable<Object> findex) {
+            iterator = new EngineIterator<KeyWord>() {
+                final Iterator<Object[]> index = (Iterator<Object[]>) (Object) findex.iterator();
+                KeyWord cache;
+
+                @Override
+                public boolean hasNext() {
+                    if (index.hasNext()) {
+                        Object[] os = index.next();
+                        cache = create();
+                        cache.setKeyWord(os[0]);
+                        cache.I = (Long) os[1];
+                        cache.P = (Integer) os[2];
+                        return true;
+                    }
+                    return false;
+                }
+
+                @Override
+                public KeyWord next() {
+                    return cache;
+                }
+            };
+        }
+
+        @Override
+        public Iterator<KeyWord> iterator() {
+            return iterator;
+        }
+
+        protected abstract KeyWord create();
+
     }
 
     private static abstract class EngineIterator<E> implements java.util.Iterator<E> {

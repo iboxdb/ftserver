@@ -138,7 +138,7 @@ public class Page {
             doc.$("Style").text("");
 
             String content = doc.text().trim();
-            if (content.length() < 10) {
+            if (content.length() < 50) {
                 return null;
             }
             if (content.length() > 5000) {
