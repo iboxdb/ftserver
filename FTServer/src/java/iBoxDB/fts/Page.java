@@ -146,6 +146,8 @@ public class Page {
             }
             content = content.replaceAll("\r", " ")
                     .replaceAll("\n", " ")
+                    .replaceAll("　", " ")
+                    .replaceAll("   ", " ")
                     .replaceAll("   ", " ")
                     .replaceAll("  ", " ")
                     .replaceAll("  ", " ").trim();
