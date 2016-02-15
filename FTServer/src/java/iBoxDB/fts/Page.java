@@ -56,9 +56,14 @@ public class Page {
             if ("gzip".equalsIgnoreCase(response.contentEncoding())) {
                 result = decompress(result);
             }
+            // -17 -69 -65
             String charset = response.charset();
             if (charset == null) {
-
+                if (result[0] == -17 && result[1] == -69 && result[2] == -65) {
+                    charset = "UTF-8";
+                }
+            }
+            if (charset == null) {
                 ArrayList<Charset> tests = new ArrayList<Charset>();
                 tests.add(Charset.forName("UTF-8"));
                 tests.add(Charset.forName("ISO-8859-1"));
