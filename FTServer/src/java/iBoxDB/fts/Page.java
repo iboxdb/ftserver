@@ -143,19 +143,20 @@ public class Page {
             doc.$("Style").text("");
 
             String content = doc.text().trim();
+            content = content.replaceAll("\r", " ")
+                    .replaceAll("\n", " ")
+                    .replaceAll("�", " ")
+                    .replaceAll("　", " ")
+                    .replaceAll("   ", " ")
+                    .replaceAll("   ", " ")
+                    .replaceAll("  ", " ")
+                    .replaceAll("  ", " ").trim();
             if (content.length() < 50) {
                 return null;
             }
             if (content.length() > 5000) {
                 content = content.substring(0, 5000);
             }
-            content = content.replaceAll("\r", " ")
-                    .replaceAll("\n", " ")
-                    .replaceAll("　", " ")
-                    .replaceAll("   ", " ")
-                    .replaceAll("   ", " ")
-                    .replaceAll("  ", " ")
-                    .replaceAll("  ", " ").trim();
 
             page.content = UString.S((content
                     + " " + page.url
