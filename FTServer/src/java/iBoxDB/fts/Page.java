@@ -120,7 +120,8 @@ public class Page {
                 page.title = page.title.substring(0, 80);
             }
             page.title = page.title.replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ");
+                    .replaceAll(">", " ").replaceAll("\\$", " ")
+                    .replaceAll("�", " ");
 
             page.description = doc.$("meta[name='description']").attr("content");
             if (page.description == null) {
@@ -133,7 +134,8 @@ public class Page {
                 page.description = page.description.substring(0, 200);
             }
             page.description = page.description.replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ");
+                    .replaceAll(">", " ").replaceAll("\\$", " ")
+                    .replaceAll("�", " ");
 
             doc = jerry(doc.text().replaceAll("&lt;", "<")
                     .replaceAll("&gt;", ">"));
