@@ -35,12 +35,8 @@ public class Page {
     }
 
     @NotColumn
-    public String getShortDescription() {
-        int end = description.length() - title.length();
-        if (end > 100) {
-            return description.substring(0, end);
-        }
-        return description;
+    public String rankUpDescription() {
+        return description + " " + title;
     }
 
     private static final Random cran = new Random();
@@ -181,7 +177,6 @@ public class Page {
             page.description = page.description.replaceAll("<", " ")
                     .replaceAll(">", " ").replaceAll("\\$", " ")
                     .replaceAll("�", " ");
-            page.description += (" " + page.title);
 
             doc = jerry(doc.text().replaceAll("&lt;", "<")
                     .replaceAll("&gt;", ">"));

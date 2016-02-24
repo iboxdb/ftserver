@@ -22,7 +22,7 @@ public class SearchResource {
         try (Box box = SDB.search_db.cube()) {
             for (Page p : box.select(Page.class, "from Page where url==?", url)) {
                 engine.indexText(box, p.id, p.content.toString(), true);
-                engine.indexText(box, p.rankUpId(), p.description, true);
+                engine.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
                 box.d("Page", p.id).delete();
                 break;
             }
@@ -39,7 +39,7 @@ public class SearchResource {
                 p.id = box.newId();
                 box.d("Page").insert(p);
                 engine.indexText(box, p.id, p.content.toString(), false);
-                engine.indexText(box, p.rankUpId(), p.description, false);
+                engine.indexText(box, p.rankUpId(), p.rankUpDescription(), false);
                 CommitResult cr = box.commit();
                 cr.Assert(cr.getErrorMsg(box));
             }

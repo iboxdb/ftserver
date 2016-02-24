@@ -125,14 +125,14 @@
                         if (pages.size() == 1 || p.keyWord == null) {
                             content = p.content.toString();
                         } else if (p.id != p.keyWord.getID()) {
-                            content = p.getShortDescription();
+                            content = p.description;
                         } else {
                             content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
                             if (content.length() < 100) {
                                 content += p.getRandomContent();
                             }
                             if (content.length() < 100) {
-                                content += p.getShortDescription();
+                                content += p.description;
                             }
                             if (content.length() > 200) {
                                 content = content.substring(0, 200);
