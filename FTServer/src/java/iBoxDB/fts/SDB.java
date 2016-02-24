@@ -23,7 +23,7 @@ public class SDB {
                 = (int) server.getConfig().DBConfig.mb(2);
         new Engine().Config(server.getConfig().DBConfig);
         server.getConfig().ensureTable(Page.class, "Page", "id");
-        server.getConfig().ensureIndex(Page.class, "Page", true, "url(100)");
+        server.getConfig().ensureIndex(Page.class, "Page", true, "url(" + Page.MAX_URL_LENGTH + ")");
 
         search_db = server.open();
 

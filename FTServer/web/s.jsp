@@ -21,7 +21,9 @@
     Box box = SDB.search_db.cube();
     try {
         for (KeyWord kw : SearchResource.engine.searchDistinct(box, name)) {
-            Page p = box.d("Page", kw.getID()).select().select(Page.class);
+            long id = kw.getID();
+            id = Page.rankDownId(id);
+            Page p = box.d("Page", id).select().select(Page.class);
             p.keyWord = kw;
             pages.add(p);
             if (pages.size() > 100) {
@@ -120,15 +122,14 @@
             <div class="ten wide column" style="max-width: 600px;">
                 <% for (Page p : pages) {
                         String content = null;
-                        if (pages.size() == 1 || p.keyWord == null) {
+                        if (p.id != p.keyWord.getID()) {
+                            content = p.description;
+                        } else if (pages.size() == 1 || p.keyWord == null) {
                             content = p.content.toString();
                         } else {
                             content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
                             if (content.length() < 200) {
                                 content += p.description;
-                            }
-                            if (content.length() < 200) {
-                                content += p.title;
                             }
                         }
                 %>

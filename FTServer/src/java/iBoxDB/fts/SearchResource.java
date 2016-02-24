@@ -22,6 +22,7 @@ public class SearchResource {
         try (Box box = SDB.search_db.cube()) {
             for (Page p : box.select(Page.class, "from Page where url==?", url)) {
                 engine.indexText(box, p.id, p.content.toString(), true);
+                engine.indexText(box, p.rankUpId(), p.description, true);
                 box.d("Page", p.id).delete();
                 break;
             }
@@ -29,7 +30,7 @@ public class SearchResource {
         }
         if (isDelete) {
             return "deleted";
-        } 
+        }
         Page p = Page.get(url);
         if (p == null) {
             return "temporarily unreachable";
@@ -38,6 +39,7 @@ public class SearchResource {
                 p.id = box.newId();
                 box.d("Page").insert(p);
                 engine.indexText(box, p.id, p.content.toString(), false);
+                engine.indexText(box, p.rankUpId(), p.description, false);
                 CommitResult cr = box.commit();
                 cr.Assert(cr.getErrorMsg(box));
             }

@@ -13,6 +13,8 @@ import static jodd.jerry.Jerry.jerry;
 
 public class Page {
 
+    public final static int MAX_URL_LENGTH = 200;
+
     public long id;
     public String url;
 
@@ -20,6 +22,14 @@ public class Page {
     public String description;
 
     public UString content;
+
+    public long rankUpId() {
+        return id | (1L << 60);
+    }
+
+    public static long rankDownId(long id) {
+        return id & (~(1L << 60));
+    }
 
     public static byte[] decompress(byte[] is) {
         try {
@@ -39,7 +49,7 @@ public class Page {
 
     public static Page get(String url) {
         try {
-            if (url == null || url.length() > 100 || url.length() < 8) {
+            if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
             Page page = new Page();
@@ -136,6 +146,7 @@ public class Page {
             page.description = page.description.replaceAll("<", " ")
                     .replaceAll(">", " ").replaceAll("\\$", " ")
                     .replaceAll("�", " ");
+            page.description += (" " + page.title);
 
             doc = jerry(doc.text().replaceAll("&lt;", "<")
                     .replaceAll("&gt;", ">"));
@@ -152,19 +163,17 @@ public class Page {
                     .replaceAll("   ", " ")
                     .replaceAll("   ", " ")
                     .replaceAll("  ", " ")
-                    .replaceAll("  ", " ").trim();
+                    .replaceAll("  ", " ")
+                    .replaceAll("<", " ")
+                    .replaceAll(">", " ").replaceAll("\\$", " ")
+                    .replaceAll("　", " ").trim();
             if (content.length() < 50) {
                 return null;
             }
             if (content.length() > 5000) {
                 content = content.substring(0, 5000);
             }
-
-            page.content = UString.S((content
-                    + " " + page.url
-                    + " " + page.description).replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ")
-                    .replaceAll("　", " "));
+            page.content = UString.S(content + " " + page.url);
 
             return page;
         } catch (Throwable e) {
