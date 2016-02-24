@@ -5,6 +5,7 @@ import iBoxDB.LocalServer.UString;
 import iBoxDB.fulltext.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.zip.GZIPInputStream;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
@@ -23,14 +24,44 @@ public class Page {
 
     public UString content;
 
+    @NotColumn
     public long rankUpId() {
         return id | (1L << 60);
     }
 
+    @NotColumn
     public static long rankDownId(long id) {
         return id & (~(1L << 60));
     }
 
+    @NotColumn
+    public String getShortDescription() {
+        int end = description.length() - title.length();
+        if (end > 100) {
+            return description.substring(0, end);
+        }
+        return description;
+    }
+
+    private static final Random cran = new Random();
+
+    @NotColumn
+    public String getRandomContent() {
+        int len = content.toString().length() - 100;
+        if (len <= 0) {
+            return content.toString();
+        }
+        int s = cran.nextInt(len);
+        if (s < 0) {
+            s = 0;
+        }
+        if (s > len) {
+            s = len;
+        }
+        return content.toString().substring(s);
+    }
+
+    @NotColumn
     public static byte[] decompress(byte[] is) {
         try {
             GZIPInputStream gis = new GZIPInputStream(new java.io.ByteArrayInputStream(is));
@@ -47,6 +78,7 @@ public class Page {
         }
     }
 
+    @NotColumn
     public static Page get(String url) {
         try {
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
@@ -132,6 +164,9 @@ public class Page {
             page.title = page.title.replaceAll("<", " ")
                     .replaceAll(">", " ").replaceAll("\\$", " ")
                     .replaceAll("�", " ");
+
+            doc.$("title").text("");
+            doc.$("Title").text("");
 
             page.description = doc.$("meta[name='description']").attr("content");
             if (page.description == null) {

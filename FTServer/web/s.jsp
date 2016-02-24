@@ -122,14 +122,20 @@
             <div class="ten wide column" style="max-width: 600px;">
                 <% for (Page p : pages) {
                         String content = null;
-                        if (p.id != p.keyWord.getID()) {
-                            content = p.description;
-                        } else if (pages.size() == 1 || p.keyWord == null) {
+                        if (pages.size() == 1 || p.keyWord == null) {
                             content = p.content.toString();
+                        } else if (p.id != p.keyWord.getID()) {
+                            content = p.getShortDescription();
                         } else {
                             content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
-                            if (content.length() < 200) {
-                                content += p.description;
+                            if (content.length() < 100) {
+                                content += p.getRandomContent();
+                            }
+                            if (content.length() < 100) {
+                                content += p.getShortDescription();
+                            }
+                            if (content.length() > 200) {
+                                content = content.substring(0, 200);
                             }
                         }
                 %>
