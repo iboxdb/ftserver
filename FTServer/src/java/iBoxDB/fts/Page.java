@@ -131,6 +131,9 @@ public class Page {
                     }
                 }
             }
+            if ("gb2312".equalsIgnoreCase(charset)) {
+                charset = "GBK";
+            }
             if (charset == null) {
                 charset = "UTF-8";
             }
