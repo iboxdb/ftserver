@@ -126,6 +126,9 @@
                             content = p.content.toString();
                         } else if (p.id != p.keyWord.getID()) {
                             content = p.description;
+                            if (content.length() < 20) {
+                                content += p.getRandomContent();
+                            }
                         } else {
                             content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
                             if (content.length() < 100) {
