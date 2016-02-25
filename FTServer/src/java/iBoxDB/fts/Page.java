@@ -54,7 +54,13 @@ public class Page {
         if (s > len) {
             s = len;
         }
-        return content.toString().substring(s);
+
+        int end = s + 200;
+        if (end > content.toString().length()) {
+            end = content.toString().length();
+        }
+
+        return content.toString().substring(s, end);
     }
 
     @NotColumn
