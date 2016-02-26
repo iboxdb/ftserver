@@ -44,7 +44,7 @@ public class Page {
     @NotColumn
     public String getRandomContent() {
         int len = content.toString().length() - 100;
-        if (len <= 0) {
+        if (len <= 20) {
             return content.toString();
         }
         int s = cran.nextInt(len);

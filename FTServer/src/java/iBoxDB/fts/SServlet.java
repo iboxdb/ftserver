@@ -23,7 +23,7 @@ public class SServlet extends HttpServlet {
         }
         name = name.replaceAll("<", " ").replaceAll(">", " ")
                 .replaceAll("\"", " ").replaceAll(",", " ")
-                .replaceAll("\\$", " ").toLowerCase().trim();
+                .replaceAll("\\$", " ").trim();
 
         final AsyncContext ctx = request.startAsync(request, response);
         ctx.setTimeout(30 * 1000);
