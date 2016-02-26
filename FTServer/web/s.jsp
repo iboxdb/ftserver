@@ -61,7 +61,7 @@
             .stext{
 
             }
-            .redtext{
+            .rt{
                 color: red;
             }
         </style> 
@@ -77,11 +77,11 @@
                     if (kw.length < 1) {
                         continue;
                     }
-                    var fontText = "<font class='redtext'>";
-                    if (fontText.indexOf(kw) > -1) {
+                    var fontText = "<font class='rt'>";
+                    if (fontText.indexOf(kw.toLowerCase()) > -1) {
                         continue;
                     }
-                    if ("</font>".indexOf(kw) > -1) {
+                    if ("</font>".indexOf(kw.toLowerCase()) > -1) {
                         continue;
                     }
                     for (var j = 0; j < ts.length; j++) {
