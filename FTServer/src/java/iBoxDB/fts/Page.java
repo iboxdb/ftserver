@@ -14,7 +14,7 @@ import static jodd.jerry.Jerry.jerry;
 
 public class Page {
 
-    public final static int MAX_URL_LENGTH = 200;
+    public final static int MAX_URL_LENGTH = 100;
 
     public long id;
     public String url;

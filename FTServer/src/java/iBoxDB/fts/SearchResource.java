@@ -58,7 +58,12 @@ public class SearchResource {
             p = name.indexOf("https://");
         }
         if (p >= 0) {
-            return name.substring(p).trim();
+            name = name.substring(p).trim();
+            int t = name.indexOf("#");
+            if (t > 0) {
+                name = name.substring(0, t);
+            }
+            return name;
         }
         return "";
     }
