@@ -7,7 +7,6 @@ Use Netbeans to build or download fts.zip(WAR) from Release
 Deploy to tomcat
 ```
 
-![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts.png)
 
 ![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts2.png)
 
