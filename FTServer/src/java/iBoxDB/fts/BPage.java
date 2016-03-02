@@ -5,14 +5,16 @@ import iBoxDB.LocalServer.UString;
 import iBoxDB.fulltext.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
 import static jodd.jerry.Jerry.jerry;
+import static jodd.jerry.Jerry.jerry;
 
-public class Page {
+public class BPage {
 
     public final static int MAX_URL_LENGTH = 100;
 
@@ -81,12 +83,12 @@ public class Page {
     }
 
     @NotColumn
-    public static Page get(String url) {
+    public static BPage get(String url, HashSet<String> subUrls) {
         try {
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
-            Page page = new Page();
+            BPage page = new BPage();
             page.url = url;
 
             HttpRequest httpRequest = HttpRequest.get(url);
@@ -152,6 +154,15 @@ public class Page {
             doc.$("Script").text("");
             doc.$("Style").text("");
 
+            if (subUrls != null) {
+                for (Jerry a : doc.$("a")) {
+                    String ss = getFullUrl(url, a.attr("href"));
+                    if (ss != null) {
+                        subUrls.add(ss);
+                    }
+                }
+            }
+
             page.title = doc.$("title").text();
             if (page.title == null) {
                 page.title = doc.$("Title").text();
@@ -195,17 +206,11 @@ public class Page {
             doc.$("Style").text("");
 
             String content = doc.text().trim();
-            content = content.replaceAll("\r", " ")
-                    .replaceAll("\n", " ")
-                    .replaceAll("�", " ")
+            content = content.replaceAll("\t|\r|\n|�|<|>", " ")
+                    .replaceAll("\\$", " ")
                     .replaceAll("　", " ")
-                    .replaceAll("   ", " ")
-                    .replaceAll("   ", " ")
-                    .replaceAll("  ", " ")
-                    .replaceAll("  ", " ")
-                    .replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ")
-                    .replaceAll("　", " ").trim();
+                    .replaceAll("\\s+", " ")
+                    .trim();
             if (content.length() < 50) {
                 return null;
             }
@@ -218,6 +223,119 @@ public class Page {
         } catch (Throwable e) {
             return null;
         }
+    }
+
+    @NotColumn
+    private static String getFullUrl(String base, String url) {
+        try {
+            if (base == null || url == null) {
+                return null;
+            }
+            base = base.trim();
+            url = url.trim();
+            if (base.length() < 2 || url.length() < 2) {
+                return null;
+            }
+            int si = url.indexOf("#");
+            if (si > 0) {
+                url = url.substring(0, si);
+            }
+            if (si == 0) {
+                return null;
+            }
+            if (url.startsWith("./")) {
+                url = url.substring(2);
+            }
+
+            String lcurl = url.toLowerCase();
+            if (lcurl.startsWith("javascript")) {
+                return null;
+            }
+            if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")) {
+                return null;
+            }
+
+            if (lcurl.startsWith("http:") || lcurl.startsWith("https:")) {
+                if (isHTMLURL(url)) {
+                    return url;
+                }
+                return null;
+            }
+
+            String lcbase = base.toLowerCase();
+            if ((!lcbase.startsWith("http:")) && (!lcbase.startsWith("https:"))) {
+                return null;
+            }
+
+            int t = base.indexOf("//");
+            t = base.indexOf("/", t + 2);
+            String domain = base;
+            if (t > 0) {
+                domain = domain.substring(0, t);
+            }
+            if (!domain.endsWith("/")) {
+                domain += "/";
+            }
+            if (!base.endsWith("/") && base.length() > domain.length()) {
+                t = base.lastIndexOf("/");
+                base = base.substring(0, t + 1);
+            }
+
+            if (url.startsWith("/")) {
+                url = domain + url.substring(1);
+            } else {
+                url = base + url;
+            }
+
+            if (isHTMLURL(url)) {
+                return url;
+            }
+            return null;
+        } catch (Throwable ex) {
+            //ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @NotColumn
+    private static boolean isHTMLURL(String url) {
+        url = url.toLowerCase();
+        int t = url.lastIndexOf("/");
+        if (t > "https://-".length()) {
+            String tu = url.substring(t);
+            if (tu.contains(".")) {
+                if ((!tu.contains(".html")) && (!tu.contains(".htm"))
+                        && (!tu.contains(".shtml"))
+                        && (!tu.contains(".asp"))
+                        && (!tu.contains(".aspx")) && (!tu.contains(".php"))
+                        && (!tu.contains(".jsp"))) {
+                    return false;
+                }
+            }
+        }
+        return url.contains(".");
+    }
+
+    @NotColumn
+    public static String getUrl(String name) {
+
+        int p = name.indexOf("http://");
+        if (p < 0) {
+            p = name.indexOf("https://");
+        }
+        if (p >= 0) {
+            name = name.substring(p).trim();
+            int t = name.indexOf("#");
+            if (t > 0) {
+                name = name.substring(0, t);
+            }
+            t = name.indexOf(" ");
+            if (t > 0) {
+                name = name.substring(0, t);
+            }
+            return name;
+        }
+        return "";
     }
 
     @NotColumn

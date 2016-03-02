@@ -1,8 +1,12 @@
 package iBoxDB.fts;
 
+import iBoxDB.LocalServer.Box;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "SServlet", urlPatterns = {"/s"}, asyncSupported = true)
 public class SServlet extends HttpServlet {
+
+    public static int SleepTime = 2000;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,21 +51,66 @@ public class SServlet extends HttpServlet {
             getReadES(name).submit(new Runnable() {
                 @Override
                 public void run() {
+                    SDB.vmGC();
                     ctx.dispatch("/s.jsp");
                 }
             });
         } else {
+            final String url = BPage.getUrl(name);
             final boolean del = isdelete;
-            getWriteES(name).submit(new Runnable() {
+            writeES.submit(new Runnable() {
                 @Override
                 public void run() {
+                    HashSet<String> subUrls = new HashSet<String>();
                     ctx.getRequest().setAttribute("q", SearchResource.indexText(
-                            ctx.getRequest().getAttribute("q").toString(), del));
+                            url, del, subUrls));
+                    ctx.getRequest().setAttribute("index", true);
+                    subUrls.remove(url);
+                    if (subUrls.size() > 0) {
+                        try (Box box = SDB.search_db.cube()) {
+                            for (String url : subUrls) {
+                                BURL burl = new BURL();
+                                burl.id = box.newId(1, 1);
+                                burl.url = url;
+                                box.d("URL").insert(burl);
+                            }
+                            box.commit().Assert();
+                        }
+                        addBGTask();
+                    }
+                    SDB.vmGC();
                     ctx.dispatch("/s.jsp");
                 }
             });
         }
 
+    }
+
+    private void addBGTask() {
+        writeESBG.submit(new Runnable() {
+            @Override
+            public void run() {
+                boolean continuing;
+                do {
+                    SDB.vmGC();
+                    continuing = false;
+                    Iterable<BURL> urls
+                            = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
+                    for (BURL burl : urls) {
+                        System.out.println(burl.url);
+                        SearchResource.indexText(burl.url, false, null);
+                        SDB.search_db.delete("URL", burl.id);
+                        continuing = true;
+                    }
+
+                    try {
+                        Thread.sleep(SleepTime);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } while (continuing);
+            }
+        });
     }
 
     private final ExecutorService[] readES = new ExecutorService[]{
@@ -70,13 +121,8 @@ public class SServlet extends HttpServlet {
         return readES[Math.abs(key.hashCode()) % readES.length];
     }
 
-    private final ExecutorService[] writeES = new ExecutorService[]{
-        Executors.newSingleThreadExecutor(), Executors.newSingleThreadExecutor()
-    };
-
-    private ExecutorService getWriteES(Object key) {
-        return writeES[Math.abs(key.hashCode()) % writeES.length];
-    }
+    private final ExecutorService writeES = Executors.newSingleThreadExecutor();
+    private final ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

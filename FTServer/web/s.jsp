@@ -1,7 +1,8 @@
+<%@page import="iBoxDB.fts.BURL"%>
 <%@page import="iBoxDB.LocalServer.UString"%>
 <%@page import="iBoxDB.fulltext.KeyWord"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="iBoxDB.fts.Page"%>
+<%@page import="iBoxDB.fts.BPage"%>
 <%@page import="iBoxDB.LocalServer.Box"%>
 <%@page import="iBoxDB.fts.SDB"%>
 <%@page import="iBoxDB.fts.SearchResource"%>
@@ -16,18 +17,27 @@
     if (name == null) {
         return;
     }
-    ArrayList<Page> pages = new ArrayList<Page>();
+    ArrayList<BPage> pages = new ArrayList<BPage>();
     long begin = System.currentTimeMillis();
     Box box = SDB.search_db.cube();
     try {
         for (KeyWord kw : SearchResource.engine.searchDistinct(box, name)) {
             long id = kw.getID();
-            id = Page.rankDownId(id);
-            Page p = box.d("Page", id).select().select(Page.class);
+            id = BPage.rankDownId(id);
+            BPage p = box.d("Page", id).select().select(BPage.class);
             p.keyWord = kw;
             pages.add(p);
-            if (pages.size() > 100) {
+            if (pages.size() > 30) {
                 break;
+            }
+        }
+        if ("BURL".equalsIgnoreCase(name) || request.getAttribute("index") != null) {
+            for (BURL burl : SDB.search_db.select(BURL.class, "FROM URL")) {
+                BPage p = new BPage();
+                p.title = burl.url;
+                p.url = burl.url;
+                p.content = UString.S("");
+                pages.add(p);
             }
         }
     } finally {
@@ -35,7 +45,7 @@
     }
 
     if (pages.isEmpty()) {
-        Page p = new Page();
+        BPage p = new BPage();
         p.title = "NotFound";
         p.content = UString.S("input URL to index");
         p.url = "https://github.com/iboxdb/ftserver";
@@ -120,7 +130,7 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;">
-                <% for (Page p : pages) {
+                <% for (BPage p : pages) {
                         String content = null;
                         if (pages.size() == 1 || p.keyWord == null) {
                             content = p.content.toString();
@@ -150,6 +160,16 @@
 
             </div>
             <div class="six wide column" style="max-width: 200px;">
+
+                <div class="ui segment">
+                    <h4><a href="http://www.iboxdb.com" target="_blank">iBoxDB</a></h4> 
+                    Fast ACID Document NoSQL
+                </div>
+
+                <div class="ui segment">
+                    <h4>Source</h4> 
+                    Code
+                </div>
                 <%
                     String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
                             + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";

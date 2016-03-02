@@ -15,12 +15,10 @@ public class SearchResource {
 
     public final static Engine engine = new Engine();
 
-    public static String indexText(final String name, final boolean isDelete) {
-
-        String url = getUrl(name);
+    public static String indexText(String url, boolean isDelete, HashSet<String> subUrls) {
 
         try (Box box = SDB.search_db.cube()) {
-            for (Page p : box.select(Page.class, "from Page where url==?", url)) {
+            for (BPage p : box.select(BPage.class, "from Page where url==?", url)) {
                 engine.indexText(box, p.id, p.content.toString(), true);
                 engine.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
                 box.d("Page", p.id).delete();
@@ -31,7 +29,8 @@ public class SearchResource {
         if (isDelete) {
             return "deleted";
         }
-        Page p = Page.get(url);
+
+        BPage p = BPage.get(url, subUrls);
         if (p == null) {
             return "temporarily unreachable";
         } else {
@@ -40,8 +39,7 @@ public class SearchResource {
                 box.d("Page").insert(p);
                 engine.indexText(box, p.id, p.content.toString(), false);
                 engine.indexText(box, p.rankUpId(), p.rankUpDescription(), false);
-                CommitResult cr = box.commit();
-                cr.Assert(cr.getErrorMsg(box));
+                box.commit().Assert();
             }
             urlList.add(p.url);
             while (urlList.size() > 3) {
@@ -50,22 +48,6 @@ public class SearchResource {
             return p.url;
         }
 
-    }
-
-    private static String getUrl(String name) {
-        int p = name.indexOf("http://");
-        if (p < 0) {
-            p = name.indexOf("https://");
-        }
-        if (p >= 0) {
-            name = name.substring(p).trim();
-            int t = name.indexOf("#");
-            if (t > 0) {
-                name = name.substring(0, t);
-            }
-            return name;
-        }
-        return "";
     }
 
 }
