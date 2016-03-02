@@ -163,12 +163,12 @@
 
                 <div class="ui segment">
                     <h4><a href="http://www.iboxdb.com" target="_blank">iBoxDB</a></h4> 
-                    Fast ACID Document NoSQL
+                    Fast NoSQL Document Database
                 </div>
 
                 <div class="ui segment">
-                    <h4>Source</h4> 
-                    Code
+                    <h4>Full Text Search</h4> 
+                     
                 </div>
                 <%
                     String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
