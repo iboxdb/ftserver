@@ -251,7 +251,8 @@ public class BPage {
                 return null;
             }
             if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
-                    || lcurl.contains("share")) {
+                    || lcurl.contains("share") || lcurl.contains("mailto")
+                    || lcurl.contains("report")) {
                 return null;
             }
 

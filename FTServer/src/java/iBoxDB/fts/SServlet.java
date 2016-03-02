@@ -22,6 +22,8 @@ public class SServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        //String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
+        //name = name.substring(2);
         String name = request.getParameter("q");
 
         if (name.length() > 500) {
