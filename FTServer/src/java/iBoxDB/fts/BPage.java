@@ -12,7 +12,6 @@ import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
 import static jodd.jerry.Jerry.jerry;
-import static jodd.jerry.Jerry.jerry;
 
 public class BPage {
 
@@ -251,7 +250,8 @@ public class BPage {
             if (lcurl.startsWith("javascript")) {
                 return null;
             }
-            if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")) {
+            if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
+                    || lcurl.contains("share")) {
                 return null;
             }
 
