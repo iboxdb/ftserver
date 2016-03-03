@@ -98,7 +98,6 @@ public class SServlet extends HttpServlet {
                     addBGTask();
                     //System.out.println(burl.url);
                 }
-
                 try {
                     Thread.sleep(SleepTime);
                 } catch (InterruptedException ex) {

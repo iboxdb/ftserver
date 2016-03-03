@@ -14,7 +14,7 @@
 %>
 <%
     String name = (String) request.getAttribute("q");
-    if (name == null) {
+    if (name == null || SDB.search_db == null) {
         return;
     }
     ArrayList<BPage> pages = new ArrayList<BPage>();
