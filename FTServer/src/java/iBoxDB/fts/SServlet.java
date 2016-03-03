@@ -22,9 +22,9 @@ public class SServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
-        //name = name.substring(2);
-        String name = request.getParameter("q");
+        String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
+        name = name.substring(2);
+        //String name = request.getParameter("q");
 
         if (name.length() > 500) {
             return;
@@ -53,7 +53,6 @@ public class SServlet extends HttpServlet {
             getReadES(name).submit(new Runnable() {
                 @Override
                 public void run() {
-                    SDB.vmGC();
                     ctx.dispatch("/s.jsp");
                 }
             });
@@ -80,7 +79,6 @@ public class SServlet extends HttpServlet {
                         }
                         addBGTask();
                     }
-                    SDB.vmGC();
                     ctx.dispatch("/s.jsp");
                 }
             });
@@ -92,25 +90,21 @@ public class SServlet extends HttpServlet {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
-                boolean continuing;
-                do {
-                    SDB.vmGC();
-                    continuing = false;
-                    Iterable<BURL> urls
-                            = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
-                    for (BURL burl : urls) {
-                        System.out.println(burl.url);
-                        SearchResource.indexText(burl.url, false, null);
-                        SDB.search_db.delete("URL", burl.id);
-                        continuing = true;
-                    }
+                Iterable<BURL> urls
+                        = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
+                for (BURL burl : urls) {
+                    SearchResource.indexText(burl.url, false, null);
+                    SDB.search_db.delete("URL", burl.id);
+                    addBGTask();
+                    //System.out.println(burl.url);
+                }
 
-                    try {
-                        Thread.sleep(SleepTime);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } while (continuing);
+                try {
+                    Thread.sleep(SleepTime);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         });
     }

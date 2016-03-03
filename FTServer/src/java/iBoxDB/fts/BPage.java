@@ -84,6 +84,7 @@ public class BPage {
     @NotColumn
     public static BPage get(String url, HashSet<String> subUrls) {
         try {
+
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
@@ -117,12 +118,16 @@ public class BPage {
                     tests.add(Charset.forName("GBK"));
                 } catch (Throwable e) {
 
-                }
-
+                } 
+                
                 for (Charset cset : tests) {
                     String t = new String(result, cset);
+                    int p = t.indexOf("<meta ");
+                    if (p > 0) {
+                        t = t.substring(p);
+                    }
                     final String cs = "charset=";
-                    int p = t.indexOf(cs);
+                    p = t.indexOf(cs);
                     if (p > 0) {
                         int e = t.indexOf("\"", p + cs.length() + 2);
                         if (e > 0) {
@@ -274,7 +279,6 @@ public class BPage {
                 }
                 return null;
             }
-            
 
             String lcbase = base.toLowerCase();
             if ((!lcbase.startsWith("http:")) && (!lcbase.startsWith("https:"))) {

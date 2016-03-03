@@ -148,7 +148,7 @@
                                 content += p.description;
                             }
                             if (content.length() > 200) {
-                                content = content.substring(0, 200);
+                                content = content.substring(0, 200) + "..";
                             }
                         }
                 %>
@@ -168,7 +168,7 @@
 
                 <div class="ui segment">
                     <h4>Full Text Search</h4> 
-                     
+
                 </div>
                 <%
                     String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "

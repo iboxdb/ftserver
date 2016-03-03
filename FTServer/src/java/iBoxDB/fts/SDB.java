@@ -18,8 +18,9 @@ public class SDB {
 
         DB server = new DB(1);
         if (isVM) {
+            //JAVA_OPTS = "$JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xmx256m -Xms256m"   
             server.getConfig().DBConfig.CacheLength
-                    = server.getConfig().DBConfig.mb(8);
+                    = server.getConfig().DBConfig.mb(32);
         }
         server.getConfig().DBConfig.SwapFileBuffer
                 = (int) server.getConfig().DBConfig.mb(2);
@@ -49,12 +50,5 @@ public class SDB {
         }
         search_db = null;
         Logger.getLogger(SDB.class.getName()).log(Level.INFO, "DBClosed");
-    }
-
-    public static void vmGC() {
-        if (isVM) {
-            System.runFinalization();
-            System.gc();
-        }
     }
 }
