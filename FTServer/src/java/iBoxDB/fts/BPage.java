@@ -263,6 +263,19 @@ public class BPage {
                 return null;
             }
 
+            if (lcurl.startsWith("//")) {
+                if (base.startsWith("https:")) {
+                    url = "https:" + url;
+                } else {
+                    url = "http:" + url;
+                }
+                if (isHTMLURL(url)) {
+                    return url;
+                }
+                return null;
+            }
+            
+
             String lcbase = base.toLowerCase();
             if ((!lcbase.startsWith("http:")) && (!lcbase.startsWith("https:"))) {
                 return null;

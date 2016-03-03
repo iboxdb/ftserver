@@ -53,6 +53,7 @@ public class SDB {
 
     public static void vmGC() {
         if (isVM) {
+            System.runFinalization();
             System.gc();
         }
     }
