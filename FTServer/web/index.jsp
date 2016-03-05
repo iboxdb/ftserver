@@ -68,7 +68,7 @@
                     <%
                         for (String str : SearchResource.searchList) {
 
-                    %> <a href="s?q=<%=str%>"><%=str%></a>. &nbsp;  
+                    %> <a href="s?q=<%=str.replace("#", "%23")%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>

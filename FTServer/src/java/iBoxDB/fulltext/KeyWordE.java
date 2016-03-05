@@ -36,6 +36,11 @@ public final class KeyWordE extends KeyWord {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
     private static HashMap<String, String> antetypes = new HashMap<String, String>() {
         {
             put("dogs", "dog");

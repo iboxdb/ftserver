@@ -31,13 +31,23 @@
                 break;
             }
         }
-        if ("BURL".equalsIgnoreCase(name) || request.getAttribute("index") != null) {
-            for (BURL burl : SDB.search_db.select(BURL.class, "FROM URL")) {
+
+        UString empty = UString.S("");
+        if ("BURL".startsWith(name) || request.getAttribute("index") != null) {
+            for (BURL burl : box.select(BURL.class, "FROM URL")) {
                 BPage p = new BPage();
                 p.title = burl.url;
                 p.url = burl.url;
-                p.content = UString.S("");
+                p.content = empty;
+                p.id = burl.id;
                 pages.add(p);
+            }
+        }
+        if ("BURLBURL".startsWith(name)) {
+            for (BPage burl : pages) {
+                if (burl.content == empty) {
+                    SDB.search_db.delete("URL", burl.id);
+                }
             }
         }
     } finally {

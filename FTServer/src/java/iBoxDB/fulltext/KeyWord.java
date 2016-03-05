@@ -55,7 +55,7 @@ public abstract class KeyWord {
 
     @Override
     public String toString() {
-        return getKeyWord() + ", Pos=" + P + ", ID=" + I + " "
+        return getKeyWord() + " Pos=" + P + ", ID=" + I + " "
                 + (this instanceof KeyWordE ? "E" : "N");
     }
 

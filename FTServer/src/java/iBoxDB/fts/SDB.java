@@ -4,7 +4,6 @@ import iBoxDB.LocalServer.*;
 import iBoxDB.fulltext.Engine;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.*;
 
 public class SDB {
@@ -24,7 +23,7 @@ public class SDB {
         if (isVM) {
             // when JVM on VM, to prevent multiple VM Instances.
             // example
-            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xmx356m -Xms256m
+            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC  -Xmx356m -Xms256m
             // lockFile = 7
             String str = System.getenv("lockFile");
             if (str == null) {
@@ -65,16 +64,6 @@ public class SDB {
 
             search_db = server.open();
 
-            try (Box box = search_db.cube()) {
-                ArrayList<BURL> list = new ArrayList<BURL>();
-                for (BURL burl : box.select(BURL.class, "from URL")) {
-                    list.add(burl);
-                }
-                for (BURL burl : list) {
-                    box.d("URL", burl.id).delete();
-                }
-                box.commit().Assert();
-            }
         } catch (Throwable ex) {
             if (search_db != null) {
                 search_db.getDatabase().close();

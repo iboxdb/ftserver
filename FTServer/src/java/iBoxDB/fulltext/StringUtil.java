@@ -5,16 +5,31 @@ import java.util.*;
 class StringUtil {
 
     HashSet<Character> set;
+    public HashSet<String> mvends;
 
     public StringUtil() {
         String s = "!\"@$%&'()*+,./:;<=>?[\\]^_`{|}~\r\n"; //@-
         s += "， 　，《。》、？；：‘’“”【｛】｝——=+、｜·～！￥%……&*（）"; //@-#
         s += "｀～！＠￥％……—×（）——＋－＝【】｛｝：；’＇”＂，．／＜＞？’‘”“";//＃
+        s += "� ★☆,。？,　！";
         set = new HashSet<Character>();
         for (char c : s.toCharArray()) {
             set.add(c);
         }
         set.add((char) 0);
+
+        String[] ms = new String[]{
+            "are", "were", "have", "has", "had",
+            "you", "she", "her", "him", "like", "will", "would", "should",
+            "when", "than", "then", "that", "this", "there", "who", "those", "these",
+            "with", "which", "where", "they", "them", "one",
+            "does", "doesn", "did", "gave", "give",
+            "something", "someone", "about", "come"
+        };
+        mvends = new HashSet<String>();
+        for (String c : ms) {
+            mvends.add(c);
+        }
     }
 
     public boolean isWord(char c) {
@@ -38,11 +53,11 @@ class StringUtil {
     }
 
     public char[] clear(String str) {
-        char[] cs = (str + " ").toLowerCase().toCharArray();
+        char[] cs = (str + "   ").toLowerCase().toCharArray();
         for (int i = 0; i < cs.length; i++) {
             if (set.contains(cs[i])) {
                 cs[i] = ' ';
-            } 
+            }
         }
         return cs;
     }

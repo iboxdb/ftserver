@@ -48,8 +48,25 @@ class Util {
                 k = null;
                 KeyWordN n = new KeyWordN();
                 n.setID(id);
-                n.setKeyWord(c);
                 n.setPosition(i);
+                char c0 = c;
+                char c1 = str[i + 1];
+                char c2 = str[i + 2];
+                if ((c1 != ' ') && (!sUtil.isWord(c1))) {
+                    if ((c2 != ' ') && (!sUtil.isWord(c2))) {
+                        n.setKeyWord(new String(new char[]{c0, c1, c2}));
+                        if (!includeOF) {
+                            i += 2;
+                        }
+                    } else {
+                        n.setKeyWord(new String(new char[]{c0, c1}));
+                        if (!includeOF) {
+                            i += 1;
+                        }
+                    }
+                } else {
+                    n.setKeyWord(Character.toString(c0));
+                }
                 kws.add(n);
             }
         }
