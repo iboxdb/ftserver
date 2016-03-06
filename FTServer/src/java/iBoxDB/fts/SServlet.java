@@ -97,9 +97,9 @@ public class SServlet extends HttpServlet {
                             = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
                     for (BURL burl : urls) {
                         System.out.println(burl.url);
-                        addBGTask();
                         SDB.search_db.delete("URL", burl.id);
                         SearchResource.indexText(burl.url, false, null);
+                        addBGTask();
                     }
                     Thread.sleep(SleepTime);
                 } catch (Throwable ex) {
