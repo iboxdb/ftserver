@@ -53,7 +53,7 @@
             p.title = "BURL Deleted";
             p.content = empty;
             p.url = "./";
-            pages.add(p);
+            pages.add(0, p);
         }
     } finally {
         box.close();
