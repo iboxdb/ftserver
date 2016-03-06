@@ -36,4 +36,10 @@ public final class KeyWordE extends KeyWord {
         return null;
     }
 
+    @NotColumn
+    @Override
+    public String toString() {
+        return K + " Pos=" + P + ", ID=" + I + " E";
+    }
+
 }

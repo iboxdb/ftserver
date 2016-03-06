@@ -10,17 +10,13 @@ public final class KeyWordN extends KeyWord {
     @NotColumn
     @Override
     public Object getKeyWord() {
-        return KtoString(K);
+        return K;
     }
 
     @NotColumn
     @Override
     public void setKeyWord(Object k) {
-        if (k instanceof Long) {
-            K = (long) k;
-        } else {
-            K = StringtoK((String) k);
-        }
+        K = (long) k;
     }
 
     @NotColumn
@@ -52,14 +48,21 @@ public final class KeyWordN extends KeyWord {
     }
 
     @NotColumn
-    private static long StringtoK(String str) {
-        long k = (0L | str.charAt(0)) << 32;
-        if (str.length() > 1) {
-            k |= ((0L | str.charAt(1)) << 16);
+    public void longKeyWord(char c0, char c1, char c2) {
+        long k = (0L | c0) << 32;
+        if (c1 != 0) {
+            k |= ((0L | c1) << 16);
+            if (c2 != 0) {
+                k |= (0L | c2);
+            }
         }
-        if (str.length() > 2) {
-            k |= (0L | str.charAt(2));
-        }
-        return k;
+        K = k;
     }
+
+    @NotColumn
+    @Override
+    public String toString() {
+        return KtoString(K) + " Pos=" + P + ", ID=" + I + " N";
+    }
+
 }

@@ -195,18 +195,18 @@ public class Engine {
                         kw.getKeyWord(), con.getID()));
             }
         } else {
-            KeyWordN kwn = (KeyWordN) kw;
+
             if (con instanceof KeyWordE) {
                 asWord = true;
             }
             if (con == null) {
-                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==?", kwn.K));
+                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==?", kw.getKeyWord()));
             } else if (asWord) {
                 return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? &  I==?",
-                        kwn.K, con.getID()));
+                        kw.getKeyWord(), con.getID()));
             } else {
                 return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? & I==? & P==?",
-                        kwn.K, con.getID(), (con.getPosition() + ((KeyWordN) con).size())));
+                        kw.getKeyWord(), con.getID(), (con.getPosition() + ((KeyWordN) con).size())));
             }
         }
     }
@@ -255,7 +255,7 @@ public class Engine {
                         cache.setKeyWord(os[0]);
                         cache.I = (Long) os[1];
                         cache.P = (Integer) os[2];
-                        
+
                         return true;
                     }
                     return false;

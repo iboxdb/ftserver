@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "SServlet", urlPatterns = {"/s"}, asyncSupported = true)
 public class SServlet extends HttpServlet {
-    
+
     public static int SleepTime = 2000;
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
         name = name.substring(2);
         //String name = request.getParameter("q");
@@ -32,13 +32,13 @@ public class SServlet extends HttpServlet {
         name = name.replaceAll("<", " ").replaceAll(">", " ")
                 .replaceAll("\"", " ").replaceAll(",", " ")
                 .replaceAll("\\$", " ").trim();
-        
+
         final AsyncContext ctx = request.startAsync(request, response);
         ctx.setTimeout(30 * 1000);
         request.setAttribute("q", name);
-        
+
         Boolean isdelete = null;
-        
+
         if (name.startsWith("http://") || name.startsWith("https://")) {
             isdelete = false;
         } else if (name.startsWith("delete")
@@ -85,39 +85,42 @@ public class SServlet extends HttpServlet {
                 }
             });
         }
-        
+
     }
-    
+
     private void addBGTask() {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
-                Iterable<BURL> urls
-                        = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
-                for (BURL burl : urls) {
-                    SearchResource.indexText(burl.url, false, null);
-                    SDB.search_db.delete("URL", burl.id);
-                    addBGTask();
-                    //System.out.println(burl.url);
-                }
+                boolean add = false;
                 try {
+                    Iterable<BURL> urls
+                            = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
+                    for (BURL burl : urls) {
+                        System.out.println(burl.url);
+                        add = true;
+                        SearchResource.indexText(burl.url, false, null);
+                        SDB.search_db.delete("URL", burl.id);
+                    }
                     Thread.sleep(SleepTime);
-                } catch (InterruptedException ex) {
+                } catch (Throwable ex) {
                     Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+                if (add) {
+                    addBGTask();
+                } 
             }
         });
     }
-    
+
     private final ExecutorService[] readES = new ExecutorService[]{
         Executors.newSingleThreadExecutor(), Executors.newSingleThreadExecutor()
     };
-    
+
     private ExecutorService getReadES(Object key) {
         return readES[Math.abs(key.hashCode()) % readES.length];
     }
-    
+
     private final ExecutorService writeES = Executors.newSingleThreadExecutor();
     private final ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 

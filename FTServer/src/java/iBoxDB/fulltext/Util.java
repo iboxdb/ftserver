@@ -50,7 +50,7 @@ class Util {
                 KeyWordN n = new KeyWordN();
                 n.setID(id);
                 n.setPosition(i);
-                n.setKeyWord(Character.toString(c));
+                n.longKeyWord(c, (char) 0, (char) 0);
                 kws.add(n);
 
                 char c1 = str[i + 1];
@@ -58,7 +58,7 @@ class Util {
                     n = new KeyWordN();
                     n.setID(id);
                     n.setPosition(i);
-                    n.setKeyWord(new String(new char[]{c, c1}));
+                    n.longKeyWord(c, c1, (char) 0);
                     kws.add(n);
                     if (!includeOF) {
                         kws.remove(kws.size() - 2);

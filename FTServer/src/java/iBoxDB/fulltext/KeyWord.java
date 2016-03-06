@@ -53,12 +53,6 @@ public abstract class KeyWord {
     @NotColumn
     public KeyWord previous;
 
-    @NotColumn
-    @Override
-    public String toString() {
-        return getKeyWord() + " Pos=" + P + ", ID=" + I + " "
-                + (this instanceof KeyWordE ? "E" : "N");
-    }
 
     @NotColumn
     public String toFullString() {
