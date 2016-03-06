@@ -122,6 +122,17 @@ public class BPage {
                 for (Charset cset : tests) {
                     String t = new String(result, cset);
                     int p = t.indexOf("<meta ");
+                    int p2 = t.indexOf("<META ");
+                    if (p < 0) {
+                        p = Integer.MAX_VALUE;
+                    }
+                    if (p2 < 0) {
+                        p2 = Integer.MAX_VALUE;
+                    }
+                    p = Math.min(p, p2);
+                    if (p == Integer.MAX_VALUE) {
+                        p = -1;
+                    }
                     if (p > 0) {
                         t = t.substring(p);
                     }
@@ -129,11 +140,22 @@ public class BPage {
                     p = t.indexOf(cs);
                     if (p > 0) {
                         int e = t.indexOf("\"", p + cs.length() + 2);
+                        int e2 = t.indexOf("\'", p + cs.length() + 2);
+                        if (e < 0) {
+                            e = Integer.MAX_VALUE;
+                        }
+                        if (e2 < 0) {
+                            e2 = Integer.MAX_VALUE;
+                        }
+                        e = Math.min(e, e2);
+                        if (e == Integer.MAX_VALUE) {
+                            e = -1;
+                        }
                         if (e > 0) {
                             t = t.substring(p + cs.length(), e);
 
                             t = t.replaceAll("\"", "").trim();
-
+                            t = t.replaceAll("\'", "").trim();
                             if (t.length() < 10) {
                                 charset = t;
                                 break;
@@ -175,6 +197,9 @@ public class BPage {
                 page.title = doc.$("Title").text();
             }
             if (page.title == null) {
+                page.title = doc.$("TITLE").text();
+            }
+            if (page.title == null) {
                 page.title = url;
             }
             page.title = page.title.trim();
@@ -184,9 +209,7 @@ public class BPage {
             if (page.title.length() > 80) {
                 page.title = page.title.substring(0, 80);
             }
-            page.title = page.title.replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ")
-                    .replaceAll("�", " ");
+            page.title = page.title.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
 
             doc.$("title").remove();
             doc.$("Title").remove();
@@ -201,9 +224,7 @@ public class BPage {
             if (page.description.length() > 200) {
                 page.description = page.description.substring(0, 200);
             }
-            page.description = page.description.replaceAll("<", " ")
-                    .replaceAll(">", " ").replaceAll("\\$", " ")
-                    .replaceAll("�", " ");
+            page.description = page.description.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
 
             /*
             doc = jerry(doc.text().replaceAll("&lt;", "<")
@@ -214,9 +235,9 @@ public class BPage {
             doc.$("Style").text("");
              */
             String content = doc.text();
-            content = content.replaceAll("\t|\r|\n|�|<|>", " ")
-                    .replaceAll("\\$", " ")
+            content = content.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ")
                     .replaceAll("　", " ")
+                    .replaceAll("&nbsp;", " ")
                     .replaceAll("\\s+", " ")
                     .trim();
             if (content.length() < 50) {
@@ -226,7 +247,6 @@ public class BPage {
                 content = content.substring(0, 5000);
             }
             page.content = UString.S(content + " " + page.url);
-
             return page;
         } catch (Throwable e) {
             return null;
@@ -261,7 +281,8 @@ public class BPage {
             }
             if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
                     || lcurl.contains("share") || lcurl.contains("mailto")
-                    || lcurl.contains("report")) {
+                    || lcurl.contains("report") || lcurl.contains("send")
+                    || lcurl.contains("register")) {
                 return null;
             }
 

@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "SServlet", urlPatterns = {"/s"}, asyncSupported = true)
 public class SServlet extends HttpServlet {
 
-    public static int SleepTime = 2000;
+    private final static int SleepTime = 2000;
+    public static Throwable lastEx;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -62,24 +63,26 @@ public class SServlet extends HttpServlet {
             writeES.submit(new Runnable() {
                 @Override
                 public void run() {
-                    HashSet<String> subUrls = new HashSet<String>();
-                    ctx.getRequest().setAttribute("q", SearchResource.indexText(
-                            url, del, subUrls));
-                    ctx.getRequest().setAttribute("index", true);
-                    subUrls.remove(url);
-                    subUrls.remove(url + "/");
-                    subUrls.remove(url.substring(0, url.length() - 1));
-                    if (subUrls.size() > 0) {
-                        try (Box box = SDB.search_db.cube()) {
-                            for (String url : subUrls) {
-                                BURL burl = new BURL();
-                                burl.id = box.newId(1, 1);
-                                burl.url = url;
-                                box.d("URL").insert(burl);
+                    synchronized (writeESBG) {
+                        HashSet<String> subUrls = new HashSet<String>();
+                        ctx.getRequest().setAttribute("q", SearchResource.indexText(
+                                url, del, subUrls));
+                        ctx.getRequest().setAttribute("index", true);
+                        subUrls.remove(url);
+                        subUrls.remove(url + "/");
+                        subUrls.remove(url.substring(0, url.length() - 1));
+                        if (subUrls.size() > 0) {
+                            try (Box box = SDB.search_db.cube()) {
+                                for (String url : subUrls) {
+                                    BURL burl = new BURL();
+                                    burl.id = box.newId(1, 1);
+                                    burl.url = url;
+                                    box.d("URL").insert(burl);
+                                }
+                                box.commit().Assert();
                             }
-                            box.commit().Assert();
+                            addBGTask();
                         }
-                        addBGTask();
                     }
                     ctx.dispatch("/s.jsp");
                 }
@@ -88,21 +91,28 @@ public class SServlet extends HttpServlet {
 
     }
 
-    private void addBGTask() {
+    public static void addBGTask() {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Iterable<BURL> urls
-                            = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
-                    for (BURL burl : urls) {
-                        System.out.println(burl.url);
-                        SDB.search_db.delete("URL", burl.id);
-                        SearchResource.indexText(burl.url, false, null);
-                        addBGTask();
+                    if (lastEx != null) {
+                        return;
                     }
                     Thread.sleep(SleepTime);
+                    System.gc();
+                    synchronized (writeESBG) {
+                        Iterable<BURL> urls
+                                = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
+                        for (BURL burl : urls) {
+                            System.out.println(burl.url);
+                            SDB.search_db.delete("URL", burl.id);
+                            SearchResource.indexText(burl.url, false, null);
+                            addBGTask();
+                        }
+                    }
                 } catch (Throwable ex) {
+                    lastEx = ex;
                     Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -119,7 +129,7 @@ public class SServlet extends HttpServlet {
     }
 
     private final ExecutorService writeES = Executors.newSingleThreadExecutor();
-    private final ExecutorService writeESBG = Executors.newSingleThreadExecutor();
+    private final static ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

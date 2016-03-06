@@ -18,11 +18,10 @@ public class SDB {
                 String.format("DBPath=%s VM=" + isVM, path));
 
         lockFile = DB.root(path) + "running_";
-
         if (isVM) {
             // when JVM on VM, to prevent multiple VM Instances.
             // example
-            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC  -Xmx356m -Xms256m
+            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -Xmx356m -Xms256m
             // lockFile = 7
             String str = System.getenv("lockFile");
             if (str == null) {
@@ -55,7 +54,7 @@ public class SDB {
                         = server.getConfig().DBConfig.mb(16);
             }
             server.getConfig().DBConfig.SwapFileBuffer
-                    = (int) server.getConfig().DBConfig.mb(2);
+                    = (int) server.getConfig().DBConfig.mb(4);
             new Engine().Config(server.getConfig().DBConfig);
 
             server.getConfig().ensureTable(BURL.class, "URL", "id");

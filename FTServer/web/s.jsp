@@ -1,3 +1,4 @@
+<%@page import="iBoxDB.fts.SServlet"%>
 <%@page import="iBoxDB.fts.BURL"%>
 <%@page import="iBoxDB.LocalServer.UString"%>
 <%@page import="iBoxDB.fulltext.KeyWord"%>
@@ -32,15 +33,25 @@
             }
         }
 
+        //Debug Begin
         UString empty = UString.S("");
         if (name.startsWith("burl") || request.getAttribute("index") != null) {
-            for (BURL burl : box.select(BURL.class, "FROM URL")) {
+            SServlet.addBGTask();
+            for (BURL burl : box.select(BURL.class, "FROM URL order by id limit 0,300")) {
                 BPage p = new BPage();
                 p.title = burl.url;
                 p.url = burl.url;
                 p.content = empty;
                 p.id = burl.id;
                 pages.add(p);
+            }
+            if (SServlet.lastEx != null) {
+                BPage p = new BPage();
+                p.title = SServlet.lastEx.getClass().getName();
+                p.url = "./";
+                p.content = UString.S(SServlet.lastEx.toString());
+                p.id = -1;
+                pages.add(0, p);
             }
         }
         if (name.startsWith("burlburl")) {
@@ -55,6 +66,7 @@
             p.url = "./";
             pages.add(0, p);
         }
+        //Debug End
     } finally {
         box.close();
     }
@@ -191,7 +203,7 @@
                             + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
                 %>
                 <div class="ui segment">
-                    <h4>Time</h4> 
+                    <h4>Time <%= SServlet.lastEx != null ? "Readonly" : ""%></h4> 
                     <%= content%>
                 </div>
 
