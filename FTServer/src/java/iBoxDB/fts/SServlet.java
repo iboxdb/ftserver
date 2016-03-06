@@ -92,23 +92,20 @@ public class SServlet extends HttpServlet {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
-                boolean add = false;
                 try {
                     Iterable<BURL> urls
                             = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
                     for (BURL burl : urls) {
                         System.out.println(burl.url);
-                        add = true;
-                        SearchResource.indexText(burl.url, false, null);
+                        addBGTask();
                         SDB.search_db.delete("URL", burl.id);
+                        SearchResource.indexText(burl.url, false, null);
                     }
                     Thread.sleep(SleepTime);
                 } catch (Throwable ex) {
                     Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (add) {
-                    addBGTask();
-                } 
+
             }
         });
     }

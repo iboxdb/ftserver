@@ -84,7 +84,6 @@ public class BPage {
     @NotColumn
     public static BPage get(String url, HashSet<String> subUrls) {
         try {
-
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
@@ -118,8 +117,8 @@ public class BPage {
                     tests.add(Charset.forName("GBK"));
                 } catch (Throwable e) {
 
-                } 
-                
+                }
+
                 for (Charset cset : tests) {
                     String t = new String(result, cset);
                     int p = t.indexOf("<meta ");
@@ -153,10 +152,14 @@ public class BPage {
             String resultS = new String(result, charset);
 
             Jerry doc = jerry(resultS);
-            doc.$("script").text("");
-            doc.$("style").text("");
-            doc.$("Script").text("");
-            doc.$("Style").text("");
+            doc.$("script").remove();
+            doc.$("Script").remove();
+
+            doc.$("style").remove();
+            doc.$("Style").remove();
+
+            doc.$("textarea").remove();
+            doc.$("Textarea").remove();
 
             if (subUrls != null) {
                 for (Jerry a : doc.$("a")) {
@@ -185,8 +188,8 @@ public class BPage {
                     .replaceAll(">", " ").replaceAll("\\$", " ")
                     .replaceAll("�", " ");
 
-            doc.$("title").text("");
-            doc.$("Title").text("");
+            doc.$("title").remove();
+            doc.$("Title").remove();
 
             page.description = doc.$("meta[name='description']").attr("content");
             if (page.description == null) {
@@ -202,14 +205,15 @@ public class BPage {
                     .replaceAll(">", " ").replaceAll("\\$", " ")
                     .replaceAll("�", " ");
 
+            /*
             doc = jerry(doc.text().replaceAll("&lt;", "<")
-                    .replaceAll("&gt;", ">"));
+                    .replaceAll("&gt;", ">"));    
             doc.$("script").text("");
             doc.$("style").text("");
             doc.$("Script").text("");
             doc.$("Style").text("");
-
-            String content = doc.text().trim();
+             */
+            String content = doc.text();
             content = content.replaceAll("\t|\r|\n|�|<|>", " ")
                     .replaceAll("\\$", " ")
                     .replaceAll("　", " ")
