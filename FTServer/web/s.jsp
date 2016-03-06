@@ -59,9 +59,10 @@
         box.close();
     }
 
-    if (pages.isEmpty()) {
+%>
+<%    if (pages.isEmpty()) {
         BPage p = new BPage();
-        p.title = "NotFound";
+        p.title = "NotFound " + name;
         p.content = UString.S("input URL to index");
         p.url = "https://github.com/iboxdb/ftserver";
         pages.add(p);
