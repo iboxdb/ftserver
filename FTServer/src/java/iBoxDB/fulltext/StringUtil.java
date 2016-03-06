@@ -4,6 +4,27 @@ import java.util.*;
 
 class StringUtil {
 
+    protected static HashMap<String, String> antetypes = new HashMap<String, String>() {
+        {
+            put("dogs", "dog");
+            put("houses", "house");
+            put("grams", "gram");
+
+            put("kisses", "kiss");
+            put("watches", "watch");
+            put("boxes", "box");
+            put("bushes", "bush");
+
+            put("tomatoes", "tomato");
+            put("potatoes", "potato");
+
+            put("babies", "baby");
+            put("universities", "university");
+            put("flies", "fly");
+            put("impurities", "impurity");
+        }
+    };
+
     HashSet<Character> set;
     public HashSet<String> mvends;
 

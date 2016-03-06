@@ -1,7 +1,6 @@
 package iBoxDB.fulltext;
 
 import iBoxDB.LocalServer.NotColumn;
-import java.util.HashMap;
 
 public final class KeyWordE extends KeyWord {
 
@@ -24,8 +23,9 @@ public final class KeyWordE extends KeyWord {
         K = t;
     }
 
+    @NotColumn
     public KeyWordE getOriginalForm() {
-        String of = antetypes.get(K);
+        String of = StringUtil.antetypes.get(K);
         if (of != null) {
             KeyWordE e = new KeyWordE();
             e.I = this.I;
@@ -36,29 +36,4 @@ public final class KeyWordE extends KeyWord {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
-    private static HashMap<String, String> antetypes = new HashMap<String, String>() {
-        {
-            put("dogs", "dog");
-            put("houses", "house");
-            put("grams", "gram");
-
-            put("kisses", "kiss");
-            put("watches", "watch");
-            put("boxes", "box");
-            put("bushes", "bush");
-
-            put("tomatoes", "tomato");
-            put("potatoes", "potato");
-
-            put("babies", "baby");
-            put("universities", "university");
-            put("flies", "fly");
-            put("impurities", "impurity");
-        }
-    };
 }

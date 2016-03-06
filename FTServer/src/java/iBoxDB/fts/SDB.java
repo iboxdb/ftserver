@@ -18,7 +18,6 @@ public class SDB {
                 String.format("DBPath=%s VM=" + isVM, path));
 
         lockFile = DB.root(path) + "running_";
-        //BoxSystem.DBDebug.DeleteDBFiles(1);
 
         if (isVM) {
             // when JVM on VM, to prevent multiple VM Instances.
@@ -49,6 +48,7 @@ public class SDB {
         }
 
         try {
+            //BoxSystem.DBDebug.DeleteDBFiles(1);
             DB server = new DB(1);
             if (isVM) {
                 server.getConfig().DBConfig.CacheLength
@@ -82,7 +82,6 @@ public class SDB {
             search_db.getDatabase().close();
         }
         search_db = null;
-        new File(lockFile).delete();
         Logger.getLogger(SDB.class.getName()).log(Level.INFO, "DBClosed");
     }
 

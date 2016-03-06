@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "SServlet", urlPatterns = {"/s"}, asyncSupported = true)
 public class SServlet extends HttpServlet {
-
+    
     public static int SleepTime = 2000;
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
         name = name.substring(2);
         //String name = request.getParameter("q");
@@ -32,13 +32,13 @@ public class SServlet extends HttpServlet {
         name = name.replaceAll("<", " ").replaceAll(">", " ")
                 .replaceAll("\"", " ").replaceAll(",", " ")
                 .replaceAll("\\$", " ").trim();
-
+        
         final AsyncContext ctx = request.startAsync(request, response);
         ctx.setTimeout(30 * 1000);
         request.setAttribute("q", name);
-
+        
         Boolean isdelete = null;
-
+        
         if (name.startsWith("http://") || name.startsWith("https://")) {
             isdelete = false;
         } else if (name.startsWith("delete")
@@ -67,6 +67,8 @@ public class SServlet extends HttpServlet {
                             url, del, subUrls));
                     ctx.getRequest().setAttribute("index", true);
                     subUrls.remove(url);
+                    subUrls.remove(url + "/");
+                    subUrls.remove(url.substring(0, url.length() - 1));
                     if (subUrls.size() > 0) {
                         try (Box box = SDB.search_db.cube()) {
                             for (String url : subUrls) {
@@ -83,9 +85,9 @@ public class SServlet extends HttpServlet {
                 }
             });
         }
-
+        
     }
-
+    
     private void addBGTask() {
         writeESBG.submit(new Runnable() {
             @Override
@@ -103,19 +105,19 @@ public class SServlet extends HttpServlet {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
             }
         });
     }
-
+    
     private final ExecutorService[] readES = new ExecutorService[]{
         Executors.newSingleThreadExecutor(), Executors.newSingleThreadExecutor()
     };
-
+    
     private ExecutorService getReadES(Object key) {
         return readES[Math.abs(key.hashCode()) % readES.length];
     }
-
+    
     private final ExecutorService writeES = Executors.newSingleThreadExecutor();
     private final ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 

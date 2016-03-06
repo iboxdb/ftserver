@@ -15,9 +15,9 @@ public class Engine {
 
     public boolean indexText(Box box, long id, String str, boolean isRemove) {
         if (id == -1) {
+            // -1 is internal default value as NULL
             return false;
         }
-
         char[] cs = sUtil.clear(str);
         ArrayList<KeyWord> map = util.fromString(id, cs, true);
 
@@ -50,16 +50,18 @@ public class Engine {
             @Override
             public Iterator<KeyWord> iterator() {
                 return new EngineIterator<KeyWord>() {
-                    HashSet<Long> c_id = new HashSet<Long>();
+                    long c_id = -1;
                     KeyWord current;
 
                     @Override
                     public boolean hasNext() {
                         while (it.hasNext()) {
                             current = it.next();
-                            if (c_id.add(current.getID())) {
-                                return true;
+                            if (current.getID() == c_id) {
+                                continue;
                             }
+                            c_id = current.getID();
+                            return true;
                         }
                         return false;
                     }
@@ -120,7 +122,6 @@ public class Engine {
         return search(box, kws.toArray(new KeyWord[0]));
     }
 
-    // Base
     private Iterable<KeyWord> search(final Box box, final KeyWord[] kws) {
         if (kws.length == 1) {
             return search(box, kws[0], (KeyWord) null, false);
@@ -199,17 +200,13 @@ public class Engine {
                 asWord = true;
             }
             if (con == null) {
-                return new Index2KeyWordNIterable(
-                        box.select(Object.class, "from N where K>=? & K<?", kwn.K, kwn.theNextK()));
+                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==?", kwn.K));
             } else if (asWord) {
-                return new Index2KeyWordNIterable(
-                        box.select(Object.class, "from N where K>=? & K<? & I==?",
-                                kwn.K, kwn.theNextK(), con.getID()));
+                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? &  I==?",
+                        kwn.K, con.getID()));
             } else {
-                return new Index2KeyWordNIterable(
-                        box.select(Object.class, "from N where K>=? & K<? & I==? & P==?",
-                                kwn.K, kwn.theNextK(), con.getID(),
-                                (con.getPosition() + ((KeyWordN) con).size())));
+                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? & I==? & P==?",
+                        kwn.K, con.getID(), (con.getPosition() + ((KeyWordN) con).size())));
             }
         }
     }
@@ -254,9 +251,11 @@ public class Engine {
                     if (index.hasNext()) {
                         Object[] os = index.next();
                         cache = create();
+
                         cache.setKeyWord(os[0]);
                         cache.I = (Long) os[1];
                         cache.P = (Integer) os[2];
+                        
                         return true;
                     }
                     return false;

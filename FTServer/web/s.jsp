@@ -33,7 +33,7 @@
         }
 
         UString empty = UString.S("");
-        if ("BURL".startsWith(name) || request.getAttribute("index") != null) {
+        if (name.startsWith("burl") || request.getAttribute("index") != null) {
             for (BURL burl : box.select(BURL.class, "FROM URL")) {
                 BPage p = new BPage();
                 p.title = burl.url;
@@ -43,12 +43,17 @@
                 pages.add(p);
             }
         }
-        if ("BURLBURL".startsWith(name)) {
+        if (name.startsWith("burlburl")) {
             for (BPage burl : pages) {
                 if (burl.content == empty) {
                     SDB.search_db.delete("URL", burl.id);
                 }
             }
+            BPage p = new BPage();
+            p.title = "BURL Deleted";
+            p.content = empty;
+            p.url = "./";
+            pages.add(p);
         }
     } finally {
         box.close();
@@ -147,7 +152,7 @@
                         } else if (p.id != p.keyWord.getID()) {
                             content = p.description;
                             if (content.length() < 20) {
-                                content += p.getRandomContent();
+                                content += p.getRandomContent() + "...";;
                             }
                         } else {
                             content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
