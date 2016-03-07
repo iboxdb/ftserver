@@ -63,28 +63,31 @@ public class SServlet extends HttpServlet {
             writeES.submit(new Runnable() {
                 @Override
                 public void run() {
-                    synchronized (writeESBG) {
-                        HashSet<String> subUrls = new HashSet<String>();
-                        ctx.getRequest().setAttribute("q", SearchResource.indexText(
-                                url, del, subUrls));
-                        ctx.getRequest().setAttribute("index", true);
-                        subUrls.remove(url);
-                        subUrls.remove(url + "/");
-                        subUrls.remove(url.substring(0, url.length() - 1));
-                        if (subUrls.size() > 0) {
-                            try (Box box = SDB.search_db.cube()) {
-                                for (String url : subUrls) {
-                                    BURL burl = new BURL();
-                                    burl.id = box.newId(1, 1);
-                                    burl.url = url;
-                                    box.d("URL").insert(burl);
+                    try {
+                        synchronized (writeESBG) {
+                            HashSet<String> subUrls = new HashSet<String>();
+                            ctx.getRequest().setAttribute("q", SearchResource.indexText(
+                                    url, del, subUrls));
+                            ctx.getRequest().setAttribute("index", true);
+                            subUrls.remove(url);
+                            subUrls.remove(url + "/");
+                            subUrls.remove(url.substring(0, url.length() - 1));
+                            if (subUrls.size() > 0) {
+                                try (Box box = SDB.search_db.cube()) {
+                                    for (String url : subUrls) {
+                                        BURL burl = new BURL();
+                                        burl.id = box.newId(1, 1);
+                                        burl.url = url;
+                                        box.d("URL").insert(burl);
+                                    }
+                                    box.commit().Assert();
                                 }
-                                box.commit().Assert();
+                                addBGTask();
                             }
-                            addBGTask();
                         }
+                    } finally {
+                        ctx.dispatch("/s.jsp");
                     }
-                    ctx.dispatch("/s.jsp");
                 }
             });
         }

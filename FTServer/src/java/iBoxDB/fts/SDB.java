@@ -21,7 +21,7 @@ public class SDB {
         if (isVM) {
             // when JVM on VM, to prevent multiple VM Instances.
             // example
-            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -Xmx356m -Xms256m
+            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection -Xmx356m -Xms256m
             // lockFile = 7
             String str = System.getenv("lockFile");
             if (str == null) {

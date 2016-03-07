@@ -282,7 +282,7 @@ public class BPage {
             if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
                     || lcurl.contains("share") || lcurl.contains("mailto")
                     || lcurl.contains("report") || lcurl.contains("send")
-                    || lcurl.contains("register")) {
+                    || lcurl.contains("register") || lcurl.contains("search")) {
                 return null;
             }
 
@@ -342,6 +342,9 @@ public class BPage {
 
     @NotColumn
     private static boolean isHTMLURL(String url) {
+        if (url.length() > BPage.MAX_URL_LENGTH) {
+            return false;
+        }
         url = url.toLowerCase();
         int t = url.lastIndexOf("/");
         if (t > "https://-".length()) {

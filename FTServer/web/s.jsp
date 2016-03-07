@@ -60,6 +60,7 @@
                     SDB.search_db.delete("URL", burl.id);
                 }
             }
+            SearchResource.searchList.clear();
             BPage p = new BPage();
             p.title = "BURL Deleted";
             p.content = empty;
