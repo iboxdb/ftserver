@@ -19,9 +19,9 @@ public class SDB {
 
         lockFile = DB.root(path) + "running_";
         if (isVM) {
-            // when JVM on VM, to prevent multiple VM Instances.
+            // when JVM on VM, to prevent multiple VM Instances reading/writing same file.
             // example
-            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection -Xmx356m -Xms256m
+            // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection -Xmx356m -Xms128m
             // lockFile = 7
             String str = System.getenv("lockFile");
             if (str == null) {
@@ -47,7 +47,7 @@ public class SDB {
         }
 
         try {
-            //BoxSystem.DBDebug.DeleteDBFiles(1);
+
             DB server = new DB(1);
             if (isVM) {
                 server.getConfig().DBConfig.CacheLength
@@ -55,6 +55,8 @@ public class SDB {
             }
             server.getConfig().DBConfig.SwapFileBuffer
                     = (int) server.getConfig().DBConfig.mb(4);
+            server.getConfig().DBConfig.FileIncSize
+                    = (int) server.getConfig().DBConfig.mb(16);
             new Engine().Config(server.getConfig().DBConfig);
 
             server.getConfig().ensureTable(BURL.class, "URL", "id");

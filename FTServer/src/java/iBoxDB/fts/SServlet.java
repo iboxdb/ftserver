@@ -65,24 +65,27 @@ public class SServlet extends HttpServlet {
                 public void run() {
                     try {
                         synchronized (writeESBG) {
-                            HashSet<String> subUrls = new HashSet<String>();
+                            HashSet<String> subUrls
+                                    = del ? null : new HashSet<String>();
                             ctx.getRequest().setAttribute("q", SearchResource.indexText(
                                     url, del, subUrls));
                             ctx.getRequest().setAttribute("index", true);
-                            subUrls.remove(url);
-                            subUrls.remove(url + "/");
-                            subUrls.remove(url.substring(0, url.length() - 1));
-                            if (subUrls.size() > 0) {
-                                try (Box box = SDB.search_db.cube()) {
-                                    for (String url : subUrls) {
-                                        BURL burl = new BURL();
-                                        burl.id = box.newId(1, 1);
-                                        burl.url = url;
-                                        box.d("URL").insert(burl);
+                            if (subUrls != null) {
+                                subUrls.remove(url);
+                                subUrls.remove(url + "/");
+                                subUrls.remove(url.substring(0, url.length() - 1));
+                                if (subUrls.size() > 0) {
+                                    try (Box box = SDB.search_db.cube()) {
+                                        for (String url : subUrls) {
+                                            BURL burl = new BURL();
+                                            burl.id = box.newId(1, 1);
+                                            burl.url = url;
+                                            box.d("URL").insert(burl);
+                                        }
+                                        box.commit().Assert();
                                     }
-                                    box.commit().Assert();
+                                    addBGTask();
                                 }
-                                addBGTask();
                             }
                         }
                     } finally {
@@ -114,6 +117,7 @@ public class SServlet extends HttpServlet {
                             addBGTask();
                         }
                     }
+                    System.gc();
                 } catch (Throwable ex) {
                     lastEx = ex;
                     Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);

@@ -16,7 +16,6 @@ public class SearchResource {
     public final static Engine engine = new Engine();
 
     public static String indexText(String url, boolean isDelete, HashSet<String> subUrls) {
-
         try (Box box = SDB.search_db.cube()) {
             for (BPage p : box.select(BPage.class, "from Page where url==?", url)) {
                 engine.indexText(box, p.id, p.content.toString(), true);

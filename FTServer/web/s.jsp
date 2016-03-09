@@ -25,7 +25,7 @@
         for (KeyWord kw : SearchResource.engine.searchDistinct(box, name)) {
             long id = kw.getID();
             id = BPage.rankDownId(id);
-            BPage p = box.d("Page", id).select().select(BPage.class);
+            BPage p = box.d("Page", id).select(BPage.class);
             p.keyWord = kw;
             pages.add(p);
             if (pages.size() > 30) {
@@ -55,17 +55,20 @@
             }
         }
         if (name.startsWith("burlburl")) {
-            for (BPage burl : pages) {
-                if (burl.content == empty) {
-                    SDB.search_db.delete("URL", burl.id);
-                }
-            }
             SearchResource.searchList.clear();
-            BPage p = new BPage();
-            p.title = "BURL Deleted";
-            p.content = empty;
-            p.url = "./";
-            pages.add(0, p);
+            SearchResource.urlList.clear();
+            if (SServlet.lastEx == null) {
+                for (BPage burl : pages) {
+                    if (burl.content == empty) {
+                        SDB.search_db.delete("URL", burl.id);
+                    }
+                }
+                BPage p = new BPage();
+                p.title = "BURL Deleted";
+                p.content = empty;
+                p.url = "./";
+                pages.add(0, p);
+            }
         }
         //Debug End
     } finally {
@@ -85,7 +88,7 @@
 <html>
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta name="description" content="<%=name%> what is? iBoxDB NoSQL Database Full Text Search">
+        <meta name="description" content="<%=name%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
         <title><%=name%>, what is? iBoxDB Full Text Search</title>
 
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 

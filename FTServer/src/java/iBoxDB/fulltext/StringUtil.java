@@ -103,8 +103,9 @@ class StringUtil {
         int end = -1;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ps.length; i++) {
-            if ((ps[i].getPosition() + ps[i].getKeyWord()
-                    .toString().length()) < end) {
+            int len = ps[i] instanceof KeyWordE ? ps[i].getKeyWord()
+                    .toString().length() : ((KeyWordN) ps[i]).size();
+            if ((ps[i].getPosition() + len) <= end) {
                 continue;
             }
             start = ps[i].getPosition();
