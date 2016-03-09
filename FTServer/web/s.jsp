@@ -40,6 +40,7 @@
             for (BURL burl : box.select(BURL.class, "FROM URL order by id limit 0,300")) {
                 BPage p = new BPage();
                 p.title = burl.url;
+                p.description = "";
                 p.url = burl.url;
                 p.content = empty;
                 p.id = burl.id;
@@ -48,6 +49,7 @@
             if (SServlet.lastEx != null) {
                 BPage p = new BPage();
                 p.title = SServlet.lastEx.getClass().getName();
+                p.description = "";
                 p.url = "./";
                 p.content = UString.S(SServlet.lastEx.toString());
                 p.id = -1;
@@ -65,6 +67,7 @@
                 }
                 BPage p = new BPage();
                 p.title = "BURL Deleted";
+                p.description = "";
                 p.content = empty;
                 p.url = "./";
                 pages.add(0, p);
@@ -79,6 +82,7 @@
 <%    if (pages.isEmpty()) {
         BPage p = new BPage();
         p.title = "NotFound " + name;
+        p.description = "";
         p.content = UString.S("input URL to index");
         p.url = "https://github.com/iboxdb/ftserver";
         pages.add(p);
