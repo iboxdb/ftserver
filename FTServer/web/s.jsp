@@ -113,7 +113,7 @@
 
                 var ts = document.getElementsByClassName("stext");
 
-                var kws = txt.split(' ');
+                var kws = txt.split(/[ 　]/);
                 for (var i = 0; i < kws.length; i++) {
                     var kw = String(kws[i]).trim();
                     if (kw.length < 1) {
@@ -165,7 +165,8 @@
                 <% for (BPage p : pages) {
                         String content = null;
                         if (pages.size() == 1 || p.keyWord == null) {
-                            content = p.content.toString();
+                            content = p.description + "...";
+                            content += p.content.toString();
                         } else if (p.id != p.keyWord.getID()) {
                             content = p.description;
                             if (content.length() < 20) {
