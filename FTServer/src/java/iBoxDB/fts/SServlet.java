@@ -67,6 +67,9 @@ public class SServlet extends HttpServlet {
                 @Override
                 public void run() {
                     try {
+                        if (lastEx != null) {
+                            return;
+                        }
                         synchronized (writeESBG) {
                             HashSet<String> subUrls
                                     = del || (!full) ? null : new HashSet<String>();
@@ -89,9 +92,10 @@ public class SServlet extends HttpServlet {
                                     }
                                     addBGTask();
                                 }
-                                subUrls = null;
                             }
                         }
+                    } catch (Throwable ex) {
+                        lastEx = ex;
                     } finally {
                         ctx.dispatch("/s.jsp");
                     }
