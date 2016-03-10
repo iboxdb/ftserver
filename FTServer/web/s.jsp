@@ -56,7 +56,7 @@
                 pages.add(0, p);
             }
         }
-        if (name.startsWith("burlburl")) {
+        if (name.startsWith("burl5")) {
             SearchResource.searchList.clear();
             SearchResource.urlList.clear();
             if (SServlet.lastEx == null) {

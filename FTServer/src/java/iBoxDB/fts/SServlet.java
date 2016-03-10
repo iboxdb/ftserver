@@ -36,12 +36,13 @@ public class SServlet extends HttpServlet {
 
         final AsyncContext ctx = request.startAsync(request, response);
         ctx.setTimeout(30 * 1000);
-        request.setAttribute("q", name);
 
         Boolean isdelete = null;
+        Boolean isfullrecord = null;
 
         if (name.startsWith("http://") || name.startsWith("https://")) {
             isdelete = false;
+            isfullrecord = name.contains(" full");
         } else if (name.startsWith("delete")
                 && (name.contains("http://") || name.contains("https://"))) {
             isdelete = true;
@@ -51,6 +52,7 @@ public class SServlet extends HttpServlet {
             while (SearchResource.searchList.size() > 15) {
                 SearchResource.searchList.remove();
             }
+            request.setAttribute("q", name);
             getReadES(name).submit(new Runnable() {
                 @Override
                 public void run() {
@@ -60,13 +62,14 @@ public class SServlet extends HttpServlet {
         } else {
             final String url = BPage.getUrl(name);
             final boolean del = isdelete;
+            final boolean full = isfullrecord != null && isfullrecord.booleanValue();
             writeES.submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         synchronized (writeESBG) {
                             HashSet<String> subUrls
-                                    = del ? null : new HashSet<String>();
+                                    = del || (!full) ? null : new HashSet<String>();
                             ctx.getRequest().setAttribute("q", SearchResource.indexText(
                                     url, del, subUrls));
                             ctx.getRequest().setAttribute("index", true);
@@ -86,6 +89,7 @@ public class SServlet extends HttpServlet {
                                     }
                                     addBGTask();
                                 }
+                                subUrls = null;
                             }
                         }
                     } finally {
