@@ -61,7 +61,7 @@
                 </script>
 
                 <div class="ui message" style="text-align: left">
-                    Input [KeyWord] to search， input [URL] to index <br> 
+                    Input [KeyWord] to search, input [URL] to index <br> 
                     Input [delete URL] to delete.   <a  href="./">Refresh</a> 
                     <br>
                     Recent Searches:<br>
