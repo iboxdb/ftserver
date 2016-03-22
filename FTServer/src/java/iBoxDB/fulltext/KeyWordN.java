@@ -59,10 +59,14 @@ public final class KeyWordN extends KeyWord {
         K = k;
     }
 
+    public String toKString() {
+        return KtoString(K);
+    }
+
     @NotColumn
     @Override
     public String toString() {
-        return KtoString(K) + " Pos=" + P + ", ID=" + I + " N";
+        return toKString() + " Pos=" + P + ", ID=" + I + " N";
     }
 
 }

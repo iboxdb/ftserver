@@ -1,9 +1,25 @@
+<%@page import="iBoxDB.fts.SDB"%>
+<%@page import="iBoxDB.LocalServer.Box"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="iBoxDB.fts.SearchResource"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%
     response.setHeader("Pragma", "No-cache");
     response.setHeader("Cache-Control", "no-cache");
     response.setDateHeader("Expires", 0);
+%>
+<%
+    ArrayList<String> discoveries = new ArrayList<String>();
+
+    Box box = SDB.search_db.cube();
+    try {
+        for (String skw : SearchResource.engine.discover(box, 'a', 'z', 4,
+                '\u2E80', '\u9fa5', 1)) {
+            discoveries.add(skw);
+        }
+    } finally {
+        box.close();
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -78,6 +94,14 @@
                         for (String str : SearchResource.urlList) {
                     %>
                     <a href="<%=str%>" target="_blank" ><%=str%></a>. <br> 
+                    <%
+                        }
+                    %>
+
+                    <br />Discoveries:&nbsp; 
+                    <%
+                        for (String str : discoveries) {
+                    %> <a href="s?q=<%=str.replace("#", "%23")%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>

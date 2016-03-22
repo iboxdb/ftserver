@@ -4,6 +4,16 @@ import java.util.*;
 
 class StringUtil {
 
+    protected static HashMap<String, String> correctKW = new HashMap<String, String>() {
+        {
+            put("databae", "database");
+            put("beby", "baby");
+            put("androd", "android");
+            put("canguan", "餐馆");
+            put("meishi", "美食");
+        }
+    };
+
     protected static HashMap<String, String> antetypes = new HashMap<String, String>() {
         {
             put("dogs", "dog");
@@ -53,6 +63,9 @@ class StringUtil {
         }
     }
 
+    //Chinese  [\u2E80-\u9fa5]
+    //Japanese [\u0800-\u4e00]|
+    //Korean   [\uAC00-\uD7A3] [\u3130-\u318F] 
     public boolean isWord(char c) {
         //English
         if (c >= 'a' && c <= 'z') {
@@ -69,7 +82,6 @@ class StringUtil {
         if (c >= 0xc0 && c <= 0xff) {
             return true;
         }
-        //Korean [uAC00-uD7A3]
         return c == '-' || c == '#';
     }
 
@@ -118,6 +130,36 @@ class StringUtil {
         }
         return sb.toString();
 
+    }
+
+    public void correctInput(ArrayList<KeyWord> kws) {
+        for (int i = 0; i < kws.size(); i++) {
+            KeyWord kw = (KeyWord) kws.get(i);
+            if (kw instanceof KeyWordE) {
+                String str = kw.getKeyWord().toString();
+                str = correctKW.get(str);
+                if (str != null) {
+                    if (isWord(str.charAt(0))) {
+                        kw.setKeyWord(str);
+                    } else {
+                        KeyWordN kwn = new KeyWordN();
+                        kwn.I = kw.I;
+                        kwn.P = kw.P + 1;
+                        switch (str.length()) {
+                            case 1:
+                                kwn.longKeyWord(str.charAt(0), (char) 0, (char) 0);
+                                break;
+                            case 2:
+                                kwn.longKeyWord(str.charAt(0), str.charAt(1), (char) 0);
+                                break;
+                            default:
+                                continue;
+                        }
+                        kws.set(i, kwn);
+                    }
+                }
+            }
+        }
     }
 
 }
