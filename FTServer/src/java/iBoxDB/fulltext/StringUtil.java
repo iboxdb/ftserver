@@ -43,6 +43,8 @@ class StringUtil {
         s += "， 　，《。》、？；：‘’“”【｛】｝——=+、｜·～！￥%……&*（）"; //@-#
         s += "｀～！＠￥％……—×（）——＋－＝【】｛｝：；’＇”＂，．／＜＞？’‘”“";//＃
         s += "� ★☆,。？,　！";
+        s += "©»¥「」";
+
         set = new HashSet<Character>();
         for (char c : s.toCharArray()) {
             set.add(c);

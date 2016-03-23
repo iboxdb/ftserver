@@ -263,9 +263,9 @@ public class Engine {
 
     private Iterable<KeyWord> lessMatch(Box box, KeyWord kw) {
         if (kw instanceof KeyWordE) {
-            return new Index2KeyWordEIterable(box.select(Object.class, "from E where K<=?", kw.getKeyWord()));
+            return new Index2KeyWordEIterable(box.select(Object.class, "from E where K<=? limit 0, 50", kw.getKeyWord()));
         } else {
-            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K<=?", kw.getKeyWord()));
+            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K<=? limit 0, 50", kw.getKeyWord()));
         }
     }
 
