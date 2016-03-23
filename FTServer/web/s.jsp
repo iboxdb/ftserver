@@ -199,7 +199,7 @@
             <div class="six wide column" style="max-width: 200px;">
 
                 <div class="ui segment">
-                    <h4><a href="http://www.iboxdb.com" target="_blank">iBoxDB</a></h4> 
+                    <h4><a href="http://www.iboxdb.com/" target="_blank">iBoxDB</a></h4> 
                     Fast NoSQL Document Database
                 </div>
 
