@@ -78,7 +78,7 @@
 
                 <div class="ui message" style="text-align: left">
                     Input [KeyWord] to search, input [URL] to index <br> 
-                    Input [delete URL] to delete.   <a  href="./">Refresh</a> 
+                    Input [delete URL] to delete.
                     <br>
                     Recent Searches:<br>
                     <%
@@ -98,7 +98,7 @@
                         }
                     %>
 
-                    <br />Discoveries:&nbsp; 
+                    <br /><a  href="./">Refresh Discoveries</a>:&nbsp; 
                     <%
                         for (String str : discoveries) {
                     %> <a href="s?q=<%=str.replace("#", "%23")%>"><%=str%></a>. &nbsp;  
