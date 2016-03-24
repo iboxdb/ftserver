@@ -25,7 +25,7 @@ public class SListener implements ServletContextListener {
         }
 
         if (path == null) {
-            path = System.getProperty("user.home") + "/ftsdata51/";
+            path = System.getProperty("user.home") + "/ftsdata52/";
             new File(path).mkdirs();
 
             String tmpPath = sce.getServletContext().getRealPath("/")
