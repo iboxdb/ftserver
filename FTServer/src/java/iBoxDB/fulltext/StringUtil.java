@@ -2,7 +2,7 @@ package iBoxDB.fulltext;
 
 import java.util.*;
 
-class StringUtil {
+public class StringUtil {
 
     protected static HashMap<String, String> correctKW = new HashMap<String, String>() {
         {

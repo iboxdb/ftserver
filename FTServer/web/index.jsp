@@ -11,14 +11,16 @@
 <%
     ArrayList<String> discoveries = new ArrayList<String>();
 
-    Box box = SDB.search_db.cube();
-    try {
-        for (String skw : SearchResource.engine.discover(box, 'a', 'z', 4,
-                '\u2E80', '\u9fa5', 1)) {
-            discoveries.add(skw);
+    if (SDB.search_db != null) {
+        Box box = SDB.search_db.cube();
+        try {
+            for (String skw : SearchResource.engine.discover(box, 'a', 'z', 4,
+                    '\u2E80', '\u9fa5', 1)) {
+                discoveries.add(skw);
+            }
+        } finally {
+            box.close();
         }
-    } finally {
-        box.close();
     }
 %>
 <!DOCTYPE html>
