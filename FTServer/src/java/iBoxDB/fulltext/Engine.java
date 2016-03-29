@@ -350,7 +350,7 @@ public class Engine {
 
                         Iterable<KeyWord> tmp = search(box, kw, con, asWord, maxId);
                         if (tmp instanceof Index2KeyWordIterable) {
-                            index = (Iterator<Object[]>) (Object) ((Index2KeyWordIterable) tmp).index;
+                            index = ((Index2KeyWordIterable) tmp).index;
                         }
                     }
 

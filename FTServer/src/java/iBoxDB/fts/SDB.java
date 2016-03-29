@@ -19,7 +19,7 @@ public class SDB {
 
         lockFile = DB.root(path) + "running_";
         if (isVM) {
-            // when JVM on VM, to prevent multiple VM Instances reading/writing same file.
+            // when JVM on VM or Using NFS, to prevent multiple VM Instances reading/writing same file.
             // example
             // JAVA_OPTS = $JAVA_OPTS -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection -Xmx356m -Xms128m
             // lockFile = 7

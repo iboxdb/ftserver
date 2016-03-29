@@ -183,6 +183,9 @@ public class BPage {
             doc.$("textarea").remove();
             doc.$("Textarea").remove();
 
+            doc.$("noscript").remove();
+            doc.$("Noscript").remove();
+
             if (subUrls != null) {
                 for (Jerry a : doc.$("a")) {
                     String ss = getFullUrl(url, a.attr("href"));
@@ -235,9 +238,11 @@ public class BPage {
             doc.$("Style").text("");
              */
             String content = doc.text();
-            content = content.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ")
+            content = content.replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
                     .replaceAll("　", " ")
                     .replaceAll("&nbsp;", " ")
+                    .replaceAll("&gt;", " ")
+                    .replaceAll("&lt;", " ")
                     .replaceAll("\\s+", " ")
                     .trim();
             if (content.length() < 50) {
