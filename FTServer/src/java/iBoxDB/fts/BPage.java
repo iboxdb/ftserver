@@ -287,7 +287,8 @@ public class BPage {
             if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
                     || lcurl.contains("share") || lcurl.contains("mailto")
                     || lcurl.contains("report") || lcurl.contains("send")
-                    || lcurl.contains("register") || lcurl.contains("search")) {
+                    || lcurl.contains("register") || lcurl.contains("search")
+                    || lcurl.contains("cgi-bin")) {
                 return null;
             }
 

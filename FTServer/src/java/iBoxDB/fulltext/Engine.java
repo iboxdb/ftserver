@@ -32,9 +32,9 @@ public class Engine {
                     continue;
                 }
                 words.add(kw.getKeyWord().toString());
-                binder = box.d("E", kw.getKeyWord(), kw.getID(), kw.getPosition());
+                binder = box.d("/E", kw.getKeyWord(), kw.getID(), kw.getPosition());
             } else {
-                binder = box.d("N", kw.getKeyWord(), kw.getID(), kw.getPosition());
+                binder = box.d("/N", kw.getKeyWord(), kw.getID(), kw.getPosition());
             }
             if (isRemove) {
                 binder.delete();
@@ -247,7 +247,7 @@ public class Engine {
 
         if (kw instanceof KeyWordE) {
             asWord = true;
-            return new Index2KeyWordEIterable(box.select(Object.class, "from E where K==? & I<=?",
+            return new Index2KeyWordEIterable(box.select(Object.class, "from /E where K==? & I<=?",
                     kw.getKeyWord(), maxId.id), box, kw, con, asWord, maxId);
         } else {
 
@@ -256,10 +256,10 @@ public class Engine {
             }
             if (con == null || asWord) {
                 asWord = true;
-                return new Index2KeyWordNIterable(box.select(Object.class, "from N where K==? & I<=?",
+                return new Index2KeyWordNIterable(box.select(Object.class, "from /N where K==? & I<=?",
                         kw.getKeyWord(), maxId.id), box, kw, con, asWord, maxId);
             } else {
-                Object[] os = (Object[]) box.d("N", kw.getKeyWord(),
+                Object[] os = (Object[]) box.d("/N", kw.getKeyWord(),
                         con.getID(), (con.getPosition() + ((KeyWordN) con).size()))
                         .select(Object.class);
                 if (os != null) {
@@ -279,9 +279,9 @@ public class Engine {
 
     private static Iterable<KeyWord> lessMatch(Box box, KeyWord kw) {
         if (kw instanceof KeyWordE) {
-            return new Index2KeyWordEIterable(box.select(Object.class, "from E where K<=? limit 0, 50", kw.getKeyWord()), null, null, null, true, new MaxID(Long.MAX_VALUE));
+            return new Index2KeyWordEIterable(box.select(Object.class, "from /E where K<=? limit 0, 50", kw.getKeyWord()), null, null, null, true, new MaxID(Long.MAX_VALUE));
         } else {
-            return new Index2KeyWordNIterable(box.select(Object.class, "from N where K<=? limit 0, 50", kw.getKeyWord()), null, null, null, true, new MaxID(Long.MAX_VALUE));
+            return new Index2KeyWordNIterable(box.select(Object.class, "from /N where K<=? limit 0, 50", kw.getKeyWord()), null, null, null, true, new MaxID(Long.MAX_VALUE));
         }
     }
 

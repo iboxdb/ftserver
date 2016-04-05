@@ -84,7 +84,7 @@
         p.title = "NotFound " + name;
         p.description = "";
         p.content = UString.S("input URL to index");
-        p.url = "https://github.com/iboxdb/ftserver";
+        p.url = "./";
         pages.add(p);
     }
 %>
@@ -93,7 +93,7 @@
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="description" content="<%=name%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
-        <title><%=name%>, what is? iBoxDB Full Text Search</title>
+        <title><%=name%>, what is? iBoxDB NoSQL Document Database Full Text Search</title>
 
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 
