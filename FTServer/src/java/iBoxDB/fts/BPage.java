@@ -83,6 +83,7 @@ public class BPage {
 
     @NotColumn
     public static BPage get(String url, HashSet<String> subUrls) {
+        HttpResponse response = null;
         try {
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
@@ -92,7 +93,7 @@ public class BPage {
 
             HttpRequest httpRequest = HttpRequest.get(url);
             httpRequest.timeout(10 * 1000);
-            HttpResponse response = httpRequest.send();
+            response = httpRequest.send();
             if (response.statusCode() != 200) {
                 return null;
             }
@@ -252,9 +253,14 @@ public class BPage {
                 content = content.substring(0, 5000);
             }
             page.content = UString.S(content + " " + page.url);
+
             return page;
         } catch (Throwable e) {
             return null;
+        } finally {
+            if (response != null) {
+                response.close();
+            }
         }
     }
 

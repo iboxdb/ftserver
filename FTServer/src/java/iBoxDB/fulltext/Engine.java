@@ -26,25 +26,59 @@ public class Engine {
 
         HashSet<String> words = new HashSet<String>();
         for (KeyWord kw : map) {
-            Binder binder;
-            if (kw instanceof KeyWordE) {
-                if (words.contains(kw.getKeyWord().toString())) {
-                    continue;
-                }
-                words.add(kw.getKeyWord().toString());
-                binder = box.d("/E", kw.getKeyWord(), kw.getID(), kw.getPosition());
-            } else {
-                binder = box.d("/N", kw.getKeyWord(), kw.getID(), kw.getPosition());
-            }
-            if (isRemove) {
-                binder.delete();
-            } else {
-                binder.insert(kw, 1);
-            }
+            insertToBox(box, kw, words, isRemove);
             itCount++;
         }
 
         return itCount;
+    }
+
+    public long indexTextNoTran(AutoBox auto, final int commitCount, long id, String str, boolean isRemove) {
+        if (id == -1) {
+            // -1 is internal default value as NULL
+            return -1;
+        }
+        long itCount = 0;
+        char[] cs = sUtil.clear(str);
+        ArrayList<KeyWord> map = util.fromString(id, cs, true);
+
+        HashSet<String> words = new HashSet<String>();
+        Box box = null;
+        int ccount = 0;
+        for (KeyWord kw : map) {
+            if (box == null) {
+                box = auto.cube();
+                ccount = commitCount;
+            }
+            insertToBox(box, kw, words, isRemove);
+            itCount++;
+            if (--ccount < 1) {
+                box.commit().Assert();
+                box = null;
+            }
+        }
+        if (box != null) {
+            box.commit().Assert();
+        }
+        return itCount;
+    }
+
+    private void insertToBox(Box box, KeyWord kw, HashSet<String> insertedWords, boolean isRemove) {
+        Binder binder;
+        if (kw instanceof KeyWordE) {
+            if (insertedWords.contains(kw.getKeyWord().toString())) {
+                return;
+            }
+            insertedWords.add(kw.getKeyWord().toString());
+            binder = box.d("/E", kw.getKeyWord(), kw.getID(), kw.getPosition());
+        } else {
+            binder = box.d("/N", kw.getKeyWord(), kw.getID(), kw.getPosition());
+        }
+        if (isRemove) {
+            binder.delete();
+        } else {
+            binder.insert(kw);
+        }
     }
 
     public LinkedHashSet<String> discover(final Box box,

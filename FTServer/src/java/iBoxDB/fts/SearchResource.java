@@ -16,15 +16,13 @@ public class SearchResource {
     public final static Engine engine = new Engine();
 
     public static String indexText(String url, boolean isDelete, HashSet<String> subUrls) {
-        try (Box box = SDB.search_db.cube()) {
-            for (BPage p : box.select(BPage.class, "from Page where url==?", url)) {
-                engine.indexText(box, p.id, p.content.toString(), true);
-                engine.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
-                box.d("Page", p.id).delete();
-                break;
-            }
-            box.commit().Assert();
+
+        for (BPage p : SDB.search_db.select(BPage.class, "from Page where url==?", url)) {
+            engine.indexTextNoTran(SDB.search_db, 10, p.id, p.content.toString(), true);
+            engine.indexTextNoTran(SDB.search_db, 10, p.rankUpId(), p.rankUpDescription(), true);
+            SDB.search_db.delete("Page", p.id);
         }
+
         if (isDelete) {
             return "deleted";
         }
@@ -33,13 +31,11 @@ public class SearchResource {
         if (p == null) {
             return "temporarily unreachable";
         } else {
-            try (Box box = SDB.search_db.cube()) {
-                p.id = box.newId();
-                box.d("Page").insert(p);
-                engine.indexText(box, p.id, p.content.toString(), false);
-                engine.indexText(box, p.rankUpId(), p.rankUpDescription(), false);
-                box.commit().Assert();
-            }
+            p.id = SDB.search_db.newId();
+            engine.indexTextNoTran(SDB.search_db, 10, p.id, p.content.toString(), false);
+            engine.indexTextNoTran(SDB.search_db, 10, p.rankUpId(), p.rankUpDescription(), false);
+            SDB.search_db.insert("Page", p);
+
             urlList.add(p.url);
             while (urlList.size() > 3) {
                 urlList.remove();
