@@ -18,8 +18,8 @@ public class SearchResource {
     public static String indexText(String url, boolean isDelete, HashSet<String> subUrls) {
 
         for (BPage p : SDB.search_db.select(BPage.class, "from Page where url==?", url)) {
-            engine.indexTextNoTran(SDB.search_db, 10, p.id, p.content.toString(), true);
-            engine.indexTextNoTran(SDB.search_db, 10, p.rankUpId(), p.rankUpDescription(), true);
+            engine.indexTextNoTran(SDB.search_db, 100, p.id, p.content.toString(), true);
+            engine.indexTextNoTran(SDB.search_db, 100, p.rankUpId(), p.rankUpDescription(), true);
             SDB.search_db.delete("Page", p.id);
         }
 
@@ -32,8 +32,8 @@ public class SearchResource {
             return "temporarily unreachable";
         } else {
             p.id = SDB.search_db.newId();
-            engine.indexTextNoTran(SDB.search_db, 10, p.id, p.content.toString(), false);
-            engine.indexTextNoTran(SDB.search_db, 10, p.rankUpId(), p.rankUpDescription(), false);
+            engine.indexTextNoTran(SDB.search_db, 100, p.id, p.content.toString(), false);
+            engine.indexTextNoTran(SDB.search_db, 100, p.rankUpId(), p.rankUpDescription(), false);
             SDB.search_db.insert("Page", p);
 
             urlList.add(p.url);
