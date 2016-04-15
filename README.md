@@ -4,7 +4,7 @@
 
 ```
 Use Netbeans to build or download fts.zip(WAR) from Release
-Deploy to tomcat
+Deploy to tomcat/jetty
 ```
 
 
