@@ -1,6 +1,5 @@
 package iBoxDB.fts;
 
-import iBoxDB.LocalServer.*;
 import iBoxDB.fulltext.Engine;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
