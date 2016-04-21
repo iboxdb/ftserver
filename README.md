@@ -11,7 +11,7 @@ Deploy to tomcat/jetty
 ![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts2.png)
 
 ### Dependencies
-[iBoxDB](http://www.iboxdb.com/)
+[iBoxDB](http://www.iboxdb.com)
 
 [FTS Engine](https://github.com/iboxdb/full-text-search)
 
