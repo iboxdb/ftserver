@@ -135,8 +135,15 @@ public class Engine {
     }
 
     public Iterable<KeyWord> searchDistinct(final Box box, String str) {
-        final Iterator<KeyWord> it = search(box, str).iterator();
+        return searchDistinct(box, str, Long.MAX_VALUE, Long.MAX_VALUE);
+    }
+
+    // startId -> descending order
+    public Iterable<KeyWord> searchDistinct(final Box box, final String str,
+            final long startId, final long length) {
+        final Iterator<KeyWord> it = search(box, str, startId).iterator();
         return new Iterable<KeyWord>() {
+            private long len = length;
 
             @Override
             public Iterator<KeyWord> iterator() {
@@ -146,12 +153,16 @@ public class Engine {
 
                     @Override
                     public boolean hasNext() {
+                        if (len < 1) {
+                            return false;
+                        }
                         while (it.hasNext()) {
                             current = it.next();
                             if (current.getID() == c_id) {
                                 continue;
                             }
                             c_id = current.getID();
+                            len--;
                             return true;
                         }
                         return false;
@@ -168,6 +179,13 @@ public class Engine {
     }
 
     public Iterable<KeyWord> search(final Box box, String str) {
+        return search(box, str, Long.MAX_VALUE);
+    }
+
+    public Iterable<KeyWord> search(final Box box, String str, long startId) {
+        if (startId < 0) {
+            return new ArrayList();
+        }
         char[] cs = sUtil.clear(str);
         ArrayList<KeyWord> map = util.fromString(-1, cs, false);
         sUtil.correctInput(map);
@@ -208,6 +226,7 @@ public class Engine {
             }
         }
         final MaxID maxId = new MaxID(this.maxSearchTime);
+        maxId.id = startId;
         return search(box, kws.toArray(new KeyWord[0]), maxId);
     }
 

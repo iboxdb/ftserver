@@ -110,12 +110,18 @@
             .rt{
                 color: red;
             }
+            .gt{
+                color: green;
+            }
         </style> 
         <script>
-            function hightlight() {
+            var loadedDivId = "ldiv" + 1;
+            function highlight() {
+                debugger;
                 var txt = document.title.substr(0, document.title.indexOf(','));
 
-                var ts = document.getElementsByClassName("stext");
+                var div = document.getElementById(loadedDivId);
+                var ts = div.getElementsByClassName("stext");
 
                 var kws = txt.split(/[ 　]/);
                 for (var i = 0; i < kws.length; i++) {
@@ -140,7 +146,7 @@
             }
         </script>
     </head>
-    <body onload="hightlight()"> 
+    <body onload="highlight()"> 
         <div class="ui left aligned grid">
             <div class="column"  style="max-width: 600px;"> 
                 <form class="ui large form"  action="s" onsubmit="formsubmit()">
@@ -166,34 +172,38 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;">
-                <% for (BPage p : pages) {
-                        String content = null;
-                        if (pages.size() == 1 || p.keyWord == null) {
-                            content = p.description + "...";
-                            content += p.content.toString();
-                        } else if (p.id != p.keyWord.getID()) {
-                            content = p.description;
-                            if (content.length() < 20) {
-                                content += p.getRandomContent() + "...";;
+                <div id="ldiv1">
+                    <% for (BPage p : pages) {
+                            String content = null;
+                            if (pages.size() == 1 || p.keyWord == null) {
+                                content = p.description + "...";
+                                content += p.content.toString();
+                            } else if (p.id != p.keyWord.getID()) {
+                                content = p.description;
+                                if (content.length() < 20) {
+                                    content += p.getRandomContent() + "...";;
+                                }
+                            } else {
+                                content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
+                                if (content.length() < 100) {
+                                    content += p.getRandomContent();
+                                }
+                                if (content.length() < 100) {
+                                    content += p.description;
+                                }
+                                if (content.length() > 200) {
+                                    content = content.substring(0, 200) + "..";
+                                }
                             }
-                        } else {
-                            content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
-                            if (content.length() < 100) {
-                                content += p.getRandomContent();
-                            }
-                            if (content.length() < 100) {
-                                content += p.description;
-                            }
-                            if (content.length() > 200) {
-                                content = content.substring(0, 200) + "..";
-                            }
-                        }
-                %>
-                <h3>
-                    <a class="stext" target="_blank"   href="<%=p.url%>" ><%= p.title%></a></h3> 
-                <span class="stext"> <%=content%> </span>
-                <% }%>
-
+                    %>
+                    <h3>
+                        <a class="stext" target="_blank"   href="<%=p.url%>" ><%= p.title%></a></h3> 
+                    <span class="stext"> <%=content%> </span><br>
+                    <div class="gt">
+                        <%=p.url%>
+                    </div>
+                    <% }%>
+                </div>
 
             </div>
             <div class="six wide column" style="max-width: 200px;">

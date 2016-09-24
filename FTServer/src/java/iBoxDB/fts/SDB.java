@@ -52,6 +52,9 @@ public class SDB {
             if (isVM) {
                 server.getConfig().DBConfig.CacheLength
                         = server.getConfig().DBConfig.mb(16);
+            } else {
+                server.getConfig().DBConfig.CacheLength
+                        = server.getConfig().DBConfig.mb(512);
             }
             server.getConfig().DBConfig.SwapFileBuffer
                     = (int) server.getConfig().DBConfig.mb(4);
