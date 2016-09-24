@@ -93,9 +93,9 @@
         String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
                 + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
     %>
-    <h4> <%= SServlet.lastEx != null ? "Readonly" : ""%></h4> 
     <%=name%>  TIME: <%= content%>
-    <a href="#btnsearch" ><b><%= pages.size() >= pageCount ? "TOP" : "END"%></b></a>
+    <a href="#btnsearch" ><b><%= pages.size() >= pageCount ? "HEAD" : "END"%></b></a>
+            <%= SServlet.lastEx != null ? "-Readonly" : ""%>
 </div>
 <script>
     setTimeout(function () {

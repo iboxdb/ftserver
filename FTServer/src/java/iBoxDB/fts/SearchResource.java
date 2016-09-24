@@ -38,11 +38,6 @@ public class SearchResource {
             SDB.search_db.insert("Page", p);
             engine.indexTextNoTran(SDB.search_db, batchCommit, p.id, p.content.toString(), false);
             engine.indexTextNoTran(SDB.search_db, batchCommit, p.rankUpId(), p.rankUpDescription(), false);
-
-            urlList.add(p.url);
-            while (urlList.size() > 3) {
-                urlList.remove();
-            }
             return p.url;
         }
 

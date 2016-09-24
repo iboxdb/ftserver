@@ -1,5 +1,6 @@
 package iBoxDB.fts;
 
+import static iBoxDB.fts.SearchResource.urlList;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
@@ -41,7 +42,7 @@ public class SServlet extends HttpServlet {
             isdelete = true;
         }
         if (isdelete == null) {
-            SearchResource.searchList.add(name);
+            SearchResource.searchList.add(name.replaceAll("<", ""));
             while (SearchResource.searchList.size() > 15) {
                 SearchResource.searchList.remove();
             }
@@ -66,6 +67,10 @@ public class SServlet extends HttpServlet {
                             HashSet<String> subUrls
                                     = del || (!full) ? null : new HashSet<String>();
                             SearchResource.indexText(url, del, subUrls);
+                            SearchResource.urlList.add(url.replaceAll("<", ""));
+                            while (SearchResource.urlList.size() > 3) {
+                                SearchResource.urlList.remove();
+                            }
                             if (subUrls != null) {
                                 subUrls.remove(url);
                                 subUrls.remove(url + "/");
