@@ -1,6 +1,5 @@
 package iBoxDB.fts;
 
-import iBoxDB.LocalServer.Box;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
@@ -22,20 +21,14 @@ public class SServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String name = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
+        final String queryString = request.getQueryString();
+        String name = java.net.URLDecoder.decode(queryString, "UTF-8");
         name = name.substring(2);
         //String name = request.getParameter("q");
 
         if (name.length() > 500) {
             return;
         }
-        name = name.replaceAll("<", " ").replaceAll(">", " ")
-                .replaceAll("\"", " ").replaceAll(",", " ")
-                .replaceAll("\\$", " ").trim();
-
-        final AsyncContext ctx = request.startAsync(request, response);
-        ctx.setTimeout(30 * 1000);
 
         Boolean isdelete = null;
         Boolean isfullrecord = null;
@@ -52,17 +45,15 @@ public class SServlet extends HttpServlet {
             while (SearchResource.searchList.size() > 15) {
                 SearchResource.searchList.remove();
             }
-            request.setAttribute("q", name);
-            getReadES(name).submit(new Runnable() {
-                @Override
-                public void run() {
-                    ctx.dispatch("/s.jsp");
-                }
-            });
+            response.sendRedirect("s.jsp?" + queryString);
+
         } else {
             final String url = BPage.getUrl(name);
             final boolean del = isdelete;
             final boolean full = isfullrecord != null && isfullrecord.booleanValue();
+
+            final AsyncContext ctx = request.startAsync(request, response);
+            ctx.setTimeout(30 * 1000);
             writeES.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -70,34 +61,28 @@ public class SServlet extends HttpServlet {
                         if (lastEx != null) {
                             return;
                         }
+
                         synchronized (writeESBG) {
                             HashSet<String> subUrls
                                     = del || (!full) ? null : new HashSet<String>();
-                            ctx.getRequest().setAttribute("q", SearchResource.indexText(
-                                    url, del, subUrls));
-                            ctx.getRequest().setAttribute("index", true);
+                            SearchResource.indexText(url, del, subUrls);
                             if (subUrls != null) {
                                 subUrls.remove(url);
                                 subUrls.remove(url + "/");
                                 subUrls.remove(url.substring(0, url.length() - 1));
                                 if (subUrls.size() > 0) {
-                                    try (Box box = SDB.search_db.cube()) {
-                                        for (String url : subUrls) {
-                                            BURL burl = new BURL();
-                                            burl.id = box.newId(1, 1);
-                                            burl.url = url;
-                                            box.d("URL").insert(burl);
-                                        }
-                                        box.commit().Assert();
+                                    for (String url : subUrls) {
+                                        SearchResource.waitingUrlList.add(url);
                                     }
                                     addBGTask();
                                 }
                             }
                         }
+                        ((HttpServletResponse) ctx.getResponse()).sendRedirect("s.jsp?q=" + java.net.URLEncoder.encode(url));
                     } catch (Throwable ex) {
                         lastEx = ex;
                     } finally {
-                        ctx.dispatch("/s.jsp");
+                        ctx.complete();
                     }
                 }
             });
@@ -109,38 +94,26 @@ public class SServlet extends HttpServlet {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
-                try {
+                for (String url : SearchResource.waitingUrlList) {
                     if (lastEx != null) {
                         return;
                     }
-                    Thread.sleep(SleepTime);
-                    System.gc();
-                    synchronized (writeESBG) {
-                        Iterable<BURL> urls
-                                = SDB.search_db.select(BURL.class, "FROM URL ORDER BY id LIMIT 0,1");
-                        for (BURL burl : urls) {
-                            System.out.println(burl.url);
-                            SDB.search_db.delete("URL", burl.id);
-                            SearchResource.indexText(burl.url, false, null);
-                            addBGTask();
+                    try {
+                        Thread.sleep(SleepTime);
+                        System.gc();
+                        if (url != null) {
+                            System.out.println(url);
+                            SearchResource.indexText(url, false, null);
                         }
+                        System.gc();
+                    } catch (Throwable ex) {
+                        lastEx = ex;
+                        Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    System.gc();
-                } catch (Throwable ex) {
-                    lastEx = ex;
-                    Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                SearchResource.waitingUrlList.clear();
             }
         });
-    }
-
-    private final ExecutorService[] readES = new ExecutorService[]{
-        Executors.newSingleThreadExecutor(), Executors.newSingleThreadExecutor()
-    };
-
-    private ExecutorService getReadES(Object key) {
-        return readES[Math.abs(key.hashCode()) % readES.length];
     }
 
     private final ExecutorService writeES = Executors.newSingleThreadExecutor();

@@ -1,92 +1,10 @@
-<%@page import="iBoxDB.fts.SServlet"%>
-<%@page import="iBoxDB.fts.BURL"%>
-<%@page import="iBoxDB.LocalServer.UString"%>
-<%@page import="iBoxDB.fulltext.KeyWord"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="iBoxDB.fts.BPage"%>
-<%@page import="iBoxDB.LocalServer.Box"%>
-<%@page import="iBoxDB.fts.SDB"%>
-<%@page import="iBoxDB.fts.SearchResource"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
-<%
-    response.setHeader("Pragma", "No-cache");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setDateHeader("Expires", 0);
-%>
-<%
-    String name = (String) request.getAttribute("q");
-    if (name == null || SDB.search_db == null) {
-        return;
-    }
-    ArrayList<BPage> pages = new ArrayList<BPage>();
-    long begin = System.currentTimeMillis();
-    Box box = SDB.search_db.cube();
-    try {
-        for (KeyWord kw : SearchResource.engine.searchDistinct(box, name)) {
-            long id = kw.getID();
-            id = BPage.rankDownId(id);
-            BPage p = box.d("Page", id).select(BPage.class);
-            p.keyWord = kw;
-            pages.add(p);
-            if (pages.size() > 30) {
-                break;
-            }
-        }
+ 
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 
-        //Debug Begin
-        UString empty = UString.S("");
-        if (name.startsWith("burl") || request.getAttribute("index") != null) {
-            SServlet.addBGTask();
-            for (BURL burl : box.select(BURL.class, "FROM URL order by id limit 0,300")) {
-                BPage p = new BPage();
-                p.title = burl.url;
-                p.description = "";
-                p.url = burl.url;
-                p.content = empty;
-                p.id = burl.id;
-                pages.add(p);
-            }
-            if (SServlet.lastEx != null) {
-                BPage p = new BPage();
-                p.title = SServlet.lastEx.getClass().getName();
-                p.description = "";
-                p.url = "./";
-                p.content = UString.S(SServlet.lastEx.toString());
-                p.id = -1;
-                pages.add(0, p);
-            }
-        }
-        if (name.startsWith("burl5")) {
-            SearchResource.searchList.clear();
-            SearchResource.urlList.clear();
-            if (SServlet.lastEx == null) {
-                for (BPage burl : pages) {
-                    if (burl.content == empty) {
-                        SDB.search_db.delete("URL", burl.id);
-                    }
-                }
-                BPage p = new BPage();
-                p.title = "BURL Deleted";
-                p.description = "";
-                p.content = empty;
-                p.url = "./";
-                pages.add(0, p);
-            }
-        }
-        //Debug End
-    } finally {
-        box.close();
-    }
-
-%>
-<%    if (pages.isEmpty()) {
-        BPage p = new BPage();
-        p.title = "NotFound " + name;
-        p.description = "";
-        p.content = UString.S("input URL to index");
-        p.url = "./";
-        pages.add(p);
-    }
+<%
+    final String queryString = request.getQueryString();
+    String name = java.net.URLDecoder.decode(queryString, "UTF-8");
+    name = name.substring(2);
 %>
 <!DOCTYPE html>
 <html>
@@ -115,9 +33,8 @@
             }
         </style> 
         <script>
-            var loadedDivId = "ldiv" + 1;
-            function highlight() {
-                debugger;
+            function highlight(loadedDivId) {
+
                 var txt = document.title.substr(0, document.title.indexOf(','));
 
                 var div = document.getElementById(loadedDivId);
@@ -145,8 +62,48 @@
                 }
             }
         </script>
+        <script>
+            var div_load = null;
+            document.addEventListener("scroll", function () {
+                scroll_event();
+            });
+            function onscroll_loaddiv(divid, startId) {
+                div_load = document.getElementById(divid);
+                div_load.startId = startId;
+                scroll_event();
+            }
+            function scroll_event() {
+                if (div_load !== null) {
+                    var top = div_load.getBoundingClientRect().top;
+                    var se = document.documentElement.clientHeight;
+                    if (top <= se) {
+                        var startId = div_load.startId;
+                        div_load = null;
+                        var xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == XMLHttpRequest.DONE) {
+                                var html = xhr.responseText;
+
+                                var frag = document.createElement("div");
+                                frag.innerHTML = html;
+                                var maindiv = document.getElementById('maindiv');
+                                maindiv.appendChild(frag);
+                                debugger;
+                                var ss = frag.getElementsByTagName("script");
+                                for (var i = 0; i < ss.length; i++) {
+                                    eval(ss[i].innerHTML);
+                                }
+                            }
+                        }
+                        var url = "spart.jsp?<%= queryString%>" + "&s=" + startId;
+                        xhr.open('GET', url, true);
+                        xhr.send(null);
+                    }
+                }
+            }
+        </script>
     </head>
-    <body onload="highlight()"> 
+    <body > 
         <div class="ui left aligned grid">
             <div class="column"  style="max-width: 600px;"> 
                 <form class="ui large form"  action="s" onsubmit="formsubmit()">
@@ -171,39 +128,8 @@
         </div>
 
         <div class="ui grid">
-            <div class="ten wide column" style="max-width: 600px;">
-                <div id="ldiv1">
-                    <% for (BPage p : pages) {
-                            String content = null;
-                            if (pages.size() == 1 || p.keyWord == null) {
-                                content = p.description + "...";
-                                content += p.content.toString();
-                            } else if (p.id != p.keyWord.getID()) {
-                                content = p.description;
-                                if (content.length() < 20) {
-                                    content += p.getRandomContent() + "...";;
-                                }
-                            } else {
-                                content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
-                                if (content.length() < 100) {
-                                    content += p.getRandomContent();
-                                }
-                                if (content.length() < 100) {
-                                    content += p.description;
-                                }
-                                if (content.length() > 200) {
-                                    content = content.substring(0, 200) + "..";
-                                }
-                            }
-                    %>
-                    <h3>
-                        <a class="stext" target="_blank"   href="<%=p.url%>" ><%= p.title%></a></h3> 
-                    <span class="stext"> <%=content%> </span><br>
-                    <div class="gt">
-                        <%=p.url%>
-                    </div>
-                    <% }%>
-                </div>
+            <div class="ten wide column" style="max-width: 600px;" id="maindiv">
+                <jsp:include page="spart.jsp?<%= queryString%>" ></jsp:include>
 
             </div>
             <div class="six wide column" style="max-width: 200px;">
@@ -215,16 +141,7 @@
 
                 <div class="ui segment">
                     <h4>Full Text Search</h4> 
-
-                </div>
-                <%
-                    String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
-                            + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
-                %>
-                <div class="ui segment">
-                    <h4>Time <%= SServlet.lastEx != null ? "Readonly" : ""%></h4> 
-                    <%= content%>
-                </div>
+                </div> 
 
 
             </div>

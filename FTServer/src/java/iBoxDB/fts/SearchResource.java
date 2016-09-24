@@ -12,6 +12,9 @@ public class SearchResource {
     public static ConcurrentLinkedDeque<String> urlList
             = new ConcurrentLinkedDeque<String>();
 
+    public static ConcurrentLinkedDeque<String> waitingUrlList
+            = new ConcurrentLinkedDeque<String>();
+
     private final static int batchCommit = 200;
     public final static Engine engine = new Engine();
 

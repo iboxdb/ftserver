@@ -62,7 +62,6 @@ public class SDB {
                     = (int) server.getConfig().DBConfig.mb(16);
             new Engine().Config(server.getConfig().DBConfig);
 
-            server.getConfig().ensureTable(BURL.class, "URL", "id");
             server.getConfig().ensureTable(BPage.class, "Page", "id");
             server.getConfig().ensureIndex(BPage.class, "Page", true, "url(" + BPage.MAX_URL_LENGTH + ")");
 
