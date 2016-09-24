@@ -88,7 +88,7 @@
                                 frag.innerHTML = html;
                                 var maindiv = document.getElementById('maindiv');
                                 maindiv.appendChild(frag);
-                                debugger;
+
                                 var ss = frag.getElementsByTagName("script");
                                 for (var i = 0; i < ss.length; i++) {
                                     eval(ss[i].innerHTML);

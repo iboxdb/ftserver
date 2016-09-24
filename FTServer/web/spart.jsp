@@ -95,6 +95,7 @@
     %>
     <h4> <%= SServlet.lastEx != null ? "Readonly" : ""%></h4> 
     <%=name%>  TIME: <%= content%>
+    <a href="#btnsearch" ><b><%= pages.size() >= pageCount ? "TOP" : "END"%></b></a>
 </div>
 <script>
     setTimeout(function () {
