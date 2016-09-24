@@ -46,9 +46,9 @@
     }
 
 %>
-<%    if (pages.isEmpty()) {
+<%    if (startId == Long.MAX_VALUE) {
         BPage p = new BPage();
-        p.title = "End. " + name;
+        p.title = "not found " + name;
         p.description = "";
         p.content = UString.S("input URL to index more page");
         p.url = "./";
