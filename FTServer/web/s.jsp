@@ -8,6 +8,11 @@
     name = name.substring(2);
     name = name.trim();
 %>
+<%
+    response.setHeader("Pragma", "No-cache");
+    response.setHeader("Cache-Control", "no-cache");
+    response.setDateHeader("Expires", 0);
+%>
 <!DOCTYPE html>
 <html>
     <head>        
