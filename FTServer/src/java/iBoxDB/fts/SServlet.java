@@ -27,6 +27,8 @@ public class SServlet extends HttpServlet {
         String name = java.net.URLDecoder.decode(queryString, "UTF-8");
         name = name.trim();
         name = name.substring(2);
+        name = name.trim();
+        
         //String name = request.getParameter("q");
 
         if (name.length() > 500) {

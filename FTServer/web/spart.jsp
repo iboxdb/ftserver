@@ -22,6 +22,7 @@
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
     name = name.substring(2);
+    name = name.trim();
 
     long startId = Long.MAX_VALUE;
     int temp = name.indexOf("&");
