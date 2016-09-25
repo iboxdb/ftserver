@@ -22,8 +22,10 @@ public class SServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         final String queryString = request.getQueryString();
         String name = java.net.URLDecoder.decode(queryString, "UTF-8");
+        name = name.trim();
         name = name.substring(2);
         //String name = request.getParameter("q");
 
@@ -105,12 +107,10 @@ public class SServlet extends HttpServlet {
                     }
                     try {
                         Thread.sleep(SleepTime);
-                        System.gc();
                         if (url != null) {
                             System.out.println(url);
                             SearchResource.indexText(url, false, null);
                         }
-                        System.gc();
                     } catch (Throwable ex) {
                         lastEx = ex;
                         Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);

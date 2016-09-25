@@ -17,9 +17,12 @@
         return;
     }
     long pageCount = 12;
+
     final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
+    name = name.trim();
     name = name.substring(2);
+
     long startId = Long.MAX_VALUE;
     int temp = name.indexOf("&");
     if (temp > 0) {
@@ -27,6 +30,7 @@
         startId = Long.parseLong(sid);
         name = name.substring(0, temp);
     }
+    boolean isFirstLoad = startId == Long.MAX_VALUE;
 
     ArrayList<BPage> pages = new ArrayList<BPage>();
     long begin = System.currentTimeMillis();
@@ -34,12 +38,15 @@
     try {
 
         for (KeyWord kw : SearchResource.engine.searchDistinct(box, name, startId, pageCount)) {
+
+            startId = kw.getID() - 1;
+
             long id = kw.getID();
             id = BPage.rankDownId(id);
             BPage p = box.d("Page", id).select(BPage.class);
             p.keyWord = kw;
             pages.add(p);
-            startId = id - 1;
+
         }
     } finally {
         box.close();
@@ -59,7 +66,7 @@
 <div id="ldiv<%= startId%>">
     <% for (BPage p : pages) {
             String content = null;
-            if (pages.size() == 1 || p.keyWord == null) {
+            if ((pages.size() == 1 && isFirstLoad) || p.keyWord == null) {
                 content = p.description + "...";
                 content += p.content.toString();
             } else if (p.id != p.keyWord.getID()) {
@@ -101,7 +108,8 @@
     setTimeout(function () {
         highlight("ldiv<%= startId%>");
     <% if (pages.size() >= pageCount) {%>
-        onscroll_loaddiv("s<%= startId%>", <%= startId%>);
+        //startId is a big number, in javascript, have to write big number as a 'String'
+        onscroll_loaddiv("s<%= startId%>", "<%= startId%>");
     <%}%>
     }, 100);
 </script>
