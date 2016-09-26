@@ -21,3 +21,7 @@ Deploy to tomcat/jetty
 
 
 ####[the Results Order details](https://github.com/iboxdb/ftserver-cs#the-results-order)
+
+
+### Known Issues
+doesn't support the URL include '&,?', need a URLEncode() operation.
