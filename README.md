@@ -24,4 +24,4 @@ Deploy to tomcat/jetty
 
 
 ### Known Issues
-doesn't support the URL include '&,?', need a URLEncode() operation.
+doesn't support the URL includes '&,?', need a URLEncode() operation.
