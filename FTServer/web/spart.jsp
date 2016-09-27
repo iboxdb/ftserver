@@ -25,7 +25,7 @@
     name = name.trim();
 
     long startId = Long.MAX_VALUE;
-    int temp = name.indexOf("&");
+    int temp = name.lastIndexOf("&s=");
     if (temp > 0) {
         String sid = name.substring(temp + 3);
         startId = Long.parseLong(sid);
