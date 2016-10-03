@@ -24,4 +24,4 @@ Deploy to tomcat/jetty
 
 
 ### Known Issues
-doesn't support the URL includes '&,?', need a URLEncode() operation. [Hotfix](https://github.com/iboxdb/ftserver/commit/f0f06e90683f04d5ede21753d6706f3ea62e75aa)
+doesn't support the URL includes '&,?', need an URLEncode() operation. [Hotfix](https://github.com/iboxdb/ftserver/commit/f0f06e90683f04d5ede21753d6706f3ea62e75aa)
