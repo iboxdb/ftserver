@@ -244,11 +244,11 @@ public class BPage {
             fixSpan(doc);
             String content = doc.text();
             content = content.replaceAll(Character.toString((char) 8203), "")
-                    .replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
-                    .replaceAll("　", " ")
                     .replaceAll("&nbsp;", " ")
                     .replaceAll("&gt;", " ")
                     .replaceAll("&lt;", " ")
+                    .replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
+                    .replaceAll("　", " ")
                     .replaceAll("\\s+", " ")
                     .trim();
 
