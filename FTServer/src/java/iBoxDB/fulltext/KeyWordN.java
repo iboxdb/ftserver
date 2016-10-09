@@ -20,7 +20,8 @@ public final class KeyWordN extends KeyWord {
     }
 
     @NotColumn
-    public byte size() {
+    @Override
+    public int size() {
         if ((K & CMASK) != 0L) {
             return 3;
         }

@@ -17,8 +17,8 @@
 <html>
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta name="description" content="<%=name%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
-        <title><%=name%>, what is? iBoxDB NoSQL Document Database Full Text Search</title>
+        <meta name="description" content="<%=name.replaceAll("\"", "")%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
+        <title><%=name.replaceAll("\"", "")%>, what is? iBoxDB NoSQL Document Database Full Text Search</title>
 
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 
@@ -118,17 +118,17 @@
 
                         <div class="ui action input">
                             <a href="./"><i class="teal disk outline icon" style="font-size:42px"></i> </a>
-                            <input name="q"  value="<%=name%>" required onfocus="formfocus()" />
+                            <input name="q"  value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()" />
                             <input id="btnsearch" type="submit"  class="ui teal right button" value="Search" /> 
                         </div>
                     </div>
                 </form> 
                 <script>
                     function formsubmit() {
-                        btnsearch.disabled = "disabled";
+                        document.getElementById('btnsearch').disabled = "disabled";
                     }
                     function formfocus() {
-                        btnsearch.disabled = undefined;
+                        document.getElementById('btnsearch').disabled = undefined;
                     }
                 </script>
             </div>

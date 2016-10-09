@@ -24,6 +24,9 @@ public abstract class KeyWord {
     @NotColumn
     public abstract void setKeyWord(Object k);
 
+    @NotColumn
+    public abstract int size();
+
     //Position
     public int P;
 
@@ -52,7 +55,10 @@ public abstract class KeyWord {
 
     @NotColumn
     public KeyWord previous;
-
+    @NotColumn
+    public boolean isLinked;
+    @NotColumn
+    public boolean isLinkedEnd;
 
     @NotColumn
     public String toFullString() {

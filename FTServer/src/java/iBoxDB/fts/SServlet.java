@@ -22,15 +22,14 @@ public class SServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         final String queryString = request.getQueryString();
         String name = java.net.URLDecoder.decode(queryString, "UTF-8");
         name = name.trim();
         name = name.substring(2);
         name = name.trim();
-        
-        //String name = request.getParameter("q");
 
+        //String name = request.getParameter("q");
         if (name.length() > 500) {
             return;
         }

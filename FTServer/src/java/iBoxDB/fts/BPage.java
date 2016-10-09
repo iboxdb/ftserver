@@ -228,7 +228,10 @@ public class BPage {
             if (page.description.length() > 200) {
                 page.description = page.description.substring(0, 200);
             }
-            page.description = page.description.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
+            page.description = page.description
+                    .replaceAll(Character.toString((char) 8203), "")
+                    .replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
+
 
             /*
             doc = jerry(doc.text().replaceAll("&lt;", "<")
@@ -238,14 +241,17 @@ public class BPage {
             doc.$("Script").text("");
             doc.$("Style").text("");
              */
+            fixSpan(doc);
             String content = doc.text();
-            content = content.replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
+            content = content.replaceAll(Character.toString((char) 8203), "")
+                    .replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
                     .replaceAll("　", " ")
                     .replaceAll("&nbsp;", " ")
                     .replaceAll("&gt;", " ")
                     .replaceAll("&lt;", " ")
                     .replaceAll("\\s+", " ")
                     .trim();
+
             if (content.length() < 50) {
                 return null;
             }
@@ -260,6 +266,14 @@ public class BPage {
         } finally {
             if (response != null) {
                 response.close();
+            }
+        }
+    }
+
+    private static void fixSpan(Jerry doc) {
+        for (Jerry j : doc.$("span")) {
+            if (j.size() == 1) {
+                j.text(j.text() + " ");
             }
         }
     }

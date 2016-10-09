@@ -71,10 +71,10 @@
                 </form>
                 <script>
                     function formsubmit() {
-                        btnsearch.disabled = "disabled";
+                        document.getElementById('btnsearch').disabled = "disabled";
                     }
                     function formfocus() {
-                        btnsearch.disabled = undefined;
+                        document.getElementById('btnsearch').disabled = undefined;
                     }
                 </script>
 
@@ -86,7 +86,7 @@
                     <%
                         for (String str : SearchResource.searchList) {
 
-                    %> <a href="s?q=<%=str.replace("#", "%23")%>"><%=str%></a>. &nbsp;  
+                    %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>
@@ -103,7 +103,7 @@
                     <br /><a  href="./">Refresh Discoveries</a>:&nbsp; 
                     <%
                         for (String str : discoveries) {
-                    %> <a href="s?q=<%=str.replace("#", "%23")%>"><%=str%></a>. &nbsp;  
+                    %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>

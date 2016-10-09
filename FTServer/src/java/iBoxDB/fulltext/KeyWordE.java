@@ -24,16 +24,9 @@ public final class KeyWordE extends KeyWord {
     }
 
     @NotColumn
-    public KeyWordE getOriginalForm() {
-        String of = StringUtil.antetypes.get(K);
-        if (of != null) {
-            KeyWordE e = new KeyWordE();
-            e.I = this.I;
-            e.P = this.P;
-            e.K = of;
-            return e;
-        }
-        return null;
+    @Override
+    public int size() {
+        return K.length();
     }
 
     @NotColumn
