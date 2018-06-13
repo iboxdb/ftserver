@@ -30,7 +30,7 @@ public class Page {
     public String title;
     public String description;
 
-    public UString content;
+    public String content;
 
     @NotColumn
     public long rankUpId() {
@@ -265,7 +265,7 @@ public class Page {
             if (content.length() > 5000) {
                 content = content.substring(0, 5000);
             }
-            page.content = UString.S(content + " " + page.url);
+            page.content = content + " " + page.url;
 
             return page;
         } catch (Throwable e) {

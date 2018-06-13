@@ -60,6 +60,7 @@
 
 <div id="ldiv<%= startId%>">
     <% for (Page p : pages) {
+            boolean sendlog = false;
             String content = null;
             if ((pages.size() == 1 && isFirstLoad) || p.keyWord == null) {
                 content = p.description + "...";
@@ -69,6 +70,8 @@
                 if (content.length() < 20) {
                     content += p.getRandomContent() + "...";;
                 }
+                //second page and "description"
+                sendlog = !isFirstLoad;
             } else {
                 content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
                 if (content.length() < 100) {
@@ -83,7 +86,9 @@
             }
     %>
     <h3>
-        <a class="stext" target="_blank"   href="<%=p.url%>" ><%= p.title%></a></h3> 
+        <a class="stext" target="_blank" href="<%=p.url%>" 
+           <%=sendlog ? "onclick=\"sendlog(this.href, 'content')\"" : ""%> >          
+            <%= p.title%></a></h3> 
     <span class="stext"> <%=content%> </span><br>
     <div class="gt">
         <%=p.url%>

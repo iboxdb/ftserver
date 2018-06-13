@@ -1,4 +1,4 @@
- <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 %> 
@@ -105,6 +105,13 @@
                         xhr.send(null);
                     }
                 }
+            }
+            function sendlog(url, txt) {
+                var xhr = new XMLHttpRequest();
+                url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
+                xhr.open('GET', url, true);
+                xhr.send(null);
+                return true;
             }
         </script>
     </head>
