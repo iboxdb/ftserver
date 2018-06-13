@@ -1,18 +1,16 @@
- 
-<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+ <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+<%
+    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
+%> 
 
 <%
     final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
-    name = name.substring(2);
+    name = name.substring(2);//q=
     name = name.trim();
 %>
-<%
-    response.setHeader("Pragma", "No-cache");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setDateHeader("Expires", 0);
-%>
+
 <!DOCTYPE html>
 <html>
     <head>        

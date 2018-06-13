@@ -1,8 +1,8 @@
-package iBoxDB.fts;
+package FTServer;
 
-import static iBoxDB.fts.SearchResource.urlList;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -14,10 +14,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "SServlet", urlPatterns = {"/s"}, asyncSupported = true)
-public class SServlet extends HttpServlet {
+@WebServlet(name = "AppServlet", urlPatterns = {"/s"}, asyncSupported = true)
+public class AppServlet extends HttpServlet {
 
-    private final static int SleepTime = 2000;
+    public static ConcurrentLinkedDeque<String> searchList
+            = new ConcurrentLinkedDeque<String>();
+
+    public static ConcurrentLinkedDeque<String> urlList
+            = new ConcurrentLinkedDeque<String>();
+
+    public static ConcurrentLinkedDeque<String> waitingUrlList
+            = new ConcurrentLinkedDeque<String>();
+
+    private final static int SLEEP_TIME = 2000;
     public static Throwable lastEx;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -45,14 +54,16 @@ public class SServlet extends HttpServlet {
             isdelete = true;
         }
         if (isdelete == null) {
-            SearchResource.searchList.add(name.replaceAll("<", ""));
-            while (SearchResource.searchList.size() > 15) {
-                SearchResource.searchList.remove();
+            // just Query
+            searchList.add(name.replaceAll("<", ""));
+            while (searchList.size() > 15) {
+                searchList.remove();
             }
             response.sendRedirect("s.jsp?" + queryString);
 
         } else {
-            final String url = BPage.getUrl(name);
+            // when input "http://www.abc.com" or "delete http://www.abc.com"
+            final String url = Page.getUrl(name);
             final boolean del = isdelete;
             final boolean full = isfullrecord != null && isfullrecord.booleanValue();
 
@@ -66,26 +77,26 @@ public class SServlet extends HttpServlet {
                             return;
                         }
 
-                        synchronized (writeESBG) {
-                            HashSet<String> subUrls
-                                    = del || (!full) ? null : new HashSet<String>();
-                            SearchResource.indexText(url, del, subUrls);
-                            SearchResource.urlList.add(url.replaceAll("<", ""));
-                            while (SearchResource.urlList.size() > 3) {
-                                SearchResource.urlList.remove();
-                            }
-                            if (subUrls != null) {
-                                subUrls.remove(url);
-                                subUrls.remove(url + "/");
-                                subUrls.remove(url.substring(0, url.length() - 1));
-                                if (subUrls.size() > 0) {
-                                    for (String url : subUrls) {
-                                        SearchResource.waitingUrlList.add(url);
-                                    }
-                                    addBGTask();
+                        HashSet<String> subUrls
+                                = del || (!full) ? null : new HashSet<String>();
+
+                        SearchResource.indexText(url, del, subUrls);
+                        urlList.add(url.replaceAll("<", ""));
+                        while (urlList.size() > 3) {
+                            urlList.remove();
+                        }
+                        if (subUrls != null) {
+                            subUrls.remove(url);
+                            subUrls.remove(url + "/");
+                            subUrls.remove(url.substring(0, url.length() - 1));
+                            if (subUrls.size() > 0) {
+                                for (String url : subUrls) {
+                                    waitingUrlList.add(url);
                                 }
+                                runBGTask();
                             }
                         }
+
                         ((HttpServletResponse) ctx.getResponse()).sendRedirect("s.jsp?q=" + java.net.URLEncoder.encode(url));
                     } catch (Throwable ex) {
                         lastEx = ex;
@@ -98,31 +109,33 @@ public class SServlet extends HttpServlet {
 
     }
 
-    public static void addBGTask() {
+    public static void runBGTask() {
         writeESBG.submit(new Runnable() {
             @Override
             public void run() {
-                for (String url : SearchResource.waitingUrlList) {
+                for (String url : waitingUrlList) {
                     if (lastEx != null) {
                         return;
                     }
                     try {
-                        Thread.sleep(SleepTime);
+                        Thread.sleep(SLEEP_TIME);
                         if (url != null) {
                             System.out.println(url);
                             SearchResource.indexText(url, false, null);
                         }
                     } catch (Throwable ex) {
                         lastEx = ex;
-                        Logger.getLogger(SServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(AppServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                SearchResource.waitingUrlList.clear();
+                waitingUrlList.clear();
             }
         });
     }
 
-    private final ExecutorService writeES = Executors.newSingleThreadExecutor();
+    //index thread
+    private final static ExecutorService writeES = Executors.newSingleThreadExecutor();
+    //background index thread
     private final static ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

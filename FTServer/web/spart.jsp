@@ -1,19 +1,13 @@
-<%@page import="iBoxDB.fts.SServlet"%> 
-<%@page import="iBoxDB.LocalServer.UString"%>
-<%@page import="iBoxDB.fulltext.KeyWord"%>
+<%@page import="FTServer.FTS.*"%>
+<%@page import="FTServer.*"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="iBoxDB.fts.BPage"%>
-<%@page import="iBoxDB.LocalServer.Box"%>
-<%@page import="iBoxDB.fts.SDB"%>
-<%@page import="iBoxDB.fts.SearchResource"%>
+<%@page import="iBoxDB.LocalServer.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%
-    response.setHeader("Pragma", "No-cache");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setDateHeader("Expires", 0);
+    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 %>
 <%
-    if (SDB.search_db == null) {
+    if (App.Auto == null) {
         return;
     }
     long pageCount = 12;
@@ -33,9 +27,9 @@
     }
     boolean isFirstLoad = startId == Long.MAX_VALUE;
 
-    ArrayList<BPage> pages = new ArrayList<BPage>();
+    ArrayList<Page> pages = new ArrayList<Page>();
     long begin = System.currentTimeMillis();
-    Box box = SDB.search_db.cube();
+    Box box = App.Auto.cube();
     try {
 
         for (KeyWord kw : SearchResource.engine.searchDistinct(box, name, startId, pageCount)) {
@@ -43,8 +37,8 @@
             startId = kw.getID() - 1;
 
             long id = kw.getID();
-            id = BPage.rankDownId(id);
-            BPage p = box.d("Page", id).select(BPage.class);
+            id = Page.rankDownId(id);
+            Page p = box.d("Page", id).select(Page.class);
             p.keyWord = kw;
             pages.add(p);
 
@@ -55,7 +49,7 @@
 
 %>
 <%    if (startId == Long.MAX_VALUE) {
-        BPage p = new BPage();
+        Page p = new Page();
         p.title = "not found " + name;
         p.description = "";
         p.content = UString.S("input URL to index more page");
@@ -65,7 +59,7 @@
 %>
 
 <div id="ldiv<%= startId%>">
-    <% for (BPage p : pages) {
+    <% for (Page p : pages) {
             String content = null;
             if ((pages.size() == 1 && isFirstLoad) || p.keyWord == null) {
                 content = p.description + "...";
@@ -103,7 +97,7 @@
     %>
     <%=name%>  TIME: <%= content%>
     <a href="#btnsearch" ><b><%= pages.size() >= pageCount ? "HEAD" : "END"%></b></a>
-            <%= SServlet.lastEx != null ? "-Readonly" : ""%>
+            <%= AppServlet.lastEx != null ? "-Readonly" : ""%>
 </div>
 <script>
     setTimeout(function () {

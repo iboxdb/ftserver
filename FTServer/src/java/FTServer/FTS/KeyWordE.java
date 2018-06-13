@@ -1,4 +1,4 @@
-package iBoxDB.fulltext;
+package FTServer.FTS;
 
 import iBoxDB.LocalServer.NotColumn;
 

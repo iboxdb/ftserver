@@ -1,20 +1,17 @@
-<%@page import="iBoxDB.fts.SDB"%>
-<%@page import="iBoxDB.LocalServer.Box"%>
+<%@page import="FTServer.*"%>
+<%@page import="iBoxDB.LocalServer.*"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="iBoxDB.fts.SearchResource"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%
-    response.setHeader("Pragma", "No-cache");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setDateHeader("Expires", 0);
+    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 %>
 <%
     ArrayList<String> discoveries = new ArrayList<String>();
 
-    if (SDB.search_db != null) {
-        Box box = SDB.search_db.cube();
+    if (App.Auto != null) {
+        Box box = App.Auto.cube();
         try {
-            for (String skw : SearchResource.engine.discover(box, 'a', 'z', 4,
+            for (String skw : SearchResource.engine.discover(box, 'a', 'z', 2,
                     '\u2E80', '\u9fa5', 1)) {
                 discoveries.add(skw);
             }
@@ -84,7 +81,7 @@
                     <br>
                     Recent Searches:<br>
                     <%
-                        for (String str : SearchResource.searchList) {
+                        for (String str : AppServlet.searchList) {
 
                     %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
@@ -93,7 +90,7 @@
 
                     <br>Recent Records:<br>
                     <%
-                        for (String str : SearchResource.urlList) {
+                        for (String str : AppServlet.urlList) {
                     %>
                     <a href="<%=str%>" target="_blank" ><%=str%></a>. <br> 
                     <%

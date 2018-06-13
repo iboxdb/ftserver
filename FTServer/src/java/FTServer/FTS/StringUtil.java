@@ -1,4 +1,4 @@
-package iBoxDB.fulltext;
+package FTServer.FTS;
 
 import java.util.*;
 

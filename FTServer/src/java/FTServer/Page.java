@@ -1,10 +1,11 @@
-package iBoxDB.fts;
+package FTServer;
 
 import iBoxDB.LocalServer.NotColumn;
 import iBoxDB.LocalServer.UString;
-import iBoxDB.fulltext.KeyWord;
+import FTServer.FTS.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
@@ -13,9 +14,15 @@ import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
 import static jodd.jerry.Jerry.jerry;
 
-public class BPage {
+public class Page {
 
-    public final static int MAX_URL_LENGTH = 100;
+    public static class Lock {
+
+        public String url;
+        public Date time;
+    }
+
+    public final static int MAX_URL_LENGTH = 150;
 
     public long id;
     public String url;
@@ -82,13 +89,13 @@ public class BPage {
     }
 
     @NotColumn
-    public static BPage get(String url, HashSet<String> subUrls) {
+    public static Page get(String url, HashSet<String> subUrls) {
         HttpResponse response = null;
         try {
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
-            BPage page = new BPage();
+            Page page = new Page();
             page.url = url;
 
             HttpRequest httpRequest = HttpRequest.get(url);
@@ -368,7 +375,7 @@ public class BPage {
 
     @NotColumn
     private static boolean isHTMLURL(String url) {
-        if (url.length() > BPage.MAX_URL_LENGTH) {
+        if (url.length() > Page.MAX_URL_LENGTH) {
             return false;
         }
         url = url.toLowerCase();
