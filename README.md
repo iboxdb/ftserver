@@ -20,7 +20,23 @@ Deploy to tomcat/jetty
 [Jodd](http://jodd.org/)
 
 
-####[The results order details & C# ASP.NET version](https://github.com/iboxdb/ftserver-cs#the-results-order)
+#### Update to Private Server
+Modify 
+```java
+public Page Page.get(String url);
+```
+Set your private WebSite text
+```java
+Page page = new Page();
+page.url = url;
+page.title = "..."
+page.description = "..."
+page.content = "..."
+return page;
+```
+
+#### More
+[The results order details & C# ASP.NET version](https://github.com/iboxdb/ftserver-cs#the-results-order)
 
 
 
