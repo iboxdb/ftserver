@@ -10,7 +10,7 @@ public class SearchResource {
     private final static int BATCH_COMMIT = 200;
     public final static Engine engine = new Engine();
 
-    public static String indexText(String url, boolean isDelete, HashSet<String> subUrls) {
+    public static String indexText(String url, boolean deleteOnly, HashSet<String> subUrls) {
 
         url = Page.getUrl(url);
         try (Box box = App.Auto.cube()) {
@@ -38,7 +38,7 @@ public class SearchResource {
                 defaultPage = p;
             }
 
-            if (isDelete) {
+            if (deleteOnly) {
                 return "deleted";
             }
 

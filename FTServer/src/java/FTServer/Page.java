@@ -89,6 +89,14 @@ public class Page {
 
     @NotColumn
     public static Page get(String url, HashSet<String> subUrls) {
+
+        //When used in private server, set values by yourself
+        //Page page = new Page();
+        //page.url = url;
+        //page.title = "...";
+        //page.description = "...";
+        //page.content == "...";
+        //return page;
         HttpResponse response = null;
         try {
             if (url == null || url.length() > MAX_URL_LENGTH || url.length() < 8) {

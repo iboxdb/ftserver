@@ -107,10 +107,11 @@ public class AppServlet extends HttpServlet {
     }
 
     public static void closeBGTask() {
+        writeES.shutdown();
         waitingUrlList.clear();
-        AppServlet.writeESBG.shutdown();
+        writeESBG.shutdown();
         try {
-            AppServlet.writeESBG.awaitTermination(10, TimeUnit.SECONDS);
+            writeESBG.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
 
         }

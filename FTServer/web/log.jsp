@@ -17,13 +17,6 @@
 %>
 
 <%
-    if (url.contains(request.getServerName())) {
-        return;
-    }
-    if (url.contains(request.getLocalName())) {
-        return;
-    }
-
     // change the rule by yourself.
     if (clicks.size() > 1000) {
         clicks.clear();

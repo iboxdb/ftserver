@@ -3,7 +3,6 @@ package FTServer;
 import FTServer.FTS.Engine;
 import iBoxDB.LocalServer.*;
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -17,6 +16,7 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         App.IsVM = false;
+        //Path
         String path = System.getProperty("user.home") + File.separatorChar + "ftsdata100" + File.separatorChar;
         new File(path).mkdirs();
 
@@ -33,6 +33,8 @@ public class AppListener implements ServletContextListener {
                 String.format("DBPath=%s VM=" + App.IsVM, path));
 
         DB.root(path);
+
+        //Config
         DB db = new DB(1);
         DatabaseConfig cfg = db.getConfig().DBConfig;
 
