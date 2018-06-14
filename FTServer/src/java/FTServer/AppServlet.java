@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.AsyncContext;
@@ -105,6 +106,16 @@ public class AppServlet extends HttpServlet {
 
     }
 
+    public static void closeBGTask() {
+        waitingUrlList.clear();
+        AppServlet.writeESBG.shutdown();
+        try {
+            AppServlet.writeESBG.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+
+        }
+    }
+
     public static void runBGTask() {
         writeESBG.submit(new Runnable() {
             @Override
@@ -118,6 +129,7 @@ public class AppServlet extends HttpServlet {
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
                         SearchResource.indexText(url, false, null);
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
                     }
                 }
                 waitingUrlList.clear();

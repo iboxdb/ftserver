@@ -30,10 +30,12 @@ public class SearchResource {
             }
         }
         try {
+            Page defaultPage = null;
             for (Page p : App.Auto.select(Page.class, "from Page where url==?", url)) {
-                engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content.toString(), true);
+                engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content, true);
                 engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.rankUpId(), p.rankUpDescription(), true);
                 App.Auto.delete("Page", p.id);
+                defaultPage = p;
             }
 
             if (isDelete) {
@@ -42,11 +44,16 @@ public class SearchResource {
 
             Page p = Page.get(url, subUrls);
             if (p == null) {
+                p = defaultPage;
+            }
+            if (p == null) {
                 return "temporarily unreachable";
             } else {
-                p.id = App.Auto.newId();
+                if (p.id == 0) {
+                    p.id = App.Auto.newId();
+                }
                 App.Auto.insert("Page", p);
-                engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content.toString(), false);
+                engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content, false);
                 engine.indexTextNoTran(App.Auto, BATCH_COMMIT, p.rankUpId(), p.rankUpDescription(), false);
                 return p.url;
             }

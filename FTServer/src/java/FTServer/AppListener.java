@@ -3,6 +3,7 @@ package FTServer;
 import FTServer.FTS.Engine;
 import iBoxDB.LocalServer.*;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -53,9 +54,11 @@ public class AppListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        AppServlet.closeBGTask();
         if (App.Auto != null) {
             App.Auto.getDatabase().close();
         }
         App.Auto = null;
+        Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Closed");
     }
 }

@@ -36,6 +36,9 @@
             .gt{
                 color: green;
             }
+            .gtt{
+                color: #4092cc;
+            }
         </style> 
         <script>
             function highlight(loadedDivId) {
@@ -107,10 +110,13 @@
                 }
             }
             function sendlog(url, txt) {
-                var xhr = new XMLHttpRequest();
-                url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
-                xhr.open('GET', url, true);
-                xhr.send(null);
+                try {
+                    var xhr = new XMLHttpRequest();
+                    url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
+                    xhr.open('GET', url, true);
+                    xhr.send(null);
+                } catch (e) {
+                }
                 return true;
             }
         </script>
