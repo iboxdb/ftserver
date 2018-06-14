@@ -27,7 +27,6 @@ public class AppServlet extends HttpServlet {
             = new ConcurrentLinkedDeque<String>();
 
     private final static int SLEEP_TIME = 2000;
-    public static Throwable lastEx;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,9 +72,6 @@ public class AppServlet extends HttpServlet {
                 @Override
                 public void run() {
                     try {
-                        if (lastEx != null) {
-                            return;
-                        }
 
                         HashSet<String> subUrls
                                 = del || (!full) ? null : new HashSet<String>();
@@ -98,8 +94,8 @@ public class AppServlet extends HttpServlet {
                         }
 
                         ((HttpServletResponse) ctx.getResponse()).sendRedirect("s.jsp?q=" + java.net.URLEncoder.encode(url));
-                    } catch (Throwable ex) {
-                        lastEx = ex;
+                    } catch (IOException ex) {
+
                     } finally {
                         ctx.complete();
                     }
@@ -114,18 +110,14 @@ public class AppServlet extends HttpServlet {
             @Override
             public void run() {
                 for (String url : waitingUrlList) {
-                    if (lastEx != null) {
-                        return;
-                    }
                     try {
                         Thread.sleep(SLEEP_TIME);
-                        if (url != null) {
-                            System.out.println(url);
-                            SearchResource.indexText(url, false, null);
-                        }
-                    } catch (Throwable ex) {
-                        lastEx = ex;
-                        Logger.getLogger(AppServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+
+                    }
+                    if (url != null) {
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, url);
+                        SearchResource.indexText(url, false, null);
                     }
                 }
                 waitingUrlList.clear();

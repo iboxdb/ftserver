@@ -19,11 +19,11 @@ public class AppListener implements ServletContextListener {
         String path = System.getProperty("user.home") + File.separatorChar + "ftsdata100" + File.separatorChar;
         new File(path).mkdirs();
 
-        String tmpPath = sce.getServletContext().getRealPath("/")
-                + "WEB-INF" + File.separatorChar + "DB" + File.separatorChar;
-
         if (!new File(path).exists()) {
             App.IsVM = true;
+            String tmpPath = sce.getServletContext().getRealPath("/")
+                    + "WEB-INF" + File.separatorChar + "DB" + File.separatorChar;
+
             path = tmpPath;
             (new File(path)).mkdirs();
         }
@@ -31,6 +31,7 @@ public class AppListener implements ServletContextListener {
         Logger.getLogger(App.class.getName()).log(Level.INFO,
                 String.format("DBPath=%s VM=" + App.IsVM, path));
 
+        DB.root(path);
         DB db = new DB(1);
         DatabaseConfig cfg = db.getConfig().DBConfig;
 

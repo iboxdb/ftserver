@@ -1,7 +1,6 @@
 package FTServer;
 
 import iBoxDB.LocalServer.NotColumn;
-import iBoxDB.LocalServer.UString;
 import FTServer.FTS.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -51,9 +50,9 @@ public class Page {
 
     @NotColumn
     public String getRandomContent() {
-        int len = content.toString().length() - 100;
+        int len = content.length() - 100;
         if (len <= 20) {
-            return content.toString();
+            return content;
         }
         int s = cran.nextInt(len);
         if (s < 0) {
@@ -64,11 +63,11 @@ public class Page {
         }
 
         int end = s + 200;
-        if (end > content.toString().length()) {
-            end = content.toString().length();
+        if (end > content.length()) {
+            end = content.length();
         }
 
-        return content.toString().substring(s, end);
+        return content.substring(s, end);
     }
 
     @NotColumn

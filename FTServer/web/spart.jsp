@@ -52,7 +52,7 @@
         Page p = new Page();
         p.title = "not found " + name;
         p.description = "";
-        p.content = UString.S("input URL to index more page");
+        p.content = "input URL to index more page";
         p.url = "./";
         pages.add(p);
     }
@@ -102,7 +102,7 @@
     %>
     <%=name%>  TIME: <%= content%>
     <a href="#btnsearch" ><b><%= pages.size() >= pageCount ? "HEAD" : "END"%></b></a>
-            <%= AppServlet.lastEx != null ? "-Readonly" : ""%>
+
 </div>
 <script>
     setTimeout(function () {

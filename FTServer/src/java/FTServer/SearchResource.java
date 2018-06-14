@@ -52,8 +52,7 @@ public class SearchResource {
             }
 
         } finally {
-            boolean cr = App.Auto.delete("PageLock", url);
-            System.out.println(cr);
+            App.Auto.delete("PageLock", url);
         }
     }
 }
