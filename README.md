@@ -50,7 +50,7 @@ public static long RankDownId(long id)
 {
     return id & (~(1L << 60 | 1L << 61)) ;
 }
-public static bool IsAdvertisingId(long id)
+public static boolean IsAdvertisingId(long id)
 {
     return id > (1L << 61) ;
 }
@@ -113,9 +113,9 @@ DB.Delete("Page", page.Id);
 
 #### Memory
 ````java
-indexText(IBox, id, String, bool) // faster, more memories
+indexText(IBox, id, String, boolean) // faster, more memories
 
-indexTextNoTran(AutoBox, commitCount, id, String, bool) // less memory
+indexTextNoTran(AutoBox, commitCount, id, String, boolean) // less memory
 ````
 
 #### Private Server
