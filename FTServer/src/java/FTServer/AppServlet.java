@@ -3,10 +3,7 @@ package FTServer;
 import iBoxDB.LocalServer.Box;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.AsyncContext;
@@ -100,6 +97,10 @@ public class AppServlet extends HttpServlet {
                                 }
                             }
                             if (waitingUrlList.size() > 0) {
+                                subUrls.clear();
+                                subUrls.addAll(waitingUrlList);
+                                waitingUrlList.clear();
+                                waitingUrlList.addAll(subUrls);
                                 runBGTask();
                             }
                         }
