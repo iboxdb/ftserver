@@ -1,5 +1,6 @@
 package FTServer;
 
+import iBoxDB.LocalServer.Box;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -44,14 +45,14 @@ public class AppServlet extends HttpServlet {
         }
 
         Boolean isdelete = null;
-        Boolean isfullrecord = null;
 
         if (name.startsWith("http://") || name.startsWith("https://")) {
             isdelete = false;
-            isfullrecord = name.contains(" full");
-        } else if (name.startsWith("delete")
-                && (name.contains("http://") || name.contains("https://"))) {
-            isdelete = true;
+        } else if (name.startsWith("delete")) {
+            waitingUrlList.clear();
+            if ((name.contains("http://") || name.contains("https://"))) {
+                isdelete = true;
+            }
         }
         if (isdelete == null) {
             // just Query
@@ -65,7 +66,6 @@ public class AppServlet extends HttpServlet {
             // when input "http://www.abc.com" or "delete http://www.abc.com"
             final String url = Page.getUrl(name);
             final boolean del = isdelete;
-            final boolean full = isfullrecord != null && isfullrecord.booleanValue();
 
             final AsyncContext ctx = request.startAsync(request, response);
             ctx.setTimeout(30 * 1000);
@@ -74,26 +74,35 @@ public class AppServlet extends HttpServlet {
                 public void run() {
                     try {
 
-                        HashSet<String> subUrls
-                                = del || (!full) ? null : new HashSet<String>();
+                        HashSet<String> subUrls = new HashSet<String>();
 
                         SearchResource.indexText(url, del, subUrls);
+
                         urlList.add(url.replaceAll("<", ""));
                         while (urlList.size() > 3) {
                             urlList.remove();
                         }
-                        if (subUrls != null) {
-                            subUrls.remove(url);
-                            subUrls.remove(url + "/");
-                            subUrls.remove(url.substring(0, url.length() - 1));
-                            if (subUrls.size() > 0) {
+
+                        subUrls.remove(url);
+                        subUrls.remove(url + "/");
+                        subUrls.remove(url.substring(0, url.length() - 1));
+
+                        if (waitingUrlList.size() < 1000) {
+                            try (Box box = App.Auto.cube()) {
                                 for (String url : subUrls) {
-                                    waitingUrlList.add(url);
+                                    url = Page.getUrl(url);
+                                    if (box.selectCount("from Page where url==? limit 0,1", url) == 0) {
+                                        waitingUrlList.add(url);
+                                        Logger.getLogger(App.class.getName()).log(Level.INFO, "Added:" + url);
+                                    } else {
+                                        Logger.getLogger(App.class.getName()).log(Level.INFO, "Existed:" + url);
+                                    }
                                 }
+                            }
+                            if (waitingUrlList.size() > 0) {
                                 runBGTask();
                             }
                         }
-
                         ((HttpServletResponse) ctx.getResponse()).sendRedirect("s.jsp?q=" + java.net.URLEncoder.encode(url));
                     } catch (IOException ex) {
 
@@ -139,7 +148,7 @@ public class AppServlet extends HttpServlet {
     }
 
     //index thread
-    private final static ExecutorService writeES = Executors.newSingleThreadExecutor();
+    public final static ExecutorService writeES = Executors.newFixedThreadPool(2);
     //background index thread
     private final static ExecutorService writeESBG = Executors.newSingleThreadExecutor();
 

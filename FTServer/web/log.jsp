@@ -1,4 +1,5 @@
-<%@page import="FTServer.AppServlet"%>
+<%@page import="java.util.logging.*"%>
+<%@page import="FTServer.*"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 
 <%!
@@ -28,9 +29,18 @@
     c++;
     if (c >= 3) {
         clicks.remove(url);
-        AppServlet.waitingUrlList.add(url);
-        AppServlet.runBGTask();
-        out.println(url);
+
+        final String furl = url;
+        AppServlet.writeES.submit(new Runnable() {
+            @Override
+            public void run() {
+                Logger.getLogger(App.class.getName()).log(Level.INFO, furl);
+                SearchResource.indexText(furl, false, null);
+                Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
+
+            }
+        });
+
     } else {
         clicks.put(url, c);
     }
