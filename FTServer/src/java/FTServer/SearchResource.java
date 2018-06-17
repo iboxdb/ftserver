@@ -14,9 +14,9 @@ public class SearchResource {
 
         url = Page.getUrl(url);
         try (Box box = App.Auto.cube()) {
-            Page.Lock pl = box.d("PageLock", url).select(Page.Lock.class);
+            PageLock pl = box.d("PageLock", url).select(PageLock.class);
             if (pl == null) {
-                pl = new Page.Lock();
+                pl = new PageLock();
                 pl.url = url;
                 pl.time = new Date();
             } else if ((new Date().getTime() - pl.time.getTime()) > 1000 * 60 * 5) {

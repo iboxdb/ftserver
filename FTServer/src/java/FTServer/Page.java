@@ -4,7 +4,6 @@ import iBoxDB.LocalServer.NotColumn;
 import FTServer.FTS.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
@@ -15,11 +14,6 @@ import static jodd.jerry.Jerry.jerry;
 
 public class Page {
 
-    public static class Lock {
-
-        public String url;
-        public Date time;
-    }
 
     public final static int MAX_URL_LENGTH = 150;
 
