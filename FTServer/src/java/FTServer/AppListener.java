@@ -29,6 +29,10 @@ public class AppListener implements ServletContextListener {
             (new File(path)).mkdirs();
         }
 
+        long tm = java.lang.Runtime.getRuntime().maxMemory();
+        if (tm <= 512L * 1024 * 1024) {
+            App.IsVM = true;
+        }
         Logger.getLogger(App.class.getName()).log(Level.INFO,
                 System.getProperty("java.version"));
         Logger.getLogger(App.class.getName()).log(Level.INFO,
@@ -43,12 +47,11 @@ public class AppListener implements ServletContextListener {
         cfg.CacheLength
                 = cfg.mb(App.IsVM ? 16 : 512);
 
-        long tm = java.lang.Runtime.getRuntime().maxMemory();
         if (cfg.CacheLength > (tm / 2)) {
             cfg.CacheLength = (tm / 2);
         }
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
-        +  " AppMEM=" + tm/1024/1024 + "MB" );
+                + " AppMEM=" + tm / 1024 / 1024 + "MB");
 
         cfg.FileIncSize
                 = (int) cfg.mb(16);
