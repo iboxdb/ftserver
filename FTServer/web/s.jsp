@@ -133,7 +133,7 @@
     <body > 
         <div class="ui left aligned grid">
             <div class="column"  style="max-width: 600px;"> 
-                <form class="ui large form"  action="s" onsubmit="formsubmit()">
+                <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
                     <div class="ui label input">
 
                         <div class="ui action input">
@@ -156,7 +156,7 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;" id="maindiv">
-                <jsp:include page="spart.jsp?<%= queryString%>" ></jsp:include>
+                <jsp:include page="spart.jsp" ></jsp:include>
 
             </div>
             <div class="six wide column" style="max-width: 200px;">

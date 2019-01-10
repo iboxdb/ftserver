@@ -12,7 +12,7 @@
     }
     long pageCount = 12;
     long startId = Long.MAX_VALUE;
-
+    /*
     final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
@@ -23,6 +23,12 @@
         String sid = name.substring(temp + 3);
         startId = Long.parseLong(sid);
         name = name.substring(0, temp);
+    }
+     */
+    String name = request.getParameter("q");
+    String sid = request.getParameter("s");
+    if (sid != null) {
+        startId = Long.parseLong(sid);
     }
 
     boolean isFirstLoad = startId == Long.MAX_VALUE;
