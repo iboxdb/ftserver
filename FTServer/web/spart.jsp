@@ -11,71 +11,67 @@
         return;
     }
     long pageCount = 12;
+    long startId = Long.MAX_VALUE;
 
+    /*  some proxies not support UTF8, use this
     final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
     name = name.substring(2);
-    name = name.trim();
-
-    long startId = Long.MAX_VALUE;
+    
     int temp = name.lastIndexOf("&s=");
     if (temp > 0) {
         String sid = name.substring(temp + 3);
         startId = Long.parseLong(sid);
         name = name.substring(0, temp);
+    }*/
+    String name = request.getParameter("q").trim();
+    String sid = request.getParameter("s");
+    if (sid != null) {
+        startId = Long.parseLong(sid);
     }
+
     boolean isFirstLoad = startId == Long.MAX_VALUE;
 
-    ArrayList<Page> pages = new ArrayList<Page>();
     long begin = System.currentTimeMillis();
-    Box box = App.Auto.cube();
-    try {
+    ArrayList<Page> pages = new ArrayList<Page>();
 
-        for (KeyWord kw : SearchResource.engine.searchDistinct(box, name, startId, pageCount)) {
+    startId = IndexAPI.Search(pages, name, startId, pageCount);
 
-            startId = kw.getID() - 1;
-
-            long id = kw.getID();
-            id = Page.rankDownId(id);
-            Page p = box.d("Page", id).select(Page.class);
-            p.keyWord = kw;
-            pages.add(p);
-
-        }
-    } finally {
-        box.close();
-    }
 
 %>
 <%    if (startId == Long.MAX_VALUE) {
         Page p = new Page();
         p.title = "not found " + name;
         p.description = "";
-        p.content = "input URL to index more page";
-        p.url = "./";
+        p.content = "GoTO admin.jsp, input URL to index more page";
+        p.url = "admin.jsp";
         pages.add(p);
     }
 %>
 
 <div id="ldiv<%= startId%>">
     <% for (Page p : pages) {
+            //Format Paage    
             boolean sendlog = false;
             boolean isdesc = false;
             String content = null;
             if ((pages.size() == 1 && isFirstLoad) || p.keyWord == null) {
+                //only have one page, show all
                 content = p.description + "...";
                 content += p.content.toString();
             } else if (p.id != p.keyWord.getID()) {
+                //only show page description
                 content = p.description;
                 if (content.length() < 20) {
                     content += p.getRandomContent() + "...";;
                 }
-                //second page and "description"
+                //flags, second page and "description"
                 sendlog = !isFirstLoad;
                 isdesc = true;
             } else {
-                content = SearchResource.engine.getDesc(p.content.toString(), p.keyWord, 80);
+                //page content is too long, just get some chars
+                content = IndexAPI.getDesc(p.content.toString(), p.keyWord, 80);
                 if (content.length() < 100) {
                     content += p.getRandomContent();
                 }
@@ -109,7 +105,8 @@
 <script>
     setTimeout(function () {
         highlight("ldiv<%= startId%>");
-    <% if (pages.size() >= pageCount) {%>
+    <% if (pages.size()
+                >= pageCount) {%>
         //startId is a big number, in javascript, have to write big number as a 'String'
         onscroll_loaddiv("s<%= startId%>", "<%= startId%>");
     <%}%>

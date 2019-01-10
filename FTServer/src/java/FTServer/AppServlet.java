@@ -73,7 +73,7 @@ public class AppServlet extends HttpServlet {
 
                         HashSet<String> subUrls = new HashSet<String>();
 
-                        SearchResource.indexText(url, del, subUrls);
+                        IndexAPI.indexText(Page.getUrl(url), del, subUrls);
 
                         urlList.add(url.replaceAll("<", ""));
                         while (urlList.size() > 3) {
@@ -139,7 +139,7 @@ public class AppServlet extends HttpServlet {
                     }
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
-                        SearchResource.indexText(url, false, null);
+                        IndexAPI.indexText(Page.getUrl(url), false, null);
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
                     }
                 }

@@ -15,13 +15,12 @@ public class AppListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
-        App.IsVM = false;
         //Path
         String path = System.getProperty("user.home") + File.separatorChar + "ftsdata100" + File.separatorChar;
         new File(path).mkdirs();
 
         if (!new File(path).exists()) {
-            App.IsVM = true;
+
             String tmpPath = sce.getServletContext().getRealPath("/")
                     + "WEB-INF" + File.separatorChar + "DB" + File.separatorChar;
 
@@ -29,32 +28,22 @@ public class AppListener implements ServletContextListener {
             (new File(path)).mkdirs();
         }
 
-        long tm = java.lang.Runtime.getRuntime().maxMemory();
-        if (tm <= 512L * 1024 * 1024) {
-            App.IsVM = true;
-        }
         Logger.getLogger(App.class.getName()).log(Level.INFO,
                 System.getProperty("java.version"));
         Logger.getLogger(App.class.getName()).log(Level.INFO,
-                String.format("DB Path=%s VM=" + App.IsVM, path));
+                String.format("DB Path=%s ", path));
 
         DB.root(path);
 
         //Config
         DB db = new DB(1);
         DatabaseConfig cfg = db.getConfig().DBConfig;
-
-        cfg.CacheLength
-                = cfg.mb(App.IsVM ? 16 : 512);
-
-        if (cfg.CacheLength > (tm / 2)) {
-            cfg.CacheLength = (tm / 2);
-        }
+        long tm = java.lang.Runtime.getRuntime().maxMemory();
+        cfg.CacheLength = tm / 3;
+        cfg.FileIncSize = (int) cfg.mb(16);
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
                 + " AppMEM=" + tm / 1024 / 1024 + "MB");
 
-        cfg.FileIncSize
-                = (int) cfg.mb(16);
         new Engine().Config(cfg);
 
         cfg.EnsureTable(Page.class, "Page", "id");

@@ -6,19 +6,7 @@
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 %>
 <%
-    ArrayList<String> discoveries = new ArrayList<String>();
-
-    if (App.Auto != null) {
-        Box box = App.Auto.cube();
-        try {
-            for (String skw : SearchResource.engine.discover(box, 'a', 'z', 2,
-                    '\u2E80', '\u9fa5', 1)) {
-                discoveries.add(skw);
-            }
-        } finally {
-            box.close();
-        }
-    }
+    ArrayList<String> discoveries = IndexAPI.discover();
 %>
 <!DOCTYPE html>
 <html>
@@ -57,7 +45,7 @@
                 <h2 class="ui teal header" > 
                     <i class="disk outline icon" style="font-size:82px"></i> Full Text Search Server
                 </h2>
-                <form class="ui large form"  action="s"  onsubmit="formsubmit()"  >
+                <form class="ui large form"  action="s.jsp"  onsubmit="formsubmit()"  >
                     <div class="ui label input">
                         <div class="ui action input">
                             <input name="q"  value=""  required onfocus="formfocus()" />
@@ -76,12 +64,10 @@
                 </script>
 
                 <div class="ui message" style="text-align: left">
-                    Input [KeyWord] to search, input [URL] to index <br> 
-                    Input [delete URL] to delete.
+
                     <br>
                     Recent Searches:<br>
-                    <%
-                        for (String str : AppServlet.searchList) {
+                    <%                        for (String str : AppServlet.searchList) {
 
                     %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
@@ -104,6 +90,8 @@
                     <%
                         }
                     %>
+                    <br>
+                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Index HTTP Page</a>
                 </div>
 
             </div>
