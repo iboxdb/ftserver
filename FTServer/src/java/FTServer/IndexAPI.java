@@ -9,7 +9,8 @@ import java.util.concurrent.Callable;
 
 public class IndexAPI {
 
-    public final static Engine ENGINE = new Engine();
+    
+    final static Engine ENGINE = new Engine();
 
     public static long Search(ArrayList<Page> outputPages,
             String name, long startId, long pageCount) {

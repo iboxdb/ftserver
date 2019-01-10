@@ -13,22 +13,16 @@
     long pageCount = 12;
     long startId = Long.MAX_VALUE;
 
-    /*  some proxies not support UTF8, use this
     final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
     name = name.substring(2);
-    
+
     int temp = name.lastIndexOf("&s=");
     if (temp > 0) {
         String sid = name.substring(temp + 3);
         startId = Long.parseLong(sid);
         name = name.substring(0, temp);
-    }*/
-    String name = request.getParameter("q").trim();
-    String sid = request.getParameter("s");
-    if (sid != null) {
-        startId = Long.parseLong(sid);
     }
 
     boolean isFirstLoad = startId == Long.MAX_VALUE;

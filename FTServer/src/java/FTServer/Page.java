@@ -14,7 +14,6 @@ import static jodd.jerry.Jerry.jerry;
 
 public class Page {
 
-
     public final static int MAX_URL_LENGTH = 150;
 
     public long id;
@@ -100,7 +99,7 @@ public class Page {
             page.url = url;
 
             HttpRequest httpRequest = HttpRequest.get(url);
-            httpRequest.timeout(10 * 1000);
+            httpRequest.timeout(15 * 1000);
             response = httpRequest.send();
             if (response.statusCode() != 200) {
                 return null;

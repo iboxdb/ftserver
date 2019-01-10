@@ -31,11 +31,12 @@
         clicks.remove(url);
 
         final String furl = url;
-        AppServlet.writeES.submit(new Runnable() {
+        IndexPage.writeES.submit(new Runnable() {
             @Override
             public void run() {
                 Logger.getLogger(App.class.getName()).log(Level.INFO, furl);
-                SearchResource.indexText(furl, false, null);
+                //RE-INDEX, move page forward
+                IndexAPI.indexText(furl, false, null);
                 Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
 
             }

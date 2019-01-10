@@ -64,19 +64,19 @@
                 </script>
 
                 <div class="ui message" style="text-align: left">
-
+                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Pages (add http/https to server)</a><br>
                     <br>
                     Recent Searches:<br>
-                    <%                        for (String str : AppServlet.searchList) {
+                    <%                        for (String str : IndexPage.searchList) {
 
-                    %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
+                    %> <a href="s.jsp?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>
 
                     <br>Recent Records:<br>
                     <%
-                        for (String str : AppServlet.urlList) {
+                        for (String str : IndexPage.urlList) {
                     %>
                     <a href="<%=str%>" target="_blank" ><%=str%></a>. <br> 
                     <%
@@ -86,12 +86,12 @@
                     <br /><a  href="./">Refresh Discoveries</a>:&nbsp; 
                     <%
                         for (String str : discoveries) {
-                    %> <a href="s?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
+                    %> <a href="s.jsp?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
                     <%
                         }
                     %>
                     <br>
-                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Index HTTP Page</a>
+
                 </div>
 
             </div>

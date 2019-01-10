@@ -1,3 +1,4 @@
+<%@page import="FTServer.IndexPage"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
@@ -5,10 +6,18 @@
 
 <%
     final String queryString = request.getQueryString();
+    /*
+    final String queryString = request.getQueryString();
     String name = java.net.URLDecoder.decode(queryString, "UTF-8");
     name = name.trim();
     name = name.substring(2);//q=
     name = name.trim();
+     */
+    String name = request.getParameter("q").replaceAll("<", "").trim();
+    IndexPage.searchList.add(name);
+    while (IndexPage.searchList.size() > 15) {
+        IndexPage.searchList.remove();
+    }
 %>
 
 <!DOCTYPE html>
