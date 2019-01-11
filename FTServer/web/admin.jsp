@@ -8,10 +8,18 @@
 <%
     String url = request.getParameter("url");
     if (url != null) {
-        if (url.startsWith("http:") || url.startsWith("https:")) {
-            url = IndexAPI.indexText(url, false, null);
-        } else {
-            url = null;
+        Boolean isdelete = null;
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            isdelete = false;
+        } else if (url.startsWith("delete")) {
+
+            if ((url.contains("http://") || url.contains("https://"))) {
+                isdelete = true;
+            }
+        }
+
+        if (isdelete != null) {
+            url = IndexPage.processRequest(url, isdelete);
         }
     }
     if (url == null) {

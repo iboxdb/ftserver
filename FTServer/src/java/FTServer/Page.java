@@ -262,7 +262,7 @@ public class Page {
                     .replaceAll("\\s+", " ")
                     .trim();
 
-            if (content.length() < 50) {
+            if (content.length() < 50 && (!url.contains("localhost"))) {
                 return null;
             }
             if (content.length() > 5000) {
