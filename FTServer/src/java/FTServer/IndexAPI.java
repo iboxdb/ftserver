@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 public class IndexAPI {
 
-    
     final static Engine ENGINE = new Engine();
 
     public static long Search(ArrayList<Page> outputPages,
@@ -28,16 +27,25 @@ public class IndexAPI {
                 outputPages.add(p);
 
             }
+
+        }
+        if (outputPages.size() == 0 && name.length() > 1 && name.charAt(0) > 512) {
+            //only search one char, if full search is empty
+            Search(outputPages, name.substring(0, 1), Long.MAX_VALUE, pageCount);
+            return 0;
         }
         return startId;
     }
 
     public static String getDesc(String str, KeyWord kw, int length) {
+        if (kw.getID() == -1) {
+            return str;
+        }
         return ENGINE.getDesc(str, kw, length);
     }
 
     public static ArrayList<String> discover() {
-        ArrayList<String> discoveries = new ArrayList<String>();
+        ArrayList<String> discoveries = new ArrayList<>();
 
         try (Box box = App.Auto.cube()) {
             for (String skw : IndexAPI.ENGINE.discover(box, 'a', 'z', 2,
@@ -51,9 +59,9 @@ public class IndexAPI {
     public static String indexText(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
         boolean tran = true;
         if (tran) {
-            return indexTextWithTran(url, deleteOnly, subUrls);
+            return indexTextWithTran(Page.getUrl(url), deleteOnly, subUrls);
         }
-        return indexTextNoTran(url, deleteOnly, subUrls);
+        return indexTextNoTran(Page.getUrl(url), deleteOnly, subUrls);
     }
 
     private static String indexTextWithTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
@@ -63,7 +71,8 @@ public class IndexAPI {
             public String call() {
                 try (Box box = App.Auto.cube()) {
                     Page defaultPage = null;
-                    for (Page p : box.select(Page.class, "from Page where url==?", url)) {
+
+                    for (Page p : DB.toList(box.select(Page.class, "from Page where url==?", url))) {
                         ENGINE.indexText(box, p.id, p.content, true);
                         ENGINE.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
                         box.d("Page", p.id).delete();
@@ -71,7 +80,7 @@ public class IndexAPI {
                     }
 
                     if (deleteOnly) {
-                        return "deleted";
+                        return box.commit() == CommitResult.OK ? "deleted" : "not deleted";
                     }
 
                     Page p = Page.get(url, subUrls);
@@ -141,7 +150,7 @@ public class IndexAPI {
 
     }
 
-    public static String pageLock(final String url, final Callable<String> run) {
+    private static String pageLock(final String url, final Callable<String> run) {
         try (Box box = App.Auto.cube()) {
             PageLock pl = box.d("PageLock", url).select(PageLock.class);
             if (pl == null) {

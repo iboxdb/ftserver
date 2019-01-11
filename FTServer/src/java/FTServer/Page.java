@@ -4,6 +4,7 @@ import iBoxDB.LocalServer.NotColumn;
 import FTServer.FTS.KeyWord;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
@@ -23,6 +24,8 @@ public class Page {
     public String description;
 
     public String content;
+
+    public Date createTime = new Date();
 
     @NotColumn
     public long rankUpId() {

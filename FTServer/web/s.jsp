@@ -6,13 +6,7 @@
 
 <%
     final String queryString = request.getQueryString();
-    /*
-    final String queryString = request.getQueryString();
-    String name = java.net.URLDecoder.decode(queryString, "UTF-8");
-    name = name.trim();
-    name = name.substring(2);//q=
-    name = name.trim();
-     */
+
     String name = request.getParameter("q").replaceAll("<", "").trim();
     IndexPage.searchList.add(name);
     while (IndexPage.searchList.size() > 15) {
@@ -161,10 +155,6 @@
             </div>
             <div class="six wide column" style="max-width: 200px;">
 
-                <div class="ui segment">
-                    <h4><a href="http://www.iboxdb.com" target="_blank">iBoxDB</a></h4> 
-                    Fast NoSQL Document Database
-                </div>
 
                 <div class="ui segment">
                     <h4>Full Text Search</h4> 

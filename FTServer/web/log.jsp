@@ -36,9 +36,12 @@
             public void run() {
                 Logger.getLogger(App.class.getName()).log(Level.INFO, furl);
                 //RE-INDEX, move page forward
-                IndexAPI.indexText(furl, false, null);
-                Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
-
+                try {
+                    IndexAPI.indexText(furl, false, null);
+                    Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
+                } catch (Throwable ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -46,3 +49,5 @@
         clicks.put(url, c);
     }
 %>
+<%=url%>
+<%= c%>
