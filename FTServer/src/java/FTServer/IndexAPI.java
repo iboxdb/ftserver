@@ -13,7 +13,7 @@ public class IndexAPI {
 
     public static long Search(ArrayList<Page> outputPages,
             String name, long startId, long pageCount) {
-
+        name = name.trim();
         try (Box box = App.Auto.cube()) {
 
             for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
@@ -30,7 +30,7 @@ public class IndexAPI {
 
         }
         //Recommend
-        if (outputPages.size() == 0 && name.length() > 1) {
+        if (outputPages.isEmpty() && name.length() > 1) {
             if (name.charAt(0) > 512) {
                 //only search one char, if full search is empty
                 Search(outputPages, name.substring(0, 1), Long.MAX_VALUE, pageCount);
@@ -40,6 +40,9 @@ public class IndexAPI {
                     name = name.substring(0, pos);
                     Search(outputPages, name, Long.MAX_VALUE, pageCount);
                 }
+            }
+            if (outputPages.isEmpty()) {
+                return startId;
             }
             return 0;
         }
@@ -94,7 +97,7 @@ public class IndexAPI {
 
                     Page p = Html.get(url, subUrls);
                     if (p == null) {
-                        p = defaultPage;
+                        //p = defaultPage;
                     }
                     if (p == null) {
                         return "temporarily unreachable";

@@ -15,7 +15,7 @@
         <h2>Full Text Search Server</h2>
         <h3>Version : 1.0</h3>
         <h3>Build : Netbeans 8.2</h3>
-        
-        <h5>number:2</h5>
+        <h3>Free to Modify</h3>
+        <h5>Time: <%= new java.util.Date()%></h5>
     </body>
 </html>

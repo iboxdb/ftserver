@@ -200,7 +200,7 @@ public class Html {
                     .trim();
 
             if (content.length() < 50 && (!url.contains("localhost"))) {
-                return null;
+                //return null;
             }
             if (content.length() > 5000) {
                 content = content.substring(0, 5000);

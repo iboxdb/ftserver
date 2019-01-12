@@ -9,7 +9,7 @@
     String url = request.getParameter("url");
     if (url != null) {
         // when input "http://www.abc.com" or "delete http://www.abc.com"
-
+        url = url.trim();
         Boolean isdelete = null;
         if (url.startsWith("http://") || url.startsWith("https://")) {
             isdelete = false;
@@ -87,6 +87,7 @@
                     }
                     function formfocus() {
                         document.getElementById('btnsearch').disabled = undefined;
+                        document.getElementsByName('url')[0].value = "";
                     }
                 </script>
             </div>
