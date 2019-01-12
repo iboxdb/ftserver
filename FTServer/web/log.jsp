@@ -31,7 +31,7 @@
         clicks.remove(url);
 
         final String furl = url;
-        IndexPage.writeES.submit(new Runnable() {
+        IndexPage.WRITE_ES.submit(new Runnable() {
             @Override
             public void run() {
                 Logger.getLogger(App.class.getName()).log(Level.INFO, furl);

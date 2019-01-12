@@ -23,7 +23,6 @@
 
     startId = IndexAPI.Search(pages, name, startId, pageCount);
 
-
 %>
 <%    if (startId == Long.MAX_VALUE) {
         Page p = new Page();
@@ -55,7 +54,7 @@
                 content = p.description;
                 if (content.length() < 20) {
                     content += p.getRandomContent() + "...";;
-                } 
+                }
                 sendlog = !isFirstLoad;
                 isdesc = true;
             } else {
@@ -72,10 +71,11 @@
                 }
             }
     %>
-    <h3>
-        <a class="stext"  target="_blank" href="<%=p.url%>" 
-           <%=sendlog ? "onclick=\"sendlog(this.href, 'content')\"" : ""%> >          
-            <%= p.title%></a></h3> 
+    <h3><div class="spartcss">
+            <a class="stext"  target="_blank" href="<%=p.url%>" 
+               <%=sendlog ? "onclick=\"sendlog(this.href, 'content')\"" : ""%> >          
+                <%= p.title%></a></div>
+    </h3> 
     <span class="stext"> <%=content%> </span><br>
     <div class="<%=isdesc ? "gt" : "gtt"%>" >
         <%=p.url%>

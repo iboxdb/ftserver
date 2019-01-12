@@ -8,6 +8,8 @@
 <%
     String url = request.getParameter("url");
     if (url != null) {
+        // when input "http://www.abc.com" or "delete http://www.abc.com"
+
         Boolean isdelete = null;
         if (url.startsWith("http://") || url.startsWith("https://")) {
             isdelete = false;
@@ -81,6 +83,7 @@
                 <script>
                     function formsubmit() {
                         document.getElementById('btnsearch').disabled = "disabled";
+                        document.getElementById('btnsearch').value = "Loading";
                     }
                     function formfocus() {
                         document.getElementById('btnsearch').disabled = undefined;
@@ -91,8 +94,9 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;" id="maindiv">
+                <% request.setCharacterEncoding("utf-8");%>
                 <jsp:include page="spart.jsp" >
-                    <jsp:param name="q" value="<%= url%>"></jsp:param>
+                    <jsp:param name="q" value="<%=url%>"></jsp:param>
                 </jsp:include>
 
             </div>

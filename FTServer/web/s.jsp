@@ -30,8 +30,12 @@
                 font-weight:lighter;
                 overflow-x: hidden;
             }
-            .stext{
-
+            .stext{}
+            .spartcss{
+                max-width: 600px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow:ellipsis;
             }
             .rt{
                 color: red;

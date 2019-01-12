@@ -29,9 +29,18 @@ public class IndexAPI {
             }
 
         }
-        if (outputPages.size() == 0 && name.length() > 1 && name.charAt(0) > 512) {
-            //only search one char, if full search is empty
-            Search(outputPages, name.substring(0, 1), Long.MAX_VALUE, pageCount);
+        //Recommend
+        if (outputPages.size() == 0 && name.length() > 1) {
+            if (name.charAt(0) > 512) {
+                //only search one char, if full search is empty
+                Search(outputPages, name.substring(0, 1), Long.MAX_VALUE, pageCount);
+            } else {
+                int pos = name.indexOf(' ');
+                if (pos > 0) {
+                    name = name.substring(0, pos);
+                    Search(outputPages, name, Long.MAX_VALUE, pageCount);
+                }
+            }
             return 0;
         }
         return startId;
@@ -59,9 +68,9 @@ public class IndexAPI {
     public static String indexText(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
         boolean tran = true;
         if (tran) {
-            return indexTextWithTran(Page.getUrl(url), deleteOnly, subUrls);
+            return indexTextWithTran(Html.getUrl(url), deleteOnly, subUrls);
         }
-        return indexTextNoTran(Page.getUrl(url), deleteOnly, subUrls);
+        return indexTextNoTran(Html.getUrl(url), deleteOnly, subUrls);
     }
 
     private static String indexTextWithTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
@@ -83,7 +92,7 @@ public class IndexAPI {
                         return box.commit() == CommitResult.OK ? "deleted" : "not deleted";
                     }
 
-                    Page p = Page.get(url, subUrls);
+                    Page p = Html.get(url, subUrls);
                     if (p == null) {
                         p = defaultPage;
                     }
@@ -130,7 +139,7 @@ public class IndexAPI {
                     return "deleted";
                 }
 
-                Page p = Page.get(url, subUrls);
+                Page p = Html.get(url, subUrls);
                 if (p == null) {
                     p = defaultPage;
                 }

@@ -17,21 +17,21 @@ public class IndexPage {
     public static ConcurrentLinkedDeque<String> waitingUrlList
             = new ConcurrentLinkedDeque<String>();
 
-    private final static int SLEEP_TIME = 2000;
-
     public static String processRequest(String name, boolean isdelete) {
 
         if (isdelete) {
             waitingUrlList.clear();
         }
 
-        // when input "http://www.abc.com" or "delete http://www.abc.com"
-        String url = Page.getUrl(name);
+        String url = Html.getUrl(name);
+        if (url.length() < 5) {
+            return "not http";
+        }
         final boolean del = isdelete;
 
-        HashSet<String> subUrls = new HashSet<String>();
+        HashSet<String> subUrls = new HashSet<>();
 
-        String result = IndexAPI.indexText(Page.getUrl(url), del, subUrls);
+        String result = IndexAPI.indexText(Html.getUrl(url), del, subUrls);
 
         urlList.add(url.replaceAll("<", ""));
         while (urlList.size() > 3) {
@@ -45,7 +45,7 @@ public class IndexPage {
         if (waitingUrlList.size() < 1000) {
             try (Box box = App.Auto.cube()) {
                 for (String surl : subUrls) {
-                    url = Page.getUrl(surl);
+                    url = Html.getUrl(surl);
                     if (box.selectCount("from Page where url==? limit 0,1", url) == 0) {
                         waitingUrlList.add(url);
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "Added:" + url);
@@ -67,18 +67,20 @@ public class IndexPage {
     }
 
     public static void closeBGTask() {
-        writeES.shutdown();
+        WRITE_ES.shutdown();
         waitingUrlList.clear();
-        writeESBG.shutdown();
+        WRITE_ESBG.shutdown();
         try {
-            writeESBG.awaitTermination(10, TimeUnit.SECONDS);
+            WRITE_ESBG.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
 
         }
     }
 
     public static void runBGTask() {
-        writeESBG.submit(new Runnable() {
+        final int SLEEP_TIME = 2000;
+
+        WRITE_ESBG.submit(new Runnable() {
             @Override
             public void run() {
                 for (String url : waitingUrlList) {
@@ -89,7 +91,7 @@ public class IndexPage {
                     }
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
-                        IndexAPI.indexText(Page.getUrl(url), false, null);
+                        IndexAPI.indexText(Html.getUrl(url), false, null);
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
                     }
                 }
@@ -98,9 +100,9 @@ public class IndexPage {
         });
     }
 
-    public final static ExecutorService writeES = Executors.newSingleThreadExecutor();
+    public final static ExecutorService WRITE_ES = Executors.newSingleThreadExecutor();
 
     //background index thread
-    private final static ExecutorService writeESBG = Executors.newSingleThreadExecutor();
+    private final static ExecutorService WRITE_ESBG = Executors.newSingleThreadExecutor();
 
 }
