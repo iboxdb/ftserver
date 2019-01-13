@@ -18,7 +18,7 @@
 %>
 
 <%
-    // change the rule by yourself.
+    // change the re-index rule by yourself.
     if (clicks.size() > 1000) {
         clicks.clear();
     }
@@ -35,10 +35,10 @@
             @Override
             public void run() {
                 Logger.getLogger(App.class.getName()).log(Level.INFO, furl);
-                //RE-INDEX, move page forward
                 try {
-                    IndexAPI.indexText(furl, false, null);
-                    Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
+                    //RE-INDEX, move page forward
+                    //IndexAPI.indexText(furl, false, null);
+                    //Logger.getLogger(App.class.getName()).log(Level.INFO, "RE-Indexed:" + furl);
                 } catch (Throwable ex) {
                     ex.printStackTrace();
                 }
