@@ -37,7 +37,7 @@
     }
 %>
 <%
-    if (startId == 0) {
+    if (startId == -1) {
 %>
 <h3>Recommend:</h3>
 <%
@@ -78,7 +78,7 @@
     </h3> 
     <span class="stext"> <%=content%> </span><br>
     <div class="<%=isdesc ? "gt" : "gtt"%> spartcss" >
-        <%=p.url%>  <%=  p.createTime %>
+        <%=p.url%>  <%=  p.createTime%>
     </div>
     <% }%>
 </div>
@@ -88,13 +88,13 @@
                 + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
     %>
     <%=name%>  TIME: <%= content%>
-    <a href="#btnsearch" ><b><%= pages.size() >= pageCount && startId > 0 ? "HEAD" : "END"%></b></a>
+    <a href="#btnsearch" ><b><%= pages.size() >= pageCount && startId > -1 ? "HEAD" : "END"%></b></a>
 
 </div>
 <script>
     setTimeout(function () {
         highlight("ldiv<%= startId%>");
-    <% if (pages.size() >= pageCount && startId > 0) {%>
+    <% if (pages.size() >= pageCount && startId > -1) {%>
         //startId is a big number, in javascript, have to write big number as a 'String'
         onscroll_loaddiv("s<%= startId%>", "<%= startId%>");
     <%}%>

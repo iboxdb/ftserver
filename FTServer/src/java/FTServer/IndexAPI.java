@@ -44,7 +44,7 @@ public class IndexAPI {
             if (outputPages.isEmpty()) {
                 return startId;
             }
-            return 0;
+            return -1;
         }
         return startId;
     }
