@@ -25,7 +25,7 @@
         }
     }
     if (url == null) {
-        url = "http://www.iboxdb.com";
+        url = "https://www.iboxdb.com/";
     }
 %>
 

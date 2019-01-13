@@ -77,8 +77,8 @@
                 <%= p.title%></a></div>
     </h3> 
     <span class="stext"> <%=content%> </span><br>
-    <div class="<%=isdesc ? "gt" : "gtt"%>" >
-        <%=p.url%>
+    <div class="<%=isdesc ? "gt" : "gtt"%> spartcss" >
+        <%=p.url%>  <%=  p.createTime %>
     </div>
     <% }%>
 </div>

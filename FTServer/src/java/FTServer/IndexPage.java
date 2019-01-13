@@ -91,7 +91,11 @@ public class IndexPage {
                     }
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
-                        IndexAPI.indexText(Html.getUrl(url), false, null);
+                        String result = IndexAPI.indexText(Html.getUrl(url), false, null);
+                        urlList.add(url.replaceAll("<", ""));
+                        while (urlList.size() > 3) {
+                            urlList.remove();
+                        }
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
                     }
                 }

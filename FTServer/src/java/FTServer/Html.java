@@ -313,6 +313,9 @@ public class Html {
             if (!domain.endsWith("/")) {
                 domain += "/";
             }
+            if (domain.equals(base + "/")) {
+                base = domain;
+            }
             if (!base.endsWith("/") && base.length() > domain.length()) {
                 t = base.lastIndexOf("/");
                 base = base.substring(0, t + 1);
