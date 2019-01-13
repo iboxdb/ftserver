@@ -3,7 +3,7 @@
 ### Setup
 
 ```
-Use Netbeans to build or download fts.zip(WAR) from Release
+Use NetBeans 8.2 to build or download fts.zip(WAR) from WAR Folder
 Deploy to tomcat/jetty
 ```
 
@@ -113,7 +113,7 @@ DB.Delete("Page", page.Id);
 
 #### Memory
 ````java
-indexText(IBox, id, String, boolean) // faster, more memories
+indexTextWithTran(IBox, id, String, boolean) // faster, more memories
 
 indexTextNoTran(AutoBox, commitCount, id, String, boolean) // less memory
 ````
@@ -121,7 +121,7 @@ indexTextNoTran(AutoBox, commitCount, id, String, boolean) // less memory
 #### Private Server
 Open 
 ```java
-public Page Page.get(String url);
+public Page Html.get(String url);
 ```
 Set your private WebSite text
 ```java
