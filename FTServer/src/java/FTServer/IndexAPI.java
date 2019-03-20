@@ -14,7 +14,7 @@ public class IndexAPI {
     public static long Search(ArrayList<Page> outputPages,
             String name, long startId, long pageCount) {
         name = name.trim();
-        try (Box box = App.Auto.cube()) {
+        try (Box box = App.cube()) {
 
             for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
 
