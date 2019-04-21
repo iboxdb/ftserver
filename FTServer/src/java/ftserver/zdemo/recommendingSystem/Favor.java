@@ -1,4 +1,4 @@
-package ftserver.demo.recommendingSystem;
+package ftserver.zdemo.recommendingSystem;
  
 public class Favor {
 

@@ -9,18 +9,6 @@ public final class KeyWordN extends KeyWord {
 
     @NotColumn
     @Override
-    public Object getKeyWord() {
-        return K;
-    }
-
-    @NotColumn
-    @Override
-    public void setKeyWord(Object k) {
-        K = (long) k;
-    }
-
-    @NotColumn
-    @Override
     public int size() {
         if ((K & CMASK) != 0L) {
             return 3;

@@ -19,39 +19,15 @@ public abstract class KeyWord {
     }
 
     @NotColumn
-    public abstract Object getKeyWord();
-
-    @NotColumn
-    public abstract void setKeyWord(Object k);
-
-    @NotColumn
     public abstract int size();
 
     //Position
     public int P;
 
-    @NotColumn
-    public int getPosition() {
-        return P;
-    }
-
-    @NotColumn
-    public void setPosition(int p) {
-        P = p;
-    }
-
     //Document ID
     public long I;
 
-    @NotColumn
-    public long getID() {
-        return I;
-    }
-
-    @NotColumn
-    public void setID(long i) {
-        I = i;
-    }
+ 
 
     @NotColumn
     public KeyWord previous;

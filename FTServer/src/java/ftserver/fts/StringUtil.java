@@ -92,9 +92,9 @@ public class StringUtil {
             } else if (isWord(c)) {
                 if (k == null && c != '-' && c != '#') {
                     k = new KeyWordE();
-                    k.setID(id);
-                    k.setKeyWord("");
-                    k.setPosition(i);
+                    k.I = id;
+                    k.keyWord("");
+                    k.P = i;
                     if (linkedCount > 0) {
                         linkedCount++;
                     }
@@ -103,7 +103,7 @@ public class StringUtil {
                     }
                 }
                 if (k != null) {
-                    k.setKeyWord(k.getKeyWord() + Character.toString(c));
+                    k.keyWord(k.K + Character.toString(c));
                 }
             } else {
                 if (k != null) {
@@ -112,8 +112,8 @@ public class StringUtil {
                 k = null;
 
                 KeyWordN n = new KeyWordN();
-                n.setID(id);
-                n.setPosition(i);
+                n.I = id;
+                n.P = i;
                 n.longKeyWord(c, (char) 0, (char) 0);
                 n.isLinked = i == (lastNPos + 1);
                 kws.add(n);
@@ -121,8 +121,8 @@ public class StringUtil {
                 char c1 = str[i + 1];
                 if ((c1 != ' ' && c1 != '"') && (!isWord(c1))) {
                     n = new KeyWordN();
-                    n.setID(id);
-                    n.setPosition(i);
+                    n.I = id;
+                    n.P = i;
                     n.longKeyWord(c, c1, (char) 0);
                     n.isLinked = i == (lastNPos + 1);
                     kws.add(n);
@@ -164,7 +164,7 @@ public class StringUtil {
                 new Comparator<KeyWord>() {
             @Override
             public int compare(KeyWord o1, KeyWord o2) {
-                return o1.getPosition() - o2.getPosition();
+                return o1.P - o2.P;
             }
         }
         );
@@ -173,13 +173,12 @@ public class StringUtil {
         int end = -1;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ps.length; i++) {
-            int len = ps[i] instanceof KeyWordE ? ps[i].getKeyWord()
-                    .toString().length() : ((KeyWordN) ps[i]).size();
-            if ((ps[i].getPosition() + len) <= end) {
+            int len = ps[i].size();
+            if ((ps[i].P + len) <= end) {
                 continue;
             }
-            start = ps[i].getPosition();
-            end = ps[i].getPosition() + length;
+            start = ps[i].P;
+            end = ps[i].P + length;
             if (end > str.length()) {
                 end = str.length();
             }

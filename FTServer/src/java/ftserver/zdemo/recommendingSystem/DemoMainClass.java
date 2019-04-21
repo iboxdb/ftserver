@@ -1,4 +1,4 @@
-package ftserver.demo.recommendingSystem;
+package ftserver.zdemo.recommendingSystem;
 
 import ftserver.fts.*;
 import iBoxDB.LocalServer.*;
@@ -116,7 +116,7 @@ public class DemoMainClass {
             System.out.print("\r\nMonthly Recommend\r\n");
             for (KeyWord kw
                     : monthlyEngine.searchDistinct(box, sb.toString(), startId, HowManyReference)) {
-                RelatedItems item = box.d("RelatedItems", kw.getID()).select(RelatedItems.class);
+                RelatedItems item = box.d("RelatedItems", kw.I).select(RelatedItems.class);
                 for (Object l : item.items) {
                     if (!itemSet.contains(l)) {
                         System.out.print(l + " ");
@@ -148,8 +148,8 @@ public class DemoMainClass {
                 for (KeyWord kw
                         : dailyEngine.searchDistinct(box, sb.toString(), startId, HowManyUsersAsReference)) {
                     maxPage = tempMaxPage - 1;
-                    startId = kw.getID() - 1;
-                    long userId = kw.getID();
+                    startId = kw.I - 1;
+                    long userId = kw.I;
                     for (Favor favor : box.select(Favor.class, "from /Favor where userId == ?", userId)) {
                         if (itemSet.contains(favor.itemId)) {
                             continue;

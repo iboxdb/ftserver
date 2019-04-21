@@ -61,9 +61,9 @@ public class Engine {
     private void insertToBox(Box box, KeyWord kw, boolean isRemove) {
         Binder binder;
         if (kw instanceof KeyWordE) {
-            binder = box.d("/E", kw.getKeyWord(), kw.getID(), kw.getPosition());
+            binder = box.d("/E", ((KeyWordE) kw).K, kw.I, kw.P);
         } else {
-            binder = box.d("/N", kw.getKeyWord(), kw.getID(), kw.getPosition());
+            binder = box.d("/N", ((KeyWordN) kw).K, kw.I, kw.P);
         }
         if (isRemove) {
             binder.delete();
@@ -84,9 +84,9 @@ public class Engine {
                 cs[i] = (char) (ran.nextInt(eto - efrom) + efrom);
             }
             KeyWordE kw = new KeyWordE();
-            kw.setKeyWord(new String(cs));
-            for (KeyWord tkw : lessMatch(box, kw)) {
-                String str = tkw.getKeyWord().toString();
+            kw.keyWord(new String(cs));
+            for (KeyWordE tkw : lessMatch(box, kw)) {
+                String str = tkw.K;
                 if (str.length() < 3) {
                     continue;
                 }
@@ -149,10 +149,10 @@ public class Engine {
                         }
                         while (it.hasNext()) {
                             current = it.next();
-                            if (current.getID() == c_id) {
+                            if (current.I == c_id) {
                                 continue;
                             }
-                            c_id = current.getID();
+                            c_id = current.I;
                             len--;
                             return true;
                         }
@@ -220,11 +220,11 @@ public class Engine {
                         while (cd.hasNext()) {
                             r1_con = cd.next();
 
-                            if (r1_id == r1_con.getID()) {
+                            if (r1_id == r1_con.I) {
                                 continue;
                             }
                             if (!nw.isLinked) {
-                                r1_id = r1_con.getID();
+                                r1_id = r1_con.I;
                             }
 
                             r1 = search(box, nw, r1_con, maxId).iterator();
@@ -249,26 +249,24 @@ public class Engine {
 
     }
 
-    private static Iterable<KeyWord> search(final Box box,
-            final KeyWord kw, final KeyWord con, final Engine.MaxID maxId) {
+    private static <KW extends KeyWord> Iterable<KW> search(final Box box,
+            final KW kw, final KeyWord con, final Engine.MaxID maxId) {
 
         final String ql = kw instanceof KeyWordE
                 ? "from /E where K==? & I<=?"
                 : "from /N where K==? & I<=?";
 
-        final Class rclass = kw instanceof KeyWordE ? KeyWordE.class : KeyWordN.class;
-
-        final int linkPos = kw.isLinked ? (con.getPosition() + con.size()
+        final int linkPos = kw.isLinked ? (con.P + con.size()
                 + (kw instanceof KeyWordE ? 1 : 0)) : -1;
 
-        return new Iterable<KeyWord>() {
+        return new Iterable<KW>() {
             @Override
-            public Iterator<KeyWord> iterator() {
+            public Iterator<KW> iterator() {
 
-                return new EngineIterator<KeyWord>() {
+                return new EngineIterator<KW>() {
                     long currentMaxId = Long.MAX_VALUE;
-                    KeyWord cache = null;
-                    Iterator<KeyWord> iter = null;
+                    KW cache = null;
+                    Iterator<KW> iter = null;
                     boolean isLinkEndMet = false;
 
                     @Override
@@ -279,14 +277,15 @@ public class Engine {
 
                         if (currentMaxId > (maxId.id + 1)) {
                             currentMaxId = maxId.id;
-                            iter = box.select(rclass, ql, kw.getKeyWord(), maxId.id).iterator();
+                            Object kwk = kw instanceof KeyWordE ? ((KeyWordE) kw).K : ((KeyWordN) kw).K;
+                            iter = (Iterator<KW>) box.select(kw.getClass(), ql, kwk, maxId.id).iterator();
                         }
 
                         while (iter.hasNext()) {
 
                             cache = iter.next();
 
-                            maxId.id = cache.getID();
+                            maxId.id = cache.I;
                             currentMaxId = maxId.id;
                             if (con != null && con.I != maxId.id) {
                                 return false;
@@ -300,7 +299,7 @@ public class Engine {
                                 return true;
                             }
 
-                            int cpos = cache.getPosition();
+                            int cpos = cache.P;
                             if (cpos > linkPos) {
                                 continue;
                             }
@@ -319,7 +318,7 @@ public class Engine {
                     }
 
                     @Override
-                    public KeyWord next() {
+                    public KW next() {
                         return cache;
                     }
 
@@ -339,12 +338,12 @@ public class Engine {
 
     }
 
-    private static Iterable<KeyWord> lessMatch(Box box, KeyWord kw) {
+    private static <KW extends KeyWord> Iterable<KW> lessMatch(Box box, KW kw) {
         if (kw instanceof KeyWordE) {
-            return (Iterable<KeyWord>) (Object) box.select(KeyWordE.class, "from /E where K<=? limit 0, 50", kw.getKeyWord());
+            return (Iterable<KW>) (Object) box.select(KeyWordE.class, "from /E where K<=? limit 0, 50", ((KeyWordE) kw).K);
 
         } else {
-            return (Iterable<KeyWord>) (Object) box.select(KeyWordN.class, "from /N where K<=? limit 0, 50", kw.getKeyWord());
+            return (Iterable<KW>) (Object) box.select(KeyWordN.class, "from /N where K<=? limit 0, 50", ((KeyWordN) kw).K);
         }
     }
 

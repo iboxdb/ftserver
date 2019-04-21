@@ -18,9 +18,9 @@ public class IndexAPI {
 
             for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
 
-                startId = kw.getID() - 1;
+                startId = kw.I - 1;
 
-                long id = kw.getID();
+                long id = kw.I;
                 id = Page.rankDownId(id);
                 Page p = box.d("Page", id).select(Page.class);
                 p.keyWord = kw;
@@ -50,7 +50,7 @@ public class IndexAPI {
     }
 
     public static String getDesc(String str, KeyWord kw, int length) {
-        if (kw.getID() == -1) {
+        if (kw.I == -1) {
             return str;
         }
         return ENGINE.getDesc(str, kw, length);

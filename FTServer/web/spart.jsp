@@ -49,7 +49,7 @@
             boolean sendlog = false;
             boolean isdesc = false;
             String content = null;
-            if (p.id != p.keyWord.getID()) {
+            if (p.id != p.keyWord.I) {
                 //only show page description
                 content = p.description;
                 if (content.length() < 20) {

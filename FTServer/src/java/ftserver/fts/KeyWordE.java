@@ -7,20 +7,11 @@ public final class KeyWordE extends KeyWord {
     //Key Word
     public String K;
 
-    @NotColumn
-    @Override
-    public Object getKeyWord() {
-        return K;
-    }
-
-    @NotColumn
-    @Override
-    public void setKeyWord(Object k) {
-        String t = (String) k;
-        if (t.length() > KeyWord.MAX_WORD_LENGTH) {
+    public void keyWord(String k) {
+        if (k.length() > KeyWord.MAX_WORD_LENGTH) {
             return;
         }
-        K = t;
+        K = k;
     }
 
     @NotColumn

@@ -1,5 +1,4 @@
-// http://www.iboxdb.com/
-package ftserver.demo;
+package ftserver.zdemo;
 
 import iBoxDB.LocalServer.*;
 import ftserver.fts.*;
@@ -55,10 +54,10 @@ public class MainClass {
             doagain = false;
             try (Box box = auto.cube()) {
                 for (KeyWord kw : engine.searchDistinct(box, "test", startId, 9)) {
-                    System.out.println(engine.getDesc(ts[(int) kw.getID()], kw, 20));
+                    System.out.println(engine.getDesc(ts[(int) kw.I], kw, 20));
                     tcount++;
                     doagain = true;
-                    startId = kw.getID() - 1;
+                    startId = kw.I - 1;
                 }
             }
             System.out.println();
@@ -167,7 +166,7 @@ public class MainClass {
             try (Box box = auto.cube()) {
                 for (KeyWord kw : engine.search(box, "\"Java NoSQL\" \"上任意\"")) {
                     System.out.println(kw.toFullString());
-                    System.out.println(engine.getDesc(ts[(int) kw.getID()], kw, 20));
+                    System.out.println(engine.getDesc(ts[(int) kw.I], kw, 20));
                     System.out.println();
                 }
                 for (String skw : engine.discover(box,

@@ -14,7 +14,7 @@
     <body>
         <h1>FTServer</h1>
         <h2>Full Text Search Server</h2>
-        <h3>Version : 1.0</h3>
+        <h3>Version : 1.1</h3>
         <h3>Build : Netbeans 8.2</h3>
         <h3>Free to Modify</h3>
         <h5>Time: <%= new java.util.Date()%></h5>
