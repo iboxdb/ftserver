@@ -1,4 +1,4 @@
-<%@page import="FTServer.Html"%>
+<%@page import="ftserver.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");

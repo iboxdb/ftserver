@@ -1,7 +1,7 @@
-package FTServer;
+package ftserver;
 
 import iBoxDB.LocalServer.NotColumn;
-import FTServer.FTS.KeyWord;
+import ftserver.fts.KeyWord;
 import java.util.Date;
 import java.util.Random;
 

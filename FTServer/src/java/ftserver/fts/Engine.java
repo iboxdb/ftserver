@@ -1,5 +1,5 @@
 //Free
-package FTServer.FTS;
+package ftserver.fts;
 
 import iBoxDB.LocalServer.*;
 import java.util.*;

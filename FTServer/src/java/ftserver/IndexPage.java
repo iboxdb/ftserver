@@ -1,4 +1,4 @@
-package FTServer;
+package ftserver;
 
 import iBoxDB.LocalServer.Box;
 import java.util.HashSet;

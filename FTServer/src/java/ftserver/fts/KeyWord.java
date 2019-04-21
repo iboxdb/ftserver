@@ -1,5 +1,5 @@
 //Free
-package FTServer.FTS;
+package ftserver.fts;
 
 import iBoxDB.LocalServer.DatabaseConfig;
 import iBoxDB.LocalServer.NotColumn;

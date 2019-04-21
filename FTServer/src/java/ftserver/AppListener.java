@@ -1,6 +1,6 @@
-package FTServer;
+package ftserver;
 
-import FTServer.FTS.Engine;
+import ftserver.fts.Engine;
 import iBoxDB.LocalServer.*;
 import java.io.File;
 import java.util.logging.Level;

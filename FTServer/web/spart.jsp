@@ -1,5 +1,5 @@
-<%@page import="FTServer.FTS.*"%>
-<%@page import="FTServer.*"%>
+<%@page import="ftserver.fts.*"%>
+<%@page import="ftserver.*"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="iBoxDB.LocalServer.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>

@@ -1,7 +1,7 @@
-package FTServer;
+package ftserver;
 
-import FTServer.FTS.Engine;
-import FTServer.FTS.KeyWord;
+import ftserver.fts.Engine;
+import ftserver.fts.KeyWord;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;

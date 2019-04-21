@@ -1,4 +1,4 @@
-package FTServer.FTS;
+package ftserver.fts;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package FTServer;
+package ftserver;
 
 import iBoxDB.LocalServer.*;
 
