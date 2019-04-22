@@ -13,11 +13,9 @@ Deploy to tomcat/jetty
 ### Dependencies
 [iBoxDB](http://www.iboxdb.com)
 
-[FTS Engine](https://github.com/iboxdb/full-text-search)
-
 [Semantic-UI](http://semantic-ui.com/)
 
-[Jodd](http://jodd.org/)
+[Jsoup](http://jsoup.org/)
 
 
 
