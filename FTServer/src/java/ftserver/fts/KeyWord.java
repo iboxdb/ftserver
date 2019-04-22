@@ -1,4 +1,3 @@
-//Free
 package ftserver.fts;
 
 import iBoxDB.LocalServer.DatabaseConfig;

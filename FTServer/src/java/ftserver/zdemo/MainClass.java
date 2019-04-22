@@ -21,9 +21,9 @@ public class MainClass {
 
         System.out.println(java.lang.Runtime.getRuntime().maxMemory());
         DB.root("/tmp/");
-        test1();
+        //test1();
         //test_big_n();
-        //test_big_e();
+        test_big_e();
 
         //test_order();
     }
@@ -180,6 +180,7 @@ public class MainClass {
         }
     }
 
+    // 150 seconds test
     public static void test_big_n() throws FileNotFoundException, IOException, InterruptedException {
         String book = "/hero.txt";  //UTF-8
         long dbid = 1;
@@ -200,14 +201,16 @@ public class MainClass {
         strkw = "这几天";
         strkw = "有 这几天";
         strkw = "这几天 有";
+        strkw = "牛家村边绕";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
+    // 30 seconds test
     public static void test_big_e() throws FileNotFoundException, IOException, InterruptedException {
         String book = "/phoenix.txt"; //UTF-8
         long dbid = 2;
-        boolean rebuild = true;
-        int istran = 10;
+        boolean rebuild = false;
+        int istran = 0 ;//10;
         String split = "\\.";
         String strkw = "Harry";
         //strkw = "Harry Philosopher";
@@ -215,14 +218,14 @@ public class MainClass {
         //strkw = "\"Harry Philosopher\"";
         //strkw = "\"He looks\"";
         //strkw = "He looks";
-        strkw = "\"he drove toward town he thought\"";
-        strkw = "\"he drove toward\"";
-        strkw = "\"he thought\"";
-        strkw = "\"he thought\" toward";
+        //strkw = "\"he drove toward town he thought\"";
+        //strkw = "\"he drove toward\"";
+        //strkw = "\"he thought\"";
+        //strkw = "\"he thought\" toward";
         //strkw = "toward \"he thought\"";
-        strkw = "he thought";
-        strkw = "he thought toward";
-        strkw = "He";
+        //strkw = "he thought";
+        //strkw = "he thought toward";
+        //strkw = "He";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
@@ -243,7 +246,7 @@ public class MainClass {
 
         String[] tstmp = new String(bs).split(split);
         ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             for (String str : tstmp) {
                 list.add(str);
             }
@@ -251,9 +254,9 @@ public class MainClass {
         final String[] ts = list.toArray(new String[0]);
 
         final Engine engine = new Engine();
-        engine.Config(db.getConfig().DBConfig);
-        //engine.maxSearchTime = 3000;
-
+        engine.Config(db.getConfig().DBConfig); 
+        //db.getConfig().DBConfig.CacheLength = 512 * 1024 * 1024;
+        
         final AutoBox auto = db.open();
 
         long begin;
@@ -293,10 +296,10 @@ public class MainClass {
                     c++;
                     //System.out.println(engine.getDesc(ts[0], kw, 15));
                     //System.out.println(kw.toFullString());
-                    //items.add(kw.getID());
+                    //items.add(kw.I);
                 }
             }
-            System.out.println(c + " " + ((System.currentTimeMillis() - begin) / 1000.0));
+            System.out.println("FTS Count: " + c + " ,Time: " + ((System.currentTimeMillis() - begin) / 1000.0));
         }
 
         StringUtil sutil = new StringUtil();
@@ -330,7 +333,7 @@ public class MainClass {
             }
         }
 
-        System.out.println(strkw + " " + items.size());
+        System.out.println("WORD: " + strkw + " " + items.size());
         begin = System.currentTimeMillis();
         c = 0;
 
@@ -355,18 +358,26 @@ public class MainClass {
                 }
             }
             c++;
+
+            //if (!items.contains((long) i)) {
             /*
-            if (!items.contains((long) i)) {
+            if (!items.remove((long) i)) {
                 System.out.println(ts[i]);
                 System.out.println();
-            }
-             */
-        }
-        System.out.println(c + " " + ((System.currentTimeMillis() - begin) / 1000.0) + " -" + ts.length);
+            }*/
+        }/*
+        for (long l : items) {
+            System.out.println(ts[(int) l]);
+        }*/
+        System.out.println("MEM Count: " + c + " ,Time: " + ((System.currentTimeMillis() - begin) / 1000.0) + " Lines:" + ts.length);
 
     }
 
     private static boolean onlyPart(String str, String wd, int p) {
+        char last = wd.charAt(wd.length() - 1);
+        if (last > 256) {
+            return false;
+        }
         char pc = str.charAt(p + wd.length());
         if (pc >= 'a' && pc <= 'z') {
             return true;

@@ -16,7 +16,7 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         //Path
-        String path = System.getProperty("user.home") + File.separatorChar + "ftsdata100" + File.separatorChar;
+        String path = System.getProperty("user.home") + File.separatorChar + "ftsdata110" + File.separatorChar;
         new File(path).mkdirs();
 
         if (!new File(path).exists()) {

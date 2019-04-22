@@ -8,7 +8,7 @@ package ftserver;
 import java.util.*;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
-import org.jsoup.select.*; 
+import org.jsoup.select.*;
 
 /**
  *
@@ -78,7 +78,7 @@ public class Html {
                     .replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
 
             fixSpan(doc);
-            String content = doc.text();
+            String content = doc.body().text();
             content = content.replaceAll(Character.toString((char) 8203), "")
                     .replaceAll("&nbsp;", " ")
                     .replaceAll("&gt;", " ")
@@ -88,8 +88,8 @@ public class Html {
                     .replaceAll("\\s+", " ")
                     .trim();
 
-            if (content.length() < 50 && (!url.contains("localhost"))) {
-                //return null;
+            if (content.length() < 10 && (!url.contains("localhost"))) {
+                return null;
             }
             if (content.length() > 5000) {
                 content = content.substring(0, 5000);
@@ -128,7 +128,7 @@ public class Html {
 
     private static void fixSpan(Document doc) {
         for (Element e : doc.select("span")) {
-            e.text(e.text() + " ");
+            e.text(" " + e.text() + " ");
         }
     }
 

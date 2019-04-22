@@ -19,7 +19,6 @@ public class IndexAPI {
             for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
 
                 startId = kw.I - 1;
-
                 long id = kw.I;
                 id = Page.rankDownId(id);
                 Page p = box.d("Page", id).select(Page.class);
@@ -71,12 +70,14 @@ public class IndexAPI {
     public static String indexText(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
         boolean tran = true;
         if (tran) {
-            return indexTextWithTran(Html.getUrl(url), deleteOnly, subUrls);
+            return indexTextWithTran(Html.getUrl(url), deleteOnly, subUrls,
+                    subUrls != null ? 1L << 59 : 0);
         }
         return indexTextNoTran(Html.getUrl(url), deleteOnly, subUrls);
     }
 
-    private static String indexTextWithTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
+    private static String indexTextWithTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls,
+            final long rankUpPlus) {
         return pageLock(url, new Callable<String>() {
 
             @Override
@@ -104,6 +105,7 @@ public class IndexAPI {
                     } else {
                         if (p.id == 0) {
                             p.id = box.newId();
+                            p.rankUpPlus = rankUpPlus;
                         }
                         box.d("Page").insert(p);
                         ENGINE.indexText(box, p.id, p.content, false);

@@ -19,14 +19,20 @@ public class Page {
 
     public Date createTime = new Date();
 
+    public long rankUpPlus = 0; // only support (1L << 59), or modify 'rankDownId()' 
+
     @NotColumn
     public long rankUpId() {
-        return id | (1L << 60);
+        if (rankUpPlus != 0 && rankUpPlus != (1L << 59)) {
+            throw new RuntimeException("");
+        }
+        return (id | (1L << 60)) + rankUpPlus;
     }
 
     @NotColumn
     public static long rankDownId(long id) {
-        return id & (~(1L << 60));
+        long up = 3L;
+        return id & (~(up << 59));
     }
 
     @NotColumn
