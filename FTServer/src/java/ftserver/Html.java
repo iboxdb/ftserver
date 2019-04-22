@@ -91,8 +91,8 @@ public class Html {
             if (content.length() < 10 && (!url.contains("localhost"))) {
                 return null;
             }
-            if (content.length() > 5000) {
-                content = content.substring(0, 5000);
+            if (content.length() > 15000) {
+                content = content.substring(0, 15000);
             }
             page.content = content + " " + page.url;
 
@@ -137,7 +137,7 @@ public class Html {
             if (url == null) {
                 return null;
             }
-
+            url = url.trim();
             String lcurl = url.toLowerCase();
             if (lcurl.contains("download") || lcurl.contains("signup") || lcurl.contains("login")
                     || lcurl.contains("share") || lcurl.contains("mailto")
@@ -165,21 +165,7 @@ public class Html {
         if (url.length() > Page.MAX_URL_LENGTH) {
             return false;
         }
-        url = url.toLowerCase();
-        int t = url.lastIndexOf("/");
-        if (t > "https://-".length()) {
-            String tu = url.substring(t);
-            if (tu.contains(".")) {
-                if ((!tu.contains(".html")) && (!tu.contains(".htm"))
-                        && (!tu.contains(".shtml"))
-                        && (!tu.contains(".asp"))
-                        && (!tu.contains(".aspx")) && (!tu.contains(".php"))
-                        && (!tu.contains(".jsp"))) {
-                    return false;
-                }
-            }
-        }
-        return url.contains(".");
+        return true;
     }
 
 }

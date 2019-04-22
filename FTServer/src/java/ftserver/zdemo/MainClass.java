@@ -15,15 +15,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+
 public class MainClass {
 
     public static void main(String[] args) throws Exception {
 
         System.out.println(java.lang.Runtime.getRuntime().maxMemory());
         DB.root("/tmp/");
-        //test1();
+        test1();
         //test_big_n();
-        test_big_e();
+        //test_big_e();
 
         //test_order();
     }
@@ -210,7 +211,7 @@ public class MainClass {
         String book = "/phoenix.txt"; //UTF-8
         long dbid = 2;
         boolean rebuild = false;
-        int istran = 0 ;//10;
+        int istran = 0;//10;
         String split = "\\.";
         String strkw = "Harry";
         //strkw = "Harry Philosopher";
@@ -254,9 +255,9 @@ public class MainClass {
         final String[] ts = list.toArray(new String[0]);
 
         final Engine engine = new Engine();
-        engine.Config(db.getConfig().DBConfig); 
+        engine.Config(db.getConfig().DBConfig);
         //db.getConfig().DBConfig.CacheLength = 512 * 1024 * 1024;
-        
+
         final AutoBox auto = db.open();
 
         long begin;

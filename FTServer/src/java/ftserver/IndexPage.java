@@ -92,11 +92,16 @@ public class IndexPage {
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
                         String result = IndexAPI.indexText(Html.getUrl(url), false, null);
-                        urlList.add(url.replaceAll("<", ""));
-                        while (urlList.size() > 3) {
-                            urlList.remove();
+                        if (result != null && result.startsWith("http")) {
+                            urlList.add(url.replaceAll("<", ""));
+                            while (urlList.size() > 3) {
+                                urlList.remove();
+                            }
+                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
+                        } else {
+                            
+                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
                         }
-                        Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
                     }
                 }
                 waitingUrlList.clear();
