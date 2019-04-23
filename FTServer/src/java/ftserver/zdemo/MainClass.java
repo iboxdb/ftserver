@@ -15,7 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-
 public class MainClass {
 
     public static void main(String[] args) throws Exception {
@@ -187,7 +186,7 @@ public class MainClass {
         long dbid = 1;
         boolean rebuild = false;
         int istran = 0;
-        String split = "。";
+        String split = "15000"; // "。";
         String strkw = "黄蓉 郭靖 洪七公";
         strkw = "洪七公 黄蓉 郭靖";
         strkw = "黄蓉 郭靖 公";
@@ -245,7 +244,26 @@ public class MainClass {
 
         rf.close();
 
-        String[] tstmp = new String(bs).split(split);
+        String[] tstmp;
+        int splitNum = 0;
+        try {
+            splitNum = Integer.parseInt(split);
+        } catch (Throwable te) {
+
+        }
+
+        if (splitNum == 0) {
+            tstmp = new String(bs).split(split);
+        } else {
+            String text = new String(bs);
+            int leng = text.length() / splitNum;
+            tstmp = new String[leng + 1];
+            for (int i = 0; i < leng; i++) {
+                tstmp[i] = text.substring(i * splitNum, (i + 1) * splitNum);
+            }
+            tstmp[leng] = text.substring(leng * splitNum);
+        }
+
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < 3; i++) {
             for (String str : tstmp) {

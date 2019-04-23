@@ -153,6 +153,7 @@ public class IndexAPI {
                 } else {
                     if (p.id == 0) {
                         p.id = App.Auto.newId();
+                        //   p.rankUpPlus = rankUpPlus;
                     }
                     App.Auto.insert("Page", p);
                     ENGINE.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content, false);
