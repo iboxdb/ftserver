@@ -22,6 +22,9 @@ public class Page {
     public long rankUpPlus = 0; // only support (1L << 59), or modify 'rankDownId()' 
 
     @NotColumn
+    public boolean isAnd = true;
+
+    @NotColumn
     public long rankUpId() {
         if (rankUpPlus != 0 && rankUpPlus != (1L << 59)) {
             throw new RuntimeException("");

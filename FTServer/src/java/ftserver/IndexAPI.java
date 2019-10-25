@@ -2,7 +2,6 @@ package ftserver;
 
 import ftserver.fts.Engine;
 import ftserver.fts.KeyWord;
-import ftserver.fts.KeyWordN;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;
@@ -65,7 +64,7 @@ public class IndexAPI {
         if (startId.length < ors.size()) {
             startId = new long[ors.size()];
             startId[0] = -1;
-            for (int i = 0; i < startId.length; i++) {
+            for (int i = 1; i < startId.length; i++) {
                 startId[i] = Long.MAX_VALUE;
             }
         }
@@ -90,13 +89,13 @@ public class IndexAPI {
             int mPos = maxPos(startId);
             while (mPos > 0) {
 
-                long maxId = startId[mPos];
                 for (int i = 0; i < iters.length; i++) {
-                    if (startId[i] == maxId) {
+                    if (kws[i] == null) {
                         if (iters[i] != null && iters[i].hasNext()) {
                             kws[i] = iters[i].next();
                             startId[i] = kws[i].I;
                         } else {
+                            iters[i] = null;
                             kws[i] = null;
                             startId[i] = -1;
                         }
@@ -107,14 +106,23 @@ public class IndexAPI {
 
                 if (mPos != 1) {
                     KeyWord kw = kws[mPos];
+
                     long id = kw.I;
                     id = Page.rankDownId(id);
                     Page p = box.d("Page", id).select(Page.class);
                     p.keyWord = kw;
+                    p.isAnd = false;
                     outputPages.add(p);
                     if (outputPages.size() >= pageCount) {
                         startId[mPos] -= 1;
                         break;
+                    }
+                }
+
+                long maxId = startId[mPos];
+                for (int i = 0; i < startId.length; i++) {
+                    if (startId[i] == maxId) {
+                        kws[i] = null;
                     }
                 }
 
