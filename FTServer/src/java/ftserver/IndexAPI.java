@@ -2,6 +2,7 @@ package ftserver;
 
 import ftserver.fts.Engine;
 import ftserver.fts.KeyWord;
+import ftserver.fts.KeyWordN;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;
@@ -10,6 +11,128 @@ import java.util.concurrent.Callable;
 public class IndexAPI {
 
     final static Engine ENGINE = new Engine();
+
+    public static long[] Search(ArrayList<Page> outputPages,
+            String name, long[] startId, long pageCount) {
+
+        //And
+        if (startId[0] > 0) {
+            startId[0] = Search(outputPages, name, startId[0], pageCount);
+            if (outputPages.size() >= pageCount) {
+                return startId;
+            }
+        }
+
+//Or
+        String orName = new String(ENGINE.sUtil.clear(name));
+        orName = orName.replaceAll("\"", " ").trim();
+
+        ArrayList<StringBuilder> ors = new ArrayList();
+        ors.add(new StringBuilder());
+        for (int i = 0; i < orName.length(); i++) {
+            char c = orName.charAt(i);
+            StringBuilder last = ors.get(ors.size() - 1);
+
+            if (c == ' ') {
+                if (last.length() > 0) {
+                    ors.add(new StringBuilder());
+                }
+            } else if (last.length() == 0) {
+                last.append(c);
+            } else if (!ENGINE.sUtil.isWord(c)) {
+                if (!ENGINE.sUtil.isWord(last.charAt(last.length() - 1))) {
+                    last.append(c);
+                    ors.add(new StringBuilder());
+                } else {
+                    last = new StringBuilder();
+                    last.append(c);
+                    ors.add(last);
+                }
+            } else {
+                if (!ENGINE.sUtil.isWord(last.charAt(last.length() - 1))) {
+                    last = new StringBuilder();
+                    last.append(c);
+                    ors.add(last);
+                } else {
+                    last.append(c);
+                }
+            }
+        }
+
+        ors.add(0, null);
+        ors.add(1, new StringBuilder(name));
+
+        if (startId.length < ors.size()) {
+            startId = new long[ors.size()];
+            startId[0] = -1;
+            for (int i = 0; i < startId.length; i++) {
+                startId[i] = Long.MAX_VALUE;
+            }
+        }
+
+        try (Box box = App.cube()) {
+
+            Iterator<KeyWord>[] iters = new Iterator[ors.size()];
+
+            for (int i = 0; i < ors.size(); i++) {
+                StringBuilder sbkw = ors.get(i);
+                if (startId[i] <= 0 || sbkw == null || sbkw.length() < 2) {
+                    iters[i] = null;
+                    startId[i] = -1;
+                    continue;
+                }
+
+                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], pageCount).iterator();
+            }
+
+            KeyWord[] kws = new KeyWord[iters.length];
+
+            int mPos = maxPos(startId);
+            while (mPos > 0) {
+
+                long maxId = startId[mPos];
+                for (int i = 0; i < iters.length; i++) {
+                    if (startId[i] == maxId) {
+                        if (iters[i] != null && iters[i].hasNext()) {
+                            kws[i] = iters[i].next();
+                            startId[i] = kws[i].I;
+                        } else {
+                            kws[i] = null;
+                            startId[i] = -1;
+                        }
+                    }
+                }
+
+                mPos = maxPos(startId);
+
+                if (mPos != 1) {
+                    KeyWord kw = kws[mPos];
+                    long id = kw.I;
+                    id = Page.rankDownId(id);
+                    Page p = box.d("Page", id).select(Page.class);
+                    p.keyWord = kw;
+                    outputPages.add(p);
+                    if (outputPages.size() >= pageCount) {
+                        startId[mPos] -= 1;
+                        break;
+                    }
+                }
+
+            }
+
+        }
+        return startId;
+    }
+
+    private static int maxPos(long[] ids) {
+        int pos = 0;
+        for (int i = 0; i < ids.length; i++) {
+            if (ids[i] > ids[pos]) {
+                pos = i;
+            }
+        }
+        return pos;
+    }
 
     public static long Search(ArrayList<Page> outputPages,
             String name, long startId, long pageCount) {
@@ -24,11 +147,10 @@ public class IndexAPI {
                 Page p = box.d("Page", id).select(Page.class);
                 p.keyWord = kw;
                 outputPages.add(p);
-
+                pageCount--;
             }
-
         }
-        //Recommend
+        /*
         if (outputPages.isEmpty() && name.length() > 1) {
             if (name.charAt(0) > 512) {
                 //only search one char, if full search is empty
@@ -45,7 +167,8 @@ public class IndexAPI {
             }
             return -1;
         }
-        return startId;
+         */
+        return pageCount == 0 ? startId : -1;
     }
 
     public static String getDesc(String str, KeyWord kw, int length) {

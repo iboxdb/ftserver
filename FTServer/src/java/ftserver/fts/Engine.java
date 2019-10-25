@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Engine {
 
-    final StringUtil sUtil = new StringUtil();
+    public final StringUtil sUtil = new StringUtil();
 
     public void Config(DatabaseConfig config) {
         KeyWord.config(config);
