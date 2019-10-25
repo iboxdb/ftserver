@@ -3,20 +3,49 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="iBoxDB.LocalServer.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
+
+
+<%!
+    String IdToString(long[] ids, char p) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ids.length; i++) {
+            if (i > 0) {
+                sb.append(p);
+            }
+            sb.append(ids[i]);
+        }
+        return sb.toString();
+    }
+
+    boolean IsEnd(long[] ids) {
+        for (long l : ids) {
+            if (l > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+%>
+
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 %>
+
 <%
     long pageCount = 12;
-    long startId = Long.MAX_VALUE;
+    long[] startId = new long[]{Long.MAX_VALUE};
 
     String name = request.getParameter("q");
     String sid = request.getParameter("s");
     if (sid != null) {
-        startId = Long.parseLong(sid);
+        String[] ss = sid.trim().split("_");
+        startId = new long[ss.length];
+        for (int i = 0; i < ss.length; i++) {
+            startId[i] = Long.parseLong(ss[i]);
+        }
     }
 
-    boolean isFirstLoad = startId == Long.MAX_VALUE;
+    boolean isFirstLoad = startId[0] == Long.MAX_VALUE;
 
     long begin = System.currentTimeMillis();
     ArrayList<Page> pages = new ArrayList<>();
@@ -24,7 +53,7 @@
     startId = IndexAPI.Search(pages, name, startId, pageCount);
 
 %>
-<%    if (startId == Long.MAX_VALUE) {
+<%    if (isFirstLoad && pages.size() == 0) {
         Page p = new Page();
         p.id = -1;
         p.keyWord = new KeyWordE();
@@ -36,14 +65,8 @@
         pages.add(p);
     }
 %>
-<%
-    if (startId == -1) {
-%>
-<h3>Recommend:</h3>
-<%
-    }
-%>
-<div id="ldiv<%= startId%>">
+
+<div id="ldiv<%=IdToString(startId, '_')%>">
     <% for (Page p : pages) {
             //Format Paage    
             boolean sendlog = false;
@@ -78,25 +101,27 @@
     </h3> 
     <span class="stext"> <%=content%> </span><br>
     <div class="<%=isdesc ? "gt" : "gtt"%> spartcss" >
+        <%= p.isAnd ? "" : ":"%>
         <%=p.url%>  <%=  p.createTime%>
+
     </div>
     <% }%>
 </div>
-<div class="ui teal message" id="s<%= startId%>">
+<div class="ui teal message" id="s<%= IdToString(startId, '_')%>">
     <%
         String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
                 + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
     %>
     <%=name%>  TIME: <%= content%>
-    <a href="#btnsearch" ><b><%= pages.size() >= pageCount && startId > -1 ? "HEAD" : "END"%></b></a>
+    <a href="#btnsearch" ><b><%=  !IsEnd(startId) ? "HEAD" : "END"%></b></a>
 
 </div>
 <script>
     setTimeout(function () {
-        highlight("ldiv<%= startId%>");
-    <% if (pages.size() >= pageCount && startId > -1) {%>
+        highlight("ldiv<%= IdToString(startId, '_')%>");
+    <% if (!IsEnd(startId)) {%>
         //startId is a big number, in javascript, have to write big number as a 'String'
-        onscroll_loaddiv("s<%= startId%>", "<%= startId%>");
+        onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);
 </script>

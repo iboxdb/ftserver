@@ -104,7 +104,7 @@ public class IndexAPI {
 
                 mPos = maxPos(startId);
 
-                if (mPos != 1) {
+                if (mPos >= 1) {
                     KeyWord kw = kws[mPos];
 
                     long id = kw.I;
