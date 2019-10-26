@@ -13,7 +13,7 @@ public class IndexAPI {
 
     public static long[] Search(ArrayList<Page> outputPages,
             String name, long[] startId, long pageCount) {
-
+        name = name.trim();
         //And
         if (startId[0] > 0) {
             startId[0] = Search(outputPages, name, startId[0], pageCount);
@@ -69,6 +69,13 @@ public class IndexAPI {
             }
         }
 
+        if (ors.get(1).equals(ors.get(2))) {
+            for (int i = 1; i < startId.length; i++) {
+                startId[i] = -1;
+            }
+            return startId;
+        }
+
         try (Box box = App.cube()) {
 
             Iterator<KeyWord>[] iters = new Iterator[ors.size()];
@@ -81,7 +88,7 @@ public class IndexAPI {
                     continue;
                 }
 
-                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], pageCount).iterator();
+                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], Long.MAX_VALUE).iterator();
             }
 
             KeyWord[] kws = new KeyWord[iters.length];
@@ -101,10 +108,12 @@ public class IndexAPI {
                         }
                     }
                 }
-
+                if (outputPages.size() >= pageCount) {
+                    break;
+                }
                 mPos = maxPos(startId);
 
-                if (mPos >= 1) {
+                if (mPos > 1) {
                     KeyWord kw = kws[mPos];
 
                     long id = kw.I;
@@ -113,10 +122,7 @@ public class IndexAPI {
                     p.keyWord = kw;
                     p.isAnd = false;
                     outputPages.add(p);
-                    if (outputPages.size() >= pageCount) {
-                        startId[mPos] -= 1;
-                        break;
-                    }
+
                 }
 
                 long maxId = startId[mPos];

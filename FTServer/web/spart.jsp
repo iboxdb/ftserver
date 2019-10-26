@@ -1,3 +1,4 @@
+<%@page import="java.util.HashSet"%>
 <%@page import="ftserver.fts.*"%>
 <%@page import="ftserver.*"%>
 <%@page import="java.util.ArrayList"%>
@@ -24,6 +25,30 @@
             }
         }
         return true;
+    }
+
+    String ToKeyWordString(ArrayList<Page> pages) {
+        HashSet<String> hc = new HashSet<String>();
+        for (Page pg : pages) {
+            if (pg.keyWord instanceof KeyWordE) {
+                hc.add(((KeyWordE) pg.keyWord).K);
+            }
+            if (pg.keyWord instanceof KeyWordN) {
+
+                hc.add(((KeyWordN) pg.keyWord).toKString());
+            }
+        }
+
+        String[] ids = hc.toArray(new String[0]);
+        char p = ' ';
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ids.length; i++) {
+            if (i > 0) {
+                sb.append(p);
+            }
+            sb.append(ids[i]);
+        }
+        return sb.toString();
     }
 %>
 
@@ -101,7 +126,7 @@
     </h3> 
     <span class="stext"> <%=content%> </span><br>
     <div class="<%=isdesc ? "gt" : "gtt"%> spartcss" >
-        <%= p.isAnd ? "" : ":"%>
+        <%= p.isAnd ? "" : "*"%>
         <%=p.url%>  <%=  p.createTime%>
 
     </div>
@@ -124,4 +149,5 @@
         onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);
+    extitle = "<%= ToKeyWordString(pages)%>";
 </script>
