@@ -30,7 +30,9 @@
     String ToKeyWordString(ArrayList<Page> pages) {
         HashSet<String> hc = new HashSet<String>();
         for (Page pg : pages) {
-            if (pg.keyWord.previous != null) { continue; }
+            if (pg.keyWord != null && pg.keyWord.previous != null) {
+                continue;
+            }
             if (pg.keyWord instanceof KeyWordE) {
                 hc.add(((KeyWordE) pg.keyWord).K);
             }
