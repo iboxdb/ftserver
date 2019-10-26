@@ -17,7 +17,7 @@ public class IndexAPI {
         //And
         if (startId[0] > 0) {
             startId[0] = Search(outputPages, name, startId[0], pageCount);
-            if (outputPages.size() >= pageCount) {
+            if (outputPages.size() >= pageCount && startId[0] > 0) {
                 return startId;
             }
         }
