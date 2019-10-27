@@ -69,7 +69,7 @@ public class IndexAPI {
             }
         }
 
-        if (ors.get(1).equals(ors.get(2))) {
+        if (stringEquaal(ors.get(1).toString(), ors.get(2).toString())) {
             for (int i = 1; i < startId.length; i++) {
                 startId[i] = -1;
             }
@@ -87,8 +87,9 @@ public class IndexAPI {
                     startId[i] = -1;
                     continue;
                 }
-
-                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], Long.MAX_VALUE).iterator();
+                //never set Long.MAX 
+                long subCount = pageCount * 2;
+                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], subCount).iterator();
             }
 
             KeyWord[] kws = new KeyWord[iters.length];
@@ -146,6 +147,19 @@ public class IndexAPI {
             }
         }
         return pos;
+    }
+
+    private static boolean stringEquaal(String a, String b) {
+        if (a.equals(b)) {
+            return true;
+        }
+        if (a.equals("\"" + b + "\"")) {
+            return true;
+        }
+        if (b.equals("\"" + a + "\"")) {
+            return true;
+        }
+        return false;
     }
 
     public static long Search(ArrayList<Page> outputPages,
