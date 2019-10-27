@@ -3,7 +3,7 @@
 ### Setup
 
 ```
-Use NetBeans with **JDK8** to build or download fts.zip(WAR) from WAR Folder
+Use NetBeans with [JDK8] to build or download fts.zip(WAR) from WAR Folder
 Deploy to tomcat/jetty
 ```
 
