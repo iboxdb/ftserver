@@ -14,6 +14,10 @@ public class IndexAPI {
     public static long[] Search(ArrayList<Page> outputPages,
             String name, long[] startId, long pageCount) {
         name = name.trim();
+
+        if (name.length() > 100) {
+            return new long[]{-1};
+        }
         //And
         if (startId[0] > 0) {
             startId[0] = Search(outputPages, name, startId[0], pageCount);
@@ -69,7 +73,7 @@ public class IndexAPI {
             }
         }
 
-        if (stringEquaal(ors.get(1).toString(), ors.get(2).toString())) {
+        if (ors.size() > 16 || stringEqual(ors.get(1).toString(), ors.get(2).toString())) {
             for (int i = 1; i < startId.length; i++) {
                 startId[i] = -1;
             }
@@ -87,8 +91,8 @@ public class IndexAPI {
                     startId[i] = -1;
                     continue;
                 }
-                //never set Long.MAX 
-                long subCount = pageCount * 2;
+                //never set Long.MAX
+                long subCount = pageCount * 10;
                 iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], subCount).iterator();
             }
 
@@ -149,7 +153,7 @@ public class IndexAPI {
         return pos;
     }
 
-    private static boolean stringEquaal(String a, String b) {
+    private static boolean stringEqual(String a, String b) {
         if (a.equals(b)) {
             return true;
         }
@@ -178,24 +182,7 @@ public class IndexAPI {
                 pageCount--;
             }
         }
-        /*
-        if (outputPages.isEmpty() && name.length() > 1) {
-            if (name.charAt(0) > 512) {
-                //only search one char, if full search is empty
-                Search(outputPages, name.substring(0, 1), Long.MAX_VALUE, pageCount);
-            } else {
-                int pos = name.indexOf(' ');
-                if (pos > 0) {
-                    name = name.substring(0, pos);
-                    Search(outputPages, name, Long.MAX_VALUE, pageCount);
-                }
-            }
-            if (outputPages.isEmpty()) {
-                return startId;
-            }
-            return -1;
-        }
-         */
+
         return pageCount == 0 ? startId : -1;
     }
 
