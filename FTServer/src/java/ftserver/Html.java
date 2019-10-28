@@ -44,13 +44,25 @@ public class Html {
                 }
             }
 
-            page.title = doc.selectFirst("title").text();
-            if (page.title == null) {
-                page.title = doc.selectFirst("Title").text();
+            try {
+                page.title = doc.selectFirst("title").text();
+            } catch (Throwable e) {
+
             }
-            if (page.title == null) {
-                page.title = doc.selectFirst("TITLE").text();
+            try {
+                if (page.title == null) {
+                    page.title = doc.selectFirst("Title").text();
+                }
+            } catch (Throwable e) {
             }
+
+            try {
+                if (page.title == null) {
+                    page.title = doc.selectFirst("TITLE").text();
+                }
+            } catch (Throwable e) {
+            }
+
             if (page.title == null) {
                 page.title = url;
             }
@@ -63,10 +75,28 @@ public class Html {
             }
             page.title = page.title.replaceAll("\t|\r|\n|�|<|>|�|\\$", " ");
 
-            page.description = doc.selectFirst("meta[name='description']").attr("content");
-            if (page.description == null) {
-                page.description = doc.selectFirst("meta[name='Description']").attr("content");
+            try {
+                page.description = doc.selectFirst("meta[name='description']").attr("content");
+            } catch (Throwable e) {
+
             }
+
+            try {
+                if (page.description == null) {
+                    page.description = doc.selectFirst("meta[name='Description']").attr("content");
+                }
+            } catch (Throwable e) {
+
+            }
+
+            try {
+                if (page.description == null) {
+                    page.description = doc.selectFirst("meta[property='og:description']").attr("content");
+                }
+            } catch (Throwable e) {
+
+            }
+
             if (page.description == null) {
                 page.description = "";
             }
