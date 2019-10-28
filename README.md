@@ -66,6 +66,7 @@ if you have many pages(>100,000),  use the ID number to control the order instea
 
 ["Word1 Word2 Word3"] => text has **"Word1 Word2 Word3"** as a whole
 
+Search [https http] => get almost all pages
 
 #### Search Method
 searchDistinct (... String keywords, long **startId**, long **count**)
