@@ -20,13 +20,13 @@ Deploy to tomcat/jetty
 
 
 ### The Results Order
-the results order based on the ID number in IndexTextNoTran(.. **long id**, ...),  descending order.
+the results order based on the ID number in IndexTextX(.. **long id**, ...),  descending order.
 
 every page has two index-IDs, normal-id and rankup-id, the rankup-id is a big number and used to keep the important text on the **top**.  (the front results from SearchDistinct(IBox, String) )
 ````java
-Engine.IndexTextNoTran(..., p.Id, p.Content, ...);
-Engine.IndexTextNoTran(..., p.RankUpId(), p.RankUpDescription(), ...);
-````					
+Engine.IndexTextX(..., p.Id, p.Content, ...);
+Engine.IndexTextX(..., p.RankUpId(), p.RankUpDescription(), ...);
+````
 
 the RankUpId()
 ````java
@@ -52,12 +52,12 @@ public static boolean IsAdvertisingId(long id)
 {
     return id > (1L << 61) ;
 }
-````		
+````
 
 
 the Page.GetRandomContent() method is used to keep the Search-Page-Content always changing, doesn't affect the real page order.
 
-if you have many pages(>100,000),  use the ID number to control the order instead of loading all pages to memory.
+if you have many pages(>100,000),  use the ID number to control the order instead of loading all pages to memory. Or you can load top 100-1000 pages to memory then re-order it by favor. 
 
 
 #### Search Format
@@ -96,26 +96,39 @@ When Insert
 1.insert page --> 2.insert index
 ````java
 DB.Insert ("Page", page);
-Engine.IndexTextNoTran( IsRemove = false );
-...IndexTextNoTran...
+Engine.IndexTextX( IsRemove = false );
+...IndexTextX...
 ````
 
 
-When Delete  
+When Delete
 
 1.delete index --> 2.delete page
 ````java
-Engine.IndexTextNoTran( IsRemove = true );
-...IndexTextNoTran...
+Engine.IndexTextX( IsRemove = true );
+...IndexTextX...
 DB.Delete("Page", page.Id);
-````				
+````
 
 #### Memory
 ````java
 indexTextWithTran(IBox, id, String, boolean) // faster, more memories
 
-indexTextNoTran(AutoBox, commitCount, id, String, boolean) // less memory
+indexTextNoTran(AutoBox, commitCount, id, String, boolean) //less memory, not recommended.
 ````
+
+How to set big cache
+```java
+//-Xmx8G
+DatabaseConfig dbcfg = db.getConfig().DBConfig; 
+dbcfg.CacheLength = dbcfg.mb(2048);
+//Or
+dbcfg.CacheLength = 2048L * 1024L * 1024L;
+
+//Wrong, overflow
+//dbcfg.CacheLength = 2048 * 1024 * 1024;
+```
+
 
 #### Private Server
 Open 
