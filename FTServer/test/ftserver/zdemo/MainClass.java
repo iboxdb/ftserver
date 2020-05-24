@@ -242,9 +242,9 @@ public class MainClass {
         rf.readFully(bs);
 
         if (rebuild) {
-             //iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(dbid);
+            iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(dbid);
         }
-        BoxSystem.performance.PrintEnable = true;
+        
         DB db = new DB(dbid);
 
         rf.close();
@@ -287,7 +287,7 @@ public class MainClass {
 
         long begin;
         if (rebuild) {
-            ExecutorService pool = Executors.newFixedThreadPool(4);
+            ExecutorService pool = Executors.newFixedThreadPool(8);
             begin = System.currentTimeMillis();
             final AtomicLong rbcount = new AtomicLong(0);
             for (int i = 0; i < ts.length; i++) {
