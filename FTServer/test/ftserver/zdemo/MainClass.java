@@ -21,7 +21,10 @@ public class MainClass {
 
         System.out.println(java.lang.Runtime.getRuntime().maxMemory());
         DB.root("/tmp/");
+        //DB.root("/home/user/ftsdb/err");
         test1();
+        
+        //-Xmx=4G
         //test_big_n();
         //test_big_e();
 
@@ -32,7 +35,7 @@ public class MainClass {
         iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(3);
         DB db = new DB(3);
         Engine engine = new Engine();
-        engine.Config(db.getConfig().DBConfig);
+        engine.Config(db.getConfig());
 
         AutoBox auto = db.open();
         int count = 100;
@@ -144,7 +147,7 @@ public class MainClass {
             iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(3);
             DB db = new DB(3);
             Engine engine = new Engine();
-            engine.Config(db.getConfig().DBConfig);
+            engine.Config(db.getConfig());
 
             AutoBox auto = db.open();
 
@@ -182,26 +185,27 @@ public class MainClass {
 
     // 150 seconds test
     public static void test_big_n() throws FileNotFoundException, IOException, InterruptedException {
-        String book = "/hero.txt";  //UTF-8
+        String book = "/github/hero.txt";  //UTF-8
         long dbid = 1;
         boolean rebuild = false;
         int istran = 0;
-        String split = "15000"; // "。";
+        String split = "10000"; // "。";
         String strkw = "黄蓉 郭靖 洪七公";
-        strkw = "洪七公 黄蓉 郭靖";
-        strkw = "黄蓉 郭靖 公";
-        strkw = "郭靖 黄蓉";
-        strkw = "黄蓉";
-        strkw = "时察";
-        strkw = "的";
-        strkw = "七十二路";
-        strkw = "十八掌";
-        strkw = "日日夜夜无穷无尽的";
-        strkw = "牛家村边绕 日日夜夜无穷无尽的";
-        strkw = "这几天";
-        strkw = "有 这几天";
-        strkw = "这几天 有";
-        strkw = "牛家村边绕";
+        //strkw = "洪七公 黄蓉 郭靖";
+        //strkw = "黄蓉 郭靖 公";
+        //strkw = "郭靖 黄蓉";
+        
+        //strkw = "黄蓉";
+        //strkw = "时察";
+        //strkw = "的";
+        //strkw = "七十二路";
+        //strkw = "十八掌";
+        //strkw = "日日夜夜无穷无尽的";
+        //strkw = "牛家村边绕 日日夜夜无穷无尽的";
+        //strkw = "这几天";
+        //strkw = "有 这几天";
+        //strkw = "这几天 有";
+        //strkw = "牛家村边绕";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
@@ -238,8 +242,9 @@ public class MainClass {
         rf.readFully(bs);
 
         if (rebuild) {
-            iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(dbid);
+             //iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(dbid);
         }
+        BoxSystem.performance.PrintEnable = true;
         DB db = new DB(dbid);
 
         rf.close();
@@ -273,14 +278,16 @@ public class MainClass {
         final String[] ts = list.toArray(new String[0]);
 
         final Engine engine = new Engine();
-        engine.Config(db.getConfig().DBConfig);
-        //db.getConfig().DBConfig.CacheLength = 512 * 1024 * 1024;
+        engine.Config(db.getConfig());
+        
+        DatabaseConfig dbcfg = db.getConfig();
+        dbcfg.CacheLength = dbcfg.mb(1300); 
 
         final AutoBox auto = db.open();
 
         long begin;
         if (rebuild) {
-            ExecutorService pool = Executors.newFixedThreadPool(8);
+            ExecutorService pool = Executors.newFixedThreadPool(4);
             begin = System.currentTimeMillis();
             final AtomicLong rbcount = new AtomicLong(0);
             for (int i = 0; i < ts.length; i++) {
@@ -290,7 +297,8 @@ public class MainClass {
                     public void run() {
                         if (istran < 1) {
                             try (Box box = auto.cube()) {
-                                rbcount.addAndGet(engine.indexText(box, tsi, ts[tsi], false));
+                                long t_id = box.newId(); //tsi;
+                                rbcount.addAndGet(engine.indexText(box, t_id, ts[tsi], false));
                                 box.commit().Assert();
                             }
                         } else {

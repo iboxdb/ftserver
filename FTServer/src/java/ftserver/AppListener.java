@@ -37,7 +37,7 @@ public class AppListener implements ServletContextListener {
 
         //Config
         DB db = new DB(1);
-        DatabaseConfig cfg = db.getConfig().DBConfig;
+        DatabaseConfig cfg = db.getConfig();
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         cfg.CacheLength = tm / 3;
         cfg.FileIncSize = (int) cfg.mb(4);
@@ -46,9 +46,10 @@ public class AppListener implements ServletContextListener {
 
         new Engine().Config(cfg);
 
-        cfg.EnsureTable(Page.class, "Page", "id");
-        cfg.EnsureIndex(Page.class, "Page", true, "url(" + Page.MAX_URL_LENGTH + ")");
-        cfg.EnsureTable(PageLock.class, "PageLock", "url(" + Page.MAX_URL_LENGTH + ")");
+        cfg.ensureTable(Page.class, "Page", "id");
+        cfg.ensureIndex(Page.class, "Page", true, "url(" + Page.MAX_URL_LENGTH + ")");
+        cfg.ensureTable(PageLock.class, "PageLock", "url(" + Page.MAX_URL_LENGTH + ")");
+        
         App.Auto = db.open();
 
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Started...");

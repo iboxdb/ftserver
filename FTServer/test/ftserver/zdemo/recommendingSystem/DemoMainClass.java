@@ -26,7 +26,7 @@ public class DemoMainClass {
         BoxSystem.DBDebug.DeleteDBFiles(dailyTrackDB01);
         DB dailyDB = new DB(dailyTrackDB01);
 
-        engine.Config(dailyDB.getConfig().DBConfig);
+        engine.Config(dailyDB.getConfig());
         dailyDB.getConfig().ensureTable(Favor.class, "/Favor", "userId", "itemId");
         AutoBox autoDaily = dailyDB.open();
 
@@ -49,7 +49,7 @@ public class DemoMainClass {
 
         BoxSystem.DBDebug.DeleteDBFiles(monthlyTrackDB01);
         DB monthlyDB = new DB(monthlyTrackDB01);
-        engine.Config(monthlyDB.getConfig().DBConfig);
+        engine.Config(monthlyDB.getConfig());
         monthlyDB.getConfig().ensureTable(RelatedItems.class, "RelatedItems", "id");
         AutoBox autoMonthly = monthlyDB.open();
 

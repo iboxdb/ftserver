@@ -223,7 +223,7 @@ public class IndexAPI {
                 try (Box box = App.Auto.cube()) {
                     Page defaultPage = null;
 
-                    for (Page p : DB.toList(box.select(Page.class, "from Page where url==?", url))) {
+                    for (Page p : box.select(Page.class, "from Page where url==?", url).all()) {
                         ENGINE.indexText(box, p.id, p.content, true);
                         ENGINE.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
                         box.d("Page", p.id).delete();

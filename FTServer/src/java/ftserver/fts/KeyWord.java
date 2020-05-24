@@ -10,10 +10,10 @@ public abstract class KeyWord {
     public static void config(DatabaseConfig c) {
 
         // English Language or Word (max=16)              
-        c.EnsureTable(KeyWordE.class, "/E", "K(" + MAX_WORD_LENGTH + ")", "I", "P");
+        c.ensureTable(KeyWordE.class, "/E", "K(" + MAX_WORD_LENGTH + ")", "I", "P");
 
         // Non-English Language or Character
-        c.EnsureTable(KeyWordN.class, "/N", "K", "I", "P");
+        c.ensureTable(KeyWordN.class, "/N", "K", "I", "P");
 
     }
 
