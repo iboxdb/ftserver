@@ -2,12 +2,8 @@
 <%@page import="iBoxDB.LocalServer.*"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
-<%
-    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
-%>
-<%
-    ArrayList<String> discoveries = IndexAPI.discover();
-%>
+<%@include  file="_taghelper.jsp" %>
+
 <!DOCTYPE html>
 <html>
     <head>        
@@ -65,29 +61,33 @@
 
                 <div class="ui message" style="text-align: left">
                     <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Pages (add http/https to server)</a><br>
-                    <br>
-                    Recent Searches:<br>
-                    <%                        for (String str : IndexPage.searchList) {
 
-                    %> <a href="s.jsp?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
-                    <%
+                    <br>Recent Searches:<br>
+                    <% for (String str : IndexPage.searchList) {
+                            try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                                text(str);
+                            }
+                            text(" &nbsp; ");
                         }
-                    %>
+                    %> 
 
                     <br>Recent Records:<br>
                     <%
                         for (String str : IndexPage.urlList) {
-                    %>
-                    <a href="<%=str%>" target="_blank" ><%=str%></a>. <br> 
-                    <%
+                            try (Tag t = tag("a", "href:", str, "target:", "_blank")) {
+                                text(str);
+                            }
+                            tag("br");
                         }
                     %>
 
-                    <br /><a  href="./">Refresh Discoveries</a>:&nbsp; 
+                    <br><a  href="./">Refresh Discoveries:</a> <br> 
                     <%
-                        for (String str : discoveries) {
-                    %> <a href="s.jsp?q=<%=java.net.URLEncoder.encode(str)%>"><%=str%></a>. &nbsp;  
-                    <%
+                        for (String str : IndexAPI.discover()) {
+                            try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                                text(str);
+                            }
+                            text(" &nbsp; ");
                         }
                     %>
                     <br>
@@ -98,5 +98,5 @@
         </div>
 
     </body>
-    <!-- 1.2.1 -->
+    <!-- 1.3 -->
 </html>

@@ -4,10 +4,10 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="iBoxDB.LocalServer.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
+<%@include  file="_taghelper.jsp" %>
 
 
-<%!
-    String IdToString(long[] ids, char p) {
+<%!    String IdToString(long[] ids, char p) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ids.length; i++) {
             if (i > 0) {
@@ -55,12 +55,8 @@
     }
 %>
 
-<%
-    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
-%>
 
-<%
-    long pageCount = 12;
+<%    long pageCount = 12;
     long[] startId = new long[]{Long.MAX_VALUE};
 
     String name = request.getParameter("q");
@@ -80,8 +76,8 @@
 
     startId = IndexAPI.Search(pages, name, startId, pageCount);
 
-%>
-<%    if (isFirstLoad && pages.size() == 0) {
+    //Page isEmpty 
+    if (isFirstLoad && pages.size() == 0) {
         Page p = new Page();
         p.id = -1;
         p.keyWord = new KeyWordE();
@@ -121,19 +117,34 @@
                     content = content.substring(0, 200) + "..";
                 }
             }
-    %>
-    <h3><div class="spartcss">
-            <a class="stext"  target="_blank" href="<%=p.url%>" 
-               <%=sendlog ? "onclick=\"sendlog(this.href, 'content')\"" : ""%> >          
-                <%= p.title%></a></div>
-    </h3> 
-    <span class="stext"> <%=content%> </span><br>
-    <div class="<%=isdesc ? "gt" : "gtt"%> spartcss" >
-        <%= p.isAnd ? "" : "*"%>
-        <%=p.url%>  <%=  p.createTime%>
 
-    </div>
-    <% }%>
+            try (Tag h3 = tag("h3")) {
+                try (Tag div = tag("div", "class:", "spartcss")) {
+                    try (Tag a = tag("a",
+                            "class:", "stext",
+                            "target:", "_blank",
+                            "href:", p.url,
+                            "onclick:", sendlog ? "sendlog(this.href, 'content')" : "sendlog(false)")) {
+                        text(p.title);
+                    }
+                }
+            }
+
+            try (Tag span = tag("span", "class:", "stext")) {
+                text(content);
+            }
+            tag("br");
+
+            try (Tag div = tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
+                if (!p.isAnd) {
+                    text("*");
+                }
+                text(p.url);
+                text(" ");
+                text(p.createTime.toString());
+            }
+
+        }%>
 </div>
 <div class="ui teal message" id="s<%= IdToString(startId, '_')%>">
     <%

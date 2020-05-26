@@ -1,11 +1,9 @@
 <%@page import="ftserver.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
-<%
-    response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
-%> 
+<%@include  file="_taghelper.jsp" %>
 
-<%
-    final String queryString = request.getQueryString();
+
+<%    final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
     IndexPage.searchList.add(name);
@@ -52,7 +50,7 @@
             function highlight(loadedDivId) {
 
                 var txt = document.title.substr(0, document.title.indexOf(','));
-                txt +=  (" " + extitle);
+                txt += (" " + extitle);
                 var div = document.getElementById(loadedDivId);
                 var ts = div.getElementsByClassName("stext");
 
@@ -118,12 +116,14 @@
                 }
             }
             function sendlog(url, txt) {
-                try {
-                    var xhr = new XMLHttpRequest();
-                    url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
-                    xhr.open('GET', url, true);
-                    xhr.send(null);
-                } catch (e) {
+                if (url) {
+                    try {
+                        var xhr = new XMLHttpRequest();
+                        url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
+                        xhr.open('GET', url, true);
+                        xhr.send(null);
+                    } catch (e) {
+                    }
                 }
                 return true;
             }
