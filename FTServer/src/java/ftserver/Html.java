@@ -82,83 +82,98 @@ public class Html {
             return null;
         }
 
+        ArrayList<PageText> result = new ArrayList<PageText>();
+
+        Document doc = Jsoup.parse(page.html);
+
+        String title = null;
+        String keywords = null;
+
+        String url = page.url;
+        long pageId = page.id;
+
         try {
+            title = doc.title();
+        } catch (Throwable e) {
 
-            ArrayList<PageText> result = new ArrayList<PageText>();
+        }
 
-            Document doc = Jsoup.parse(page.html);
+        if (title == null) {
+            title = "";
+        }
+        if (title.length() < 1) {
+            title = url;
+        }
+        title = replace(title);
+        if (title.length() > 100) {
+            title = title.substring(0, 100);
+        }
 
-            String title = null;
-            String keywords = null;
+        keywords = getMetaContentByName(doc, "keywords");
+        keywords = keywords.replaceAll(",", " ");
+        if (keywords.length() > 100) {
+            keywords = keywords.substring(0, 100);
+        }
 
-            String url = page.url;
-            long pageId = page.id;
+        PageText description = new PageText();
 
-            try {
-                title = doc.title();
-            } catch (Throwable e) {
+        description.pageId = pageId;
+        description.url = url;
+        description.title = title;
+        description.keywords = keywords;
 
-            }
+        description.text = getMetaContentByName(doc, "description");
+        if (description.text.length() > 300) {
+            description.text = description.text.substring(0, 300);
+        }
+        description.priorityId = PageText.descriptionPriority;
+        result.add(description);
 
-            if (title == null) {
-                title = "";
-            }
-            if (title.length() < 1) {
-                title = url;
-            }
-            title = replace(title);
-            if (title.length() > 100) {
-                title = title.substring(0, 100);
-            }
+        String content = page.text;
+        long startPriority = PageText.descriptionPriority - 1;
+        while (startPriority > 0 && content.length() > 0) {
 
-            keywords = getMetaContentByName(doc, "keywords");
-            keywords = keywords.replaceAll(",", " ");
-            if (keywords.length() > 100) {
-                keywords = keywords.substring(0, 100);
-            }
-
-            PageText description = new PageText();
-
+            PageText text = new PageText();
             description.pageId = pageId;
             description.url = url;
             description.title = title;
-            description.keywords = keywords;
+            description.keywords = "";
 
-            description.text = getMetaContentByName(doc, "description");
-            if (description.text.length() > 300) {
-                description.text = description.text.substring(0, 300);
-            }
-            description.priorityId = PageText.descriptionPriority;
-            result.add(description);
+            text.text = "";
 
-            String content = page.text;
-            long startPriority = PageText.descriptionPriority - 1;
-            while (startPriority > 0 && content.length() > 100) {
-                int maxLength = PageText.max_text_length - 100;
+            int maxLength = PageText.max_text_length - 100;
 
-                PageText text = new PageText();
-                description.pageId = pageId;
-                description.url = url;
-                description.title = title;
-                description.keywords = "";
+            while (text.text.length() < maxLength && content.length() > 0) {
 
-                String input = "";
-                
+                String sp = " ,.　，。";
+                int p1 = content.length();
+                for (char c : sp.toCharArray()) {
+                    int t = content.indexOf(c);
+                    if (t < 1) {
+                        t = content.length();
+                    }
+                    p1 = Math.min(p1, t);
+                }
+
+                text.text += content.substring(0, p1);
+
+                if ((content.length() - p1) > 1) {
+                    content = content.substring(p1 + 1);
+                }
                 if (content.length() < 100) {
-                    text.text += content;
+                    text.text += (" " + content);
                     content = "";
                 }
-                text.priorityId = startPriority;
-                result.add(text);
-                startPriority--;
+
             }
 
-            return result;
-        } catch (Throwable e) {
-            return null;
-        } finally {
-
+            text.priorityId = startPriority;
+            result.add(text);
+            startPriority--;
         }
+
+        return result;
+
     }
 
     private static String replace(String content) {
