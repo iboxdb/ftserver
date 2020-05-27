@@ -8,6 +8,7 @@
         <data xmlns="http://www.netbeans.org/ns/web-project/3">
             <name>FTServer</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
+            <explicit-platform explicit-source-supported="true"/>
             <web-module-libraries>
                 <library dirs="200">
                     <file>${file.reference.jsoup-1.11.3.jar}</file>
