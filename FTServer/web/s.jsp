@@ -42,6 +42,9 @@
             .gtt{
                 color: #4092cc;
             }
+            .kw{
+                background-color: #ddd;
+            }
         </style> 
         <script>
             var extitle = "";

@@ -57,6 +57,7 @@ public class IndexPage {
             IndexAPI.removePage(url);
             p.isKeyPage = isKeyPage;
             IndexAPI.addPage(p);
+            IndexAPI.addPageIndex(url);
 
             subUrls.remove(url);
             subUrls.remove(url + "/");

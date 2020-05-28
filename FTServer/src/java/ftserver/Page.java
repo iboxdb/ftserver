@@ -14,7 +14,7 @@ public class Page {
     public String html;
     public String text;
 
-    public Date createTime = new Date();
+    public Date createTime;
     public boolean isKeyPage = false;
 
     private static final Random RAN = new Random();

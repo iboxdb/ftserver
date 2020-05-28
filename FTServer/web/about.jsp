@@ -7,7 +7,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="description" content="iBoxDB NoSQL Database Full Text Search Server FTS">
-        <title>About</title>
+        <meta name="keywords" content="nosql iboxdb,fts.server">        
+        <title>About iBoxDB FTServer</title>
     </head>
     <body>
         <h1>FTServer</h1>

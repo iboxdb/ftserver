@@ -86,6 +86,7 @@
                 Page fpage = IndexPage.getPage(p.url);
                 content += " " + fpage.getRandomContent(100);
             }
+            String[] keywords = p.keywords.split(" ");
 
             try (Tag h3 = tag("h3")) {
                 try (Tag div = tag("div", "class:", "spartcss")) {
@@ -111,6 +112,24 @@
                 text(p.url);
                 text(" ");
                 text(p.createTime.toString());
+
+                tag("br");
+
+                for (String kw : keywords) {
+                    String str = kw.trim();
+                    if (str == null || str.length() < 1) {
+                        continue;
+                    }
+                    try (Tag t = tag("a",
+                            "href:", "s.jsp?q=" + encode(str),
+                            "class:", "kw " + (isdesc ? "gt" : "gtt"))) {
+                        text(" &nbsp; ");
+                        text(str);
+                        text(" &nbsp; ");
+                    };
+                    text(" &nbsp;");
+                }
+
             }
 
         }%>

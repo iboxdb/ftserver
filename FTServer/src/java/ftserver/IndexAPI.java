@@ -210,13 +210,14 @@ public class IndexAPI {
             return null;
         }
 
+        page.createTime = new Date();
         page.textOrder = App.Auto.newId();
         return App.Auto.insert("Page", page);
     }
 
     public static boolean addPageIndex(final String url) {
 
-        Page page = App.Auto.get(Page.class, url);
+        Page page = App.Auto.get(Page.class, "Page", url);
         if (page == null) {
             return false;
         }

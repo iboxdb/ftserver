@@ -113,7 +113,7 @@ public class Html {
 
         keywords = getMetaContentByName(doc, "keywords");
         for (char c : splitWords.toCharArray()) {
-            keywords = keywords.replaceAll(Character.toString(c), " ");
+            keywords = keywords.replaceAll("\\" + c, " ");
         }
         if (keywords.length() > 100) {
             keywords = keywords.substring(0, 100);
@@ -136,15 +136,15 @@ public class Html {
         }
         result.add(description);
 
-        String content = " " + page.text.trim() + "  ";
+        String content = page.text.trim() + "  ";
         long startPriority = PageText.descriptionPriority - 1;
         while (startPriority > 0 && content.length() > 0) {
 
             PageText text = new PageText();
-            description.textOrder = textOrder;
-            description.url = url;
-            description.title = title;
-            description.keywords = "";
+            text.textOrder = textOrder;
+            text.url = url;
+            text.title = title;
+            text.keywords = "";
 
             text.text = "";
 
@@ -155,7 +155,9 @@ public class Html {
                 int p1 = Math.min(maxLength, content.length() - 1);
                 for (char c : splitWords.toCharArray()) {
                     int t = content.indexOf(c);
-                    p1 = Math.min(p1, t);
+                    if (t >= 0) {
+                        p1 = Math.min(p1, t);
+                    }
                 }
 
                 text.text += content.substring(0, p1 + 1);

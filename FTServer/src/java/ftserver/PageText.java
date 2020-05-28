@@ -18,7 +18,7 @@ public class PageText {
     private final long priorityOffset = 50;
 
     public long id() {
-        return textOrder & (priority << priorityOffset);
+        return textOrder | (priority << priorityOffset);
     }
 
     public void id(long id) {
