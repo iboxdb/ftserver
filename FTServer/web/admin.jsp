@@ -2,8 +2,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@include  file="_taghelper.jsp" %>
 
-<%
-    String url = request.getParameter("url");
+<%    String url = request.getParameter("url");
+    String msg = request.getParameter("msg");
     if (url != null) {
         // when input "http://www.abc.com" or "delete http://www.abc.com"
         url = url.trim();
@@ -18,12 +18,28 @@
         }
 
         if (isdelete != null) {
-            if ( isdelete ){
+            url = Html.getUrl(url);
+
+            if (url.length() < 5) {
+                url = "not http";
+            } else if (isdelete) {
                 IndexPage.removePage(url);
-            }else{
-                
+            } else {
+                url = IndexPage.addPage(url, true);
+                if (msg != null) {
+                    msg = msg.trim();
+                    if (msg.length() > 0) {
+
+                        String title = url;
+                        int pos = msg.indexOf('\n');
+                        if (pos > 0) {
+                            title = msg.substring(0, pos);
+                            msg = msg.substring(pos).trim();
+                        }
+                        IndexPage.addPageCustomText(url, title, msg);
+                    }
+                }
             }
-            url = IndexPage.processRequest(url, isdelete);
         }
     }
     if (url == null) {
@@ -72,14 +88,22 @@
         <div class="ui left aligned grid">
             <div class="column"  style="max-width: 600px;"> 
                 <h3>input HTTP or HTTPS  ://URL</h3>
-                <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()">
+                <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()" method="post">
                     <div class="ui label input">
 
                         <div class="ui action input">
                             <a href="./"><i class="teal add outline icon" style="font-size:42px"></i> </a>
                             <input name="url"  value="<%=url%>" required onfocus="formfocus()" />
-                            <input id="btnsearch" type="submit"  class="ui teal right button" value=" ADD PAGE " /> 
+                            <input id="btnsearch" type="submit"  class="ui teal right button" 
+                                   value=" ADD PAGE "  /> 
                         </div>
+
+                        <div class="ui">Informtion:</div>
+                        <div class="ui action input">
+
+                            <textarea name="msg" maxlength="200" height="200px"></textarea>
+                        </div>
+
                     </div>
                 </form> 
                 <script>

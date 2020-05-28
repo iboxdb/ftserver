@@ -27,9 +27,9 @@
         return true;
     }
 
-    String ToKeyWordString(ArrayList<Page> pages) {
+    String ToKeyWordString(ArrayList<PageText> pages) {
         HashSet<String> hc = new HashSet<String>();
-        for (Page pg : pages) {
+        for (PageText pg : pages) {
             if (pg.keyWord != null && pg.keyWord.previous != null) {
                 continue;
             }
@@ -69,53 +69,22 @@
         }
     }
 
-    boolean isFirstLoad = startId[0] == Long.MAX_VALUE;
-
     long begin = System.currentTimeMillis();
-    ArrayList<Page> pages = new ArrayList<>();
+    ArrayList<PageText> pages = new ArrayList<>();
 
     startId = IndexAPI.Search(pages, name, startId, pageCount);
 
-    //Page isEmpty 
-    if (isFirstLoad && pages.size() == 0) {
-        Page p = new Page();
-        p.id = -1;
-        p.keyWord = new KeyWordE();
-        p.keyWord.I = -1;
-        p.title = "GOTO ADMIN";
-        p.description = "";
-        p.content = "";
-        p.url = "admin.jsp";
-        pages.add(p);
-    }
 %>
 
 <div id="ldiv<%=IdToString(startId, '_')%>">
-    <% for (Page p : pages) {
-            //Format Paage    
-            boolean sendlog = false;
-            boolean isdesc = false;
-            String content = null;
-            if (p.id != p.keyWord.I) {
-                //only show page description
-                content = p.description;
-                if (content.length() < 20) {
-                    content += p.getRandomContent() + "...";;
-                }
-                sendlog = !isFirstLoad;
-                isdesc = true;
-            } else {
-                //page content is too long, just get some chars
-                content = IndexAPI.getDesc(p.content.toString(), p.keyWord, 80);
-                if (content.length() < 100) {
-                    content += " " + p.getRandomContent();
-                }
-                if (content.length() < 100) {
-                    content += p.description;
-                }
-                if (content.length() > 200) {
-                    content = content.substring(0, 200) + "..";
-                }
+    <% for (PageText p : pages) {
+
+            boolean isdesc = p.priority >= PageText.descriptionPriority;
+            String content = isdesc ? p.text
+                    : IndexAPI.getDesc(p.text, p.keyWord, 80);
+            if (content.length() < 100) {
+                Page fpage = IndexPage.getPage(p.url);
+                content += " " + fpage.getRandomContent(100);
             }
 
             try (Tag h3 = tag("h3")) {
@@ -124,7 +93,7 @@
                             "class:", "stext",
                             "target:", "_blank",
                             "href:", p.url,
-                            "onclick:", sendlog ? "sendlog(this.href, 'content')" : "sendlog(false)")) {
+                            "onclick:", "sendlog(this.href, 'content')")) {
                         text(p.title);
                     }
                 }
@@ -136,7 +105,7 @@
             tag("br");
 
             try (Tag div = tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
-                if (!p.isAnd) {
+                if (!p.isAndSearch) {
                     text("*");
                 }
                 text(p.url);

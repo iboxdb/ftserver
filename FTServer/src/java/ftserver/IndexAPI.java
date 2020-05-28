@@ -224,21 +224,25 @@ public class IndexAPI {
         ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
 
         for (PageText pt : ptlist) {
-            try (Box box = App.Auto.cube()) {
-                if (box.d("PageText", pt.id()).select(Object.class) != null) {
-                    continue;
-                }
-                box.d("PageText").insert(pt);
-                ENGINE.indexText(box, pt.id(), pt.indexedText(), false);
-                box.commit();
-            }
+            addPageTextIndex(pt);
         }
         return true;
     }
 
+    public static void addPageTextIndex(PageText pt) {
+        try (Box box = App.Auto.cube()) {
+            if (box.d("PageText", pt.id()).select(Object.class) != null) {
+                return;
+            }
+            box.d("PageText").insert(pt);
+            ENGINE.indexText(box, pt.id(), pt.indexedText(), false);
+            box.commit();
+        }
+    }
+
     public static void removePage(String url) {
 
-        Page page = App.Auto.get(Page.class, url);
+        Page page = App.Auto.get(Page.class, "Page", url);
         if (page == null) {
             return;
         }

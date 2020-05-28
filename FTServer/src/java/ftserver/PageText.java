@@ -8,6 +8,8 @@ public class PageText {
 
     public static final int max_text_length = 1100;
 
+    public static final long userPriority = 12;
+
     public static final long descriptionKeyPriority = 11;
 
     //this is the center of Priorities, under is Body.Text, upper is user's input

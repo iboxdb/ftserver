@@ -16,7 +16,7 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         //Path
-        String path = System.getProperty("user.home") + File.separatorChar + "ftsdata110" + File.separatorChar;
+        String path = System.getProperty("user.home") + File.separatorChar + "ftsdata130" + File.separatorChar;
         new File(path).mkdirs();
 
         if (!new File(path).exists()) {
@@ -51,6 +51,8 @@ public class AppListener implements ServletContextListener {
         cfg.ensureTable(PageText.class, "PageText", "id");
         cfg.ensureIndex(PageText.class, "PageText", false, "textOrder");
 
+        cfg.ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
+
         cfg.ensureTable(PageLock.class, "PageLock", "url(" + Page.MAX_URL_LENGTH + ")");
 
         App.Auto = db.open();
@@ -61,7 +63,6 @@ public class AppListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        IndexPage.closeBGTask();
         if (App.Auto != null) {
             App.Auto.getDatabase().close();
         }

@@ -20,7 +20,7 @@ public class Page {
     private static final Random RAN = new Random();
 
     @NotColumn
-    public String getRandomContent() {
+    public String getRandomContent(int length) {
         int len = text.length() - 100;
         if (len <= 20) {
             return text;
@@ -33,7 +33,7 @@ public class Page {
             s = len;
         }
 
-        int end = s + 200;
+        int end = s + length;
         if (end > text.length()) {
             end = text.length();
         }

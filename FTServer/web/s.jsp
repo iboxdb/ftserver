@@ -6,10 +6,8 @@
 <%    final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
-    IndexPage.searchList.add(name);
-    while (IndexPage.searchList.size() > 15) {
-        IndexPage.searchList.remove();
-    }
+    IndexPage.addSearchTerm(name);
+
 %>
 
 <!DOCTYPE html>

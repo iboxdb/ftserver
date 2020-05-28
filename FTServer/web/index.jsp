@@ -63,7 +63,8 @@
                     <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Pages (add http/https to server)</a><br>
 
                     <br>Recent Searches:<br>
-                    <% for (String str : IndexPage.searchList) {
+                    <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {
+                            String str = pst.keywords;
                             try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
                                 text(str);
                             }

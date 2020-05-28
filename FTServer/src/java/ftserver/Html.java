@@ -92,7 +92,7 @@ public class Html {
         String keywords = null;
 
         String url = page.url;
-        long pageId = page.textOrder;
+        long textOrder = page.textOrder;
 
         try {
             title = doc.title();
@@ -121,7 +121,7 @@ public class Html {
 
         PageText description = new PageText();
 
-        description.textOrder = pageId;
+        description.textOrder = textOrder;
         description.url = url;
         description.title = title;
         description.keywords = keywords;
@@ -141,7 +141,7 @@ public class Html {
         while (startPriority > 0 && content.length() > 0) {
 
             PageText text = new PageText();
-            description.textOrder = pageId;
+            description.textOrder = textOrder;
             description.url = url;
             description.title = title;
             description.keywords = "";
