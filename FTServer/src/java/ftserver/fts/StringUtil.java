@@ -174,11 +174,16 @@ public class StringUtil {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ps.length; i++) {
             int len = ps[i].size();
-            if ((ps[i].P + len) <= end) {
+
+            start = ps[i].P;
+            if ((start + len) <= end) {
                 continue;
             }
-            start = ps[i].P;
-            end = ps[i].P + length;
+            if (start >= str.length()) {
+                continue;
+            }
+
+            end = start + length;
             if (end > str.length()) {
                 end = str.length();
             }

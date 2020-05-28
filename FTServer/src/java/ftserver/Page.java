@@ -8,13 +8,14 @@ public class Page {
 
     public final static int MAX_URL_LENGTH = 150;
 
-    public long id;
     public String url;
 
+    public long textOrder;
     public String html;
     public String text;
 
     public Date createTime = new Date();
+    public boolean isKeyPage = false;
 
     private static final Random RAN = new Random();
 

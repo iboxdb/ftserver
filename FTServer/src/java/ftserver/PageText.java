@@ -8,22 +8,24 @@ public class PageText {
 
     public static final int max_text_length = 1100;
 
+    public static final long descriptionKeyPriority = 11;
+
     //this is the center of Priorities, under is Body.Text, upper is user's input
     public static final long descriptionPriority = 10;
 
     private final long priorityOffset = 50;
 
-    public long Id() {
-        return pageId & (priorityId << priorityOffset);
+    public long id() {
+        return textOrder & (priority << priorityOffset);
     }
 
-    public void Id(long id) {
+    public void id(long id) {
         //ignore set
 
     }
 
-    public long pageId;
-    public long priorityId;
+    public long textOrder;
+    public long priority;
 
     public String url;
 

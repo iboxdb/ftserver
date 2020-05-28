@@ -18,6 +18,11 @@
         }
 
         if (isdelete != null) {
+            if ( isdelete ){
+                IndexPage.removePage(url);
+            }else{
+                
+            }
             url = IndexPage.processRequest(url, isdelete);
         }
     }

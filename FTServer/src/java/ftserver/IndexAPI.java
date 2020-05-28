@@ -11,7 +11,7 @@ public class IndexAPI {
 
     final static Engine ENGINE = new Engine();
 
-    public static long[] Search(ArrayList<Page> outputPages,
+    public static long[] Search(ArrayList<PageText> outputPages,
             String name, long[] startId, long pageCount) {
         name = name.trim();
 
@@ -122,10 +122,9 @@ public class IndexAPI {
                     KeyWord kw = kws[mPos];
 
                     long id = kw.I;
-                    id = Page.rankDownId(id);
-                    Page p = box.d("Page", id).select(Page.class);
+                    PageText p = box.d("PageText", id).select(PageText.class);
                     p.keyWord = kw;
-                    p.isAnd = false;
+                    p.isAndSearch = false;
                     outputPages.add(p);
 
                 }
@@ -166,7 +165,7 @@ public class IndexAPI {
         return false;
     }
 
-    public static long Search(ArrayList<Page> outputPages,
+    public static long Search(ArrayList<PageText> outputPages,
             String name, long startId, long pageCount) {
         name = name.trim();
         try (Box box = App.cube()) {
@@ -175,8 +174,7 @@ public class IndexAPI {
 
                 startId = kw.I - 1;
                 long id = kw.I;
-                id = Page.rankDownId(id);
-                Page p = box.d("Page", id).select(Page.class);
+                PageText p = box.d("PageText", id).select(PageText.class);
                 p.keyWord = kw;
                 outputPages.add(p);
                 pageCount--;
@@ -205,102 +203,57 @@ public class IndexAPI {
         return discoveries;
     }
 
-    public static String indexText(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
-        boolean tran = true;
-        if (tran) {
-            return indexTextWithTran(Html.getUrl(url), deleteOnly, subUrls,
-                    subUrls != null ? 1L << 59 : 0);
+    public static Boolean addPage(Page page) {
+
+        if (App.Auto.get(Object.class, "Page", page.url) != null) {
+            //call removePage first
+            return null;
         }
-        return indexTextNoTran(Html.getUrl(url), deleteOnly, subUrls);
+
+        page.textOrder = App.Auto.newId();
+        return App.Auto.insert("Page", page);
     }
 
-    private static String indexTextWithTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls,
-            final long rankUpPlus) {
-        return pageLock(url, new Callable<String>() {
+    public static boolean addPageIndex(final String url) {
 
-            @Override
-            public String call() {
-                try (Box box = App.Auto.cube()) {
-                    Page defaultPage = null;
+        Page page = App.Auto.get(Page.class, url);
+        if (page == null) {
+            return false;
+        }
 
-                    for (Page p : box.select(Page.class, "from Page where url==?", url).all()) {
-                        ENGINE.indexText(box, p.id, p.content, true);
-                        ENGINE.indexText(box, p.rankUpId(), p.rankUpDescription(), true);
-                        box.d("Page", p.id).delete();
-                        defaultPage = p;
-                    }
+        ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
 
-                    if (deleteOnly) {
-                        return box.commit() == CommitResult.OK ? "deleted" : "not deleted";
-                    }
-
-                    Page p = Html.get(url, subUrls);
-                    if (p == null) {
-                        //p = defaultPage;
-                    }
-                    if (p == null) {
-                        return "temporarily unreachable";
-                    } else {
-                        if (p.id == 0) {
-                            p.id = box.newId();
-                            p.rankUpPlus = rankUpPlus;
-                        }
-                        box.d("Page").insert(p);
-                        ENGINE.indexText(box, p.id, p.content, false);
-                        ENGINE.indexText(box, p.rankUpId(), p.rankUpDescription(), false);
-                        CommitResult cr = box.commit();
-                        if (cr != CommitResult.OK) {
-                            return cr.getErrorMsg(box);
-                        }
-                        return p.url;
-                    }
-
+        for (PageText pt : ptlist) {
+            try (Box box = App.Auto.cube()) {
+                if (box.d("PageText", pt.id()).select(Object.class) != null) {
+                    continue;
                 }
+                box.d("PageText").insert(pt);
+                ENGINE.indexText(box, pt.id(), pt.indexedText(), false);
+                box.commit();
             }
-        });
+        }
+        return true;
     }
 
-    //No transaction, less memory
-    private static String indexTextNoTran(final String url, final boolean deleteOnly, final HashSet<String> subUrls) {
+    public static void removePage(String url) {
 
-        //url = Page.getUrl(url);
-        final int BATCH_COMMIT = 200;
-        return pageLock(url, new Callable<String>() {
+        Page page = App.Auto.get(Page.class, url);
+        if (page == null) {
+            return;
+        }
 
-            @Override
-            public String call() {
+        ArrayList<PageText> ptlist = App.Auto.select(PageText.class, "from PageText where textOrder==?", page.textOrder);
 
-                Page defaultPage = null;
-                for (Page p : App.Auto.select(Page.class, "from Page where url==?", url)) {
-                    ENGINE.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content, true);
-                    ENGINE.indexTextNoTran(App.Auto, BATCH_COMMIT, p.rankUpId(), p.rankUpDescription(), true);
-                    App.Auto.delete("Page", p.id);
-                    defaultPage = p;
-                }
-
-                if (deleteOnly) {
-                    return "deleted";
-                }
-
-                Page p = Html.get(url, subUrls);
-                if (p == null) {
-                    p = defaultPage;
-                }
-                if (p == null) {
-                    return "temporarily unreachable";
-                } else {
-                    if (p.id == 0) {
-                        p.id = App.Auto.newId();
-                        //   p.rankUpPlus = rankUpPlus;
-                    }
-                    App.Auto.insert("Page", p);
-                    ENGINE.indexTextNoTran(App.Auto, BATCH_COMMIT, p.id, p.content, false);
-                    ENGINE.indexTextNoTran(App.Auto, BATCH_COMMIT, p.rankUpId(), p.rankUpDescription(), false);
-                    return p.url;
-                }
+        for (PageText pt : ptlist) {
+            try (Box box = App.Auto.cube()) {
+                ENGINE.indexText(box, pt.id(), pt.indexedText(), true);
+                box.d("PageText", pt.id()).delete();
+                box.commit();
             }
-        });
+        }
 
+        App.Auto.delete("Page", url);
     }
 
     private static String pageLock(final String url, final Callable<String> run) {

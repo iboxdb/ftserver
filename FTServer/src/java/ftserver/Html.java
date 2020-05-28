@@ -76,8 +76,10 @@ public class Html {
         return replace(description);
     }
 
+    static String splitWords = " ,.　，。";
+
     public static ArrayList<PageText> getDefaultTexts(Page page) {
-        if (page.id < 1) {
+        if (page.textOrder < 1) {
             //no id;
             return null;
         }
@@ -90,7 +92,7 @@ public class Html {
         String keywords = null;
 
         String url = page.url;
-        long pageId = page.id;
+        long pageId = page.textOrder;
 
         try {
             title = doc.title();
@@ -110,14 +112,16 @@ public class Html {
         }
 
         keywords = getMetaContentByName(doc, "keywords");
-        keywords = keywords.replaceAll(",", " ");
+        for (char c : splitWords.toCharArray()) {
+            keywords = keywords.replaceAll(Character.toString(c), " ");
+        }
         if (keywords.length() > 100) {
             keywords = keywords.substring(0, 100);
         }
 
         PageText description = new PageText();
 
-        description.pageId = pageId;
+        description.textOrder = pageId;
         description.url = url;
         description.title = title;
         description.keywords = keywords;
@@ -126,15 +130,18 @@ public class Html {
         if (description.text.length() > 300) {
             description.text = description.text.substring(0, 300);
         }
-        description.priorityId = PageText.descriptionPriority;
+        description.priority = PageText.descriptionPriority;
+        if (page.isKeyPage) {
+            description.priority = PageText.descriptionKeyPriority;
+        }
         result.add(description);
 
-        String content = page.text;
+        String content = " " + page.text.trim() + "  ";
         long startPriority = PageText.descriptionPriority - 1;
         while (startPriority > 0 && content.length() > 0) {
 
             PageText text = new PageText();
-            description.pageId = pageId;
+            description.textOrder = pageId;
             description.url = url;
             description.title = title;
             description.keywords = "";
@@ -145,21 +152,16 @@ public class Html {
 
             while (text.text.length() < maxLength && content.length() > 0) {
 
-                String sp = " ,.　，。";
-                int p1 = content.length();
-                for (char c : sp.toCharArray()) {
+                int p1 = Math.min(maxLength, content.length() - 1);
+                for (char c : splitWords.toCharArray()) {
                     int t = content.indexOf(c);
-                    if (t < 1) {
-                        t = content.length();
-                    }
                     p1 = Math.min(p1, t);
                 }
 
-                text.text += content.substring(0, p1);
+                text.text += content.substring(0, p1 + 1);
 
-                if ((content.length() - p1) > 1) {
-                    content = content.substring(p1 + 1);
-                }
+                content = content.substring(p1 + 1);
+
                 if (content.length() < 100) {
                     text.text += (" " + content);
                     content = "";
@@ -167,7 +169,7 @@ public class Html {
 
             }
 
-            text.priorityId = startPriority;
+            text.priority = startPriority;
             result.add(text);
             startPriority--;
         }

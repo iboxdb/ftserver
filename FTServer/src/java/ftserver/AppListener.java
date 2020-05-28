@@ -46,10 +46,13 @@ public class AppListener implements ServletContextListener {
 
         new Engine().Config(cfg);
 
-        cfg.ensureTable(Page.class, "Page", "id");
-        cfg.ensureIndex(Page.class, "Page", true, "url(" + Page.MAX_URL_LENGTH + ")");
+        cfg.ensureTable(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")");
+
+        cfg.ensureTable(PageText.class, "PageText", "id");
+        cfg.ensureIndex(PageText.class, "PageText", false, "textOrder");
+
         cfg.ensureTable(PageLock.class, "PageLock", "url(" + Page.MAX_URL_LENGTH + ")");
-        
+
         App.Auto = db.open();
 
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Started...");

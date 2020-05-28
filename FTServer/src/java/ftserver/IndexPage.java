@@ -7,41 +7,54 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class IndexPage {
-
+    
     public static ConcurrentLinkedDeque<String> searchList
             = new ConcurrentLinkedDeque<String>();
-
+    
     public static ConcurrentLinkedDeque<String> urlList
             = new ConcurrentLinkedDeque<String>();
-
+    
     public static ConcurrentLinkedDeque<String> waitingUrlList
             = new ConcurrentLinkedDeque<String>();
-
-    public static String processRequest(String name, boolean isdelete) {
-
-        if (isdelete) {
-            waitingUrlList.clear();
-        }
-
-        String url = Html.getUrl(name);
+    
+    public static String removePage(String url) {
+        
+        url = Html.getUrl(url);
         if (url.length() < 5) {
             return "not http";
         }
-        final boolean del = isdelete;
-
-        HashSet<String> subUrls = new HashSet<>();
-
-        String result = IndexAPI.indexText(Html.getUrl(url), del, subUrls);
-
+        IndexAPI.removePage(url);
+        return url;
+    }
+    
+    public static String addPage(String url) {
+        
+        url = Html.getUrl(url);
+        if (url.length() < 5) {
+            return "not http";
+        }
+        
+        HashSet<String> subUrls = new HashSet<>();        
+        Page p = Html.get(url, subUrls);
+        if (p == null) {
+            return "temporarily unreachable";
+        }
+        
+        removePage(url);
+        
+        p.isKeyPage = true;        
+        IndexAPI.addPage(p);
+        
+        
         urlList.add(url.replaceAll("<", ""));
         while (urlList.size() > 3) {
             urlList.remove();
         }
-
+        
         subUrls.remove(url);
         subUrls.remove(url + "/");
         subUrls.remove(url.substring(0, url.length() - 1));
-
+        
         if (waitingUrlList.size() < 1000) {
             try (Box box = App.Auto.cube()) {
                 for (String surl : subUrls) {
@@ -63,9 +76,9 @@ public class IndexPage {
             }
         }
         return result;
-
+        
     }
-
+    
     public static void closeBGTask() {
         WRITE_ES.shutdown();
         waitingUrlList.clear();
@@ -73,13 +86,13 @@ public class IndexPage {
         try {
             WRITE_ESBG.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
-
+            
         }
     }
-
+    
     public static void runBGTask() {
         final int SLEEP_TIME = 2000;
-
+        
         WRITE_ESBG.submit(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +100,7 @@ public class IndexPage {
                     try {
                         Thread.sleep(SLEEP_TIME);
                     } catch (InterruptedException ex) {
-
+                        
                     }
                     if (url != null) {
                         Logger.getLogger(App.class.getName()).log(Level.INFO, url);
@@ -108,10 +121,10 @@ public class IndexPage {
             }
         });
     }
-
+    
     public final static ExecutorService WRITE_ES = Executors.newSingleThreadExecutor();
 
     //background index thread
     private final static ExecutorService WRITE_ESBG = Executors.newSingleThreadExecutor();
-
+    
 }
