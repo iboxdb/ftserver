@@ -3,7 +3,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
-
+<%    long begin = System.currentTimeMillis();
+%>
 <!DOCTYPE html>
 <html>
     <head>        
@@ -68,13 +69,15 @@
                             try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
                                 text(str);
                             }
-                            text(" &nbsp; ");
+                            text(", &nbsp; ");
                         }
                     %> 
 
                     <br>Recent Records:<br>
                     <%
-                        for (String str : IndexPage.urlList) {
+                        Iterator<String> itStr = IndexPage.urlList.descendingIterator();
+                        for (; itStr.hasNext();) {
+                            String str = itStr.next();
                             try (Tag t = tag("a", "href:", str, "target:", "_blank")) {
                                 text(str);
                             }
@@ -82,7 +85,7 @@
                         }
                     %>
 
-                    <br><a  href="./">Refresh Discoveries:</a> <br> 
+                    <br><a  href="javascript:location.reload()">Refresh Discoveries:</a> <br> 
                     <%
                         for (String str : IndexAPI.discover()) {
                             try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
@@ -90,14 +93,17 @@
                             }
                             text(" &nbsp; ");
                         }
+
+                        tag("br");
                     %>
                     <br>
 
                 </div>
-
+                <% text("Load Time: " + (System.currentTimeMillis() - begin) / 1000.0 + "s");
+                %>
             </div>
         </div>
 
     </body>
-    <!-- 1.3 -->
+    <!-- <%=version()%> -->
 </html>

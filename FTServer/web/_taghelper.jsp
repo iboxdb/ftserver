@@ -55,7 +55,7 @@
 
     public void text(String text) {
         try {
-            jspWriter.append(text);
+            jspWriter.print(text);
         } catch (Throwable ex) {
 
         }
