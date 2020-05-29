@@ -96,15 +96,15 @@ public class IndexPage {
 
         boolean atNight = true;
 
-        int max_background = atNight ? 10_000 : 100;
+        int max_background = atNight ? 10_000 : 0;
 
         final long SLEEP_TIME = 2000;
 
-        if (WRITE_ESBG_COUNT.get() < max_background) {
+        if (backgroundThreadCount.get() < max_background) {
             for (final String url : subUrls) {
-                WRITE_ESBG_COUNT.incrementAndGet();
-                WRITE_ESBG.submit((Runnable) () -> {
-                    WRITE_ESBG_COUNT.decrementAndGet();
+                backgroundThreadCount.incrementAndGet();
+                backgroundThread.submit((Runnable) () -> {
+                    backgroundThreadCount.decrementAndGet();
                     if (App.Auto == null) {
                         return;
                     }
@@ -133,7 +133,7 @@ public class IndexPage {
     }
 
     //background index thread
-    private final static ExecutorService WRITE_ESBG = Executors.newSingleThreadExecutor();
-    private final static AtomicInteger WRITE_ESBG_COUNT = new AtomicInteger(0);
+    private final static ExecutorService backgroundThread = Executors.newSingleThreadExecutor();
+    private final static AtomicInteger backgroundThreadCount = new AtomicInteger(0);
 
 }

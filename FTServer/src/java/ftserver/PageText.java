@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PageText {
 
-    public static final int max_text_length = 1100;
+    public static final int max_text_length = 2100;
 
     public static final long userPriority = 12;
 
@@ -15,7 +15,7 @@ public class PageText {
     //this is the center of Priorities, under is Body.Text, upper is user's input
     public static final long descriptionPriority = 10;
 
-    private final long priorityOffset = 50;
+    private static final long priorityOffset = 50;
 
     public long id() {
         return textOrder | (priority << priorityOffset);
@@ -45,7 +45,7 @@ public class PageText {
         if (priority >= descriptionPriority) {
             return text + " " + title;
         }
-        return text;
+        return text + " " + url;
     }
 
     @NotColumn

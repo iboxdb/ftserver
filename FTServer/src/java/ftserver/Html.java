@@ -136,7 +136,25 @@ public class Html {
         }
         result.add(description);
 
-        String content = page.text.trim() + "  ";
+        String content = page.text.trim() + "..";
+        int maxLength = PageText.max_text_length;
+
+        int wordCount = 0;
+        for (int i = 0; i < content.length(); i++) {
+            char c = content.charAt(i);
+            if (c < 256) {
+                wordCount++;
+            } else {
+                boolean isword = IndexAPI.ENGINE.sUtil.isWord(c);
+                if (isword) {
+                    wordCount++;
+                }
+            }
+        }
+        if (((double) wordCount / (double) content.length()) > 0.8) {
+            maxLength *= 4;
+        }
+
         long startPriority = PageText.descriptionPriority - 1;
         while (startPriority > 0 && content.length() > 0) {
 
@@ -146,31 +164,31 @@ public class Html {
             text.title = title;
             text.keywords = "";
 
-            text.text = "";
+            text.text = null;
+            StringBuilder texttext = new StringBuilder(maxLength + 100);
 
-            int maxLength = PageText.max_text_length - 100;
-
-            while (text.text.length() < maxLength && content.length() > 0) {
-
-                int p1 = Math.min(maxLength, content.length() - 1);
-                for (char c : splitWords.toCharArray()) {
-                    int t = content.indexOf(c);
-                    if (t >= 0) {
-                        p1 = Math.min(p1, t);
-                    }
+            int last = Math.min(maxLength, content.length() - 1);
+            int p1 = 0;
+            for (char c : splitWords.toCharArray()) {
+                int t = content.lastIndexOf(c, last);
+                if (t >= 0) {
+                    p1 = Math.max(p1, t);
                 }
-
-                text.text += content.substring(0, p1 + 1);
-
-                content = content.substring(p1 + 1);
-
-                if (content.length() < 100) {
-                    text.text += (" " + content);
-                    content = "";
-                }
-
+            }
+            if (p1 == 0) {
+                p1 = last;
             }
 
+            texttext.append(content.substring(0, p1 + 1));
+
+            content = content.substring(p1 + 1);
+
+            if (content.length() > 0 && content.length() < 100) {
+                texttext.append(" ").append(content);
+                content = "";
+            }
+
+            text.text = texttext.toString();
             text.priority = startPriority;
             result.add(text);
             startPriority--;

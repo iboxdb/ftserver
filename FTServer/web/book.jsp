@@ -38,9 +38,9 @@
     String l = request.getParameter("length");
 
     if (b == null) {
-        b = "0";
+        b = "1";
         s = "0";
-        l = "300";
+        l = "4040";
     }
 
     int book = Integer.parseInt(b);
@@ -86,10 +86,10 @@
                 length = ran.nextInt(200) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
-                try (Tag t = tag("a", "href:", url)) {
-                    tag("br");
-                    text(url);
+                try (Tag t = tag("a", "href:", url)) {                    
+                    text(" &nbsp; ");
                 }
+                tag("br");
             }
         %>
     </body>

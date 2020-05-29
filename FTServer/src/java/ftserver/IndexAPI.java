@@ -5,7 +5,6 @@ import ftserver.fts.KeyWord;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class IndexAPI {
 

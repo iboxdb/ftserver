@@ -41,6 +41,7 @@ public class AppListener implements ServletContextListener {
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         cfg.CacheLength = tm / 3;
         cfg.FileIncSize = (int) cfg.mb(4);
+        cfg.SwapFileBuffer = (int) cfg.mb(4);
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
                 + " AppMEM=" + tm / 1024 / 1024 + "MB");
 
