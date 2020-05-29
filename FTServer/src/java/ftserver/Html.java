@@ -234,9 +234,6 @@ public class Html {
         for (Element e : doc.getElementsByTag("span")) {
             e.text(" " + e.text() + " ");
         }
-        for (Element e : doc.getElementsByTag("div")) {
-            e.text(" " + e.text() + " ");
-        }
     }
 
 }

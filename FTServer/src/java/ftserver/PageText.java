@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PageText {
 
-    public static final int max_text_length = 2100;
+    public static final int max_text_length = 1100;
 
     public static final long userPriority = 12;
 
