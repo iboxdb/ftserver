@@ -179,7 +179,7 @@ public class StringUtil {
             if ((start + len) <= end) {
                 continue;
             }
-            if (start >= str.length()) {
+            if ((start + len) >= str.length()) {
                 continue;
             }
 

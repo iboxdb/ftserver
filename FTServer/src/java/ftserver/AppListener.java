@@ -53,8 +53,6 @@ public class AppListener implements ServletContextListener {
 
         cfg.ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
 
-        cfg.ensureTable(PageLock.class, "PageLock", "url(" + Page.MAX_URL_LENGTH + ")");
-
         App.Auto = db.open();
 
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Started...");

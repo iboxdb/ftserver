@@ -42,7 +42,10 @@ public class PageText {
 
     @NotColumn
     public String indexedText() {
-        return text + " " + title;
+        if (priority >= descriptionPriority) {
+            return text + " " + title;
+        }
+        return text;
     }
 
     @NotColumn

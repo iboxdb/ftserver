@@ -196,7 +196,7 @@ public class IndexAPI {
 
         try (Box box = App.Auto.cube()) {
             for (String skw : IndexAPI.ENGINE.discover(box, 'a', 'z', 2,
-                    '\u2E80', '\u9fa5', 1)) {
+                    '\u2E80', '\u9fa5', 2)) {
                 discoveries.add(skw);
             }
         }
@@ -261,30 +261,4 @@ public class IndexAPI {
         App.Auto.delete("Page", url);
     }
 
-    private static String pageLock(final String url, final Callable<String> run) {
-        try (Box box = App.Auto.cube()) {
-            PageLock pl = box.d("PageLock", url).select(PageLock.class);
-            if (pl == null) {
-                pl = new PageLock();
-                pl.url = url;
-                pl.time = new Date();
-            } else if ((new Date().getTime() - pl.time.getTime()) > 1000 * 60 * 5) {
-                pl.time = new Date();
-            } else {
-                return "Running";
-            }
-            box.d("PageLock").replace(pl);
-            if (box.commit() != CommitResult.OK) {
-                return "Running";
-            }
-        }
-
-        try {
-            return run.call();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            App.Auto.delete("PageLock", url);
-        }
-    }
 }

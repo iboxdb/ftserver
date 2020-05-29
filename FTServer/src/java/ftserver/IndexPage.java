@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,12 +23,12 @@ public class IndexPage {
         }
     }
 
-    public static Page getPage(String url) {
-        return App.Auto.get(Page.class, "Page", url);
-    }
-
     public static ArrayList<PageSearchTerm> getSearchTerm(int len) {
         return App.Auto.select(PageSearchTerm.class, "from /PageSearchTerm limit 0 , ?", len);
+    }
+
+    public static Page getPage(String url) {
+        return App.Auto.get(Page.class, "Page", url);
     }
 
     private static void addUrlList(String url) {
@@ -50,7 +51,11 @@ public class IndexPage {
         }
 
         HashSet<String> subUrls = new HashSet<>();
+
+        long begin = System.currentTimeMillis();
         Page p = Html.get(url, subUrls);
+        long ioend = System.currentTimeMillis();
+
         if (p == null) {
             return "temporarily unreachable";
         } else {
@@ -58,6 +63,9 @@ public class IndexPage {
             p.isKeyPage = isKeyPage;
             IndexAPI.addPage(p);
             IndexAPI.addPageIndex(url);
+            long indexend = System.currentTimeMillis();
+            Logger.getLogger(App.class.getName()).log(Level.INFO, "TIME IO:" + (ioend - begin) / 1000.0
+                    + " INDEX:" + (indexend - ioend) / 1000.0 + "  " + url);
 
             subUrls.remove(url);
             subUrls.remove(url + "/");
@@ -85,27 +93,47 @@ public class IndexPage {
     }
 
     private static void runBGTask(HashSet<String> subUrls) {
-        final int SLEEP_TIME = 2000;
 
-        for (final String url : subUrls) {
-            WRITE_ESBG.submit((Runnable) () -> {
-                long begin = System.currentTimeMillis();
-                if (url.equals(addPage(url, false))) {
-                    Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
-                } else {
-                    Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
-                }
-                try {
-                    Thread.sleep(SLEEP_TIME - (System.currentTimeMillis() - begin));
-                } catch (InterruptedException ex) {
+        boolean atNight = true;
 
-                }
-            });
+        int max_background = atNight ? 10_000 : 100;
+
+        final long SLEEP_TIME = 2000;
+
+        if (WRITE_ESBG_COUNT.get() < max_background) {
+            for (final String url : subUrls) {
+                WRITE_ESBG_COUNT.incrementAndGet();
+                WRITE_ESBG.submit((Runnable) () -> {
+                    WRITE_ESBG_COUNT.decrementAndGet();
+                    if (App.Auto == null) {
+                        return;
+                    }
+                    try {
+                        long begin = System.currentTimeMillis();
+                        String r = addPage(url, false);
+                        if (r == null) {
+                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Has indexed:" + url);
+                        } else if (url.equals(r)) {
+                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
+                        } else {
+                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
+                        }
+
+                        long sleep = SLEEP_TIME - (System.currentTimeMillis() - begin);
+                        if (sleep < 1) {
+                            sleep = 1;
+                        }
+                        Thread.sleep(sleep);
+                    } catch (Throwable ex) {
+                        Logger.getLogger(App.class.getName()).log(Level.WARNING, ex.getMessage() + " " + url);
+                    }
+                });
+            }
         }
-
     }
 
     //background index thread
     private final static ExecutorService WRITE_ESBG = Executors.newSingleThreadExecutor();
+    private final static AtomicInteger WRITE_ESBG_COUNT = new AtomicInteger(0);
 
 }

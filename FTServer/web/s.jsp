@@ -43,7 +43,7 @@
                 color: #4092cc;
             }
             .kw{
-                background-color: #ddd;
+                background-color: #eee;
             }
         </style> 
         <script>
@@ -91,6 +91,8 @@
                 if (div_load !== null) {
                     var top = div_load.getBoundingClientRect().top;
                     var se = document.documentElement.clientHeight;
+                    
+                    top = top - 1000;
                     if (top <= se) {
                         var startId = div_load.startId;
                         div_load = null;
