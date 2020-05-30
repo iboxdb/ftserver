@@ -110,7 +110,8 @@ public class IndexPage {
 
                     backgroundThreadCount.decrementAndGet();
                     try {
-                        long begin = System.currentTimeMillis();
+
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url);
                         String r = addPage(url, false);
                         if (r == null) {
                             Logger.getLogger(App.class.getName()).log(Level.INFO, "Has indexed:" + url);
@@ -120,10 +121,7 @@ public class IndexPage {
                             Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
                         }
 
-                        long sleep = SLEEP_TIME - (System.currentTimeMillis() - begin);
-                        if (sleep < 0) {
-                            sleep = 0;
-                        }
+                        long sleep = SLEEP_TIME;
                         Thread.sleep(sleep);
                     } catch (Throwable ex) {
                         Logger.getLogger(App.class.getName()).log(Level.WARNING, ex.getMessage() + " " + url);

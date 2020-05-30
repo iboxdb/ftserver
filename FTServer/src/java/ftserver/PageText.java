@@ -45,7 +45,12 @@ public class PageText {
         if (priority >= descriptionPriority) {
             return text + " " + title;
         }
-        return text + " " + url;
+
+        if (priority == (descriptionPriority - 1)) {
+            return text + " " + url;
+        }
+
+        return text;
     }
 
     @NotColumn
