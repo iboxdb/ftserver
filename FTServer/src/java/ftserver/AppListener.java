@@ -62,6 +62,7 @@ public class AppListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        IndexPage.shutdown();
         if (App.Auto != null) {
             App.Auto.getDatabase().close();
         }

@@ -21,7 +21,7 @@
             }
 
             body {
-                margin-top: 100px;
+                margin-top: 10px;
                 overflow:hidden;
             }
             body > .grid {

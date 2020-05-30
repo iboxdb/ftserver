@@ -104,10 +104,11 @@ public class IndexPage {
             for (final String url : subUrls) {
                 backgroundThreadCount.incrementAndGet();
                 backgroundThread.submit((Runnable) () -> {
-                    backgroundThreadCount.decrementAndGet();
-                    if (App.Auto == null) {
+                    if (isShutdown) {
                         return;
                     }
+
+                    backgroundThreadCount.decrementAndGet();
                     try {
                         long begin = System.currentTimeMillis();
                         String r = addPage(url, false);
@@ -120,8 +121,8 @@ public class IndexPage {
                         }
 
                         long sleep = SLEEP_TIME - (System.currentTimeMillis() - begin);
-                        if (sleep < 1) {
-                            sleep = 1;
+                        if (sleep < 0) {
+                            sleep = 0;
                         }
                         Thread.sleep(sleep);
                     } catch (Throwable ex) {
@@ -136,4 +137,17 @@ public class IndexPage {
     private final static ExecutorService backgroundThread = Executors.newSingleThreadExecutor();
     private final static AtomicInteger backgroundThreadCount = new AtomicInteger(0);
 
+    private static boolean isShutdown = false;
+
+    public synchronized static void shutdown() {
+        if (backgroundThreadCount.get() > 0) {
+            isShutdown = true;
+            backgroundThread.shutdown();
+            try {
+                backgroundThread.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(IndexPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
