@@ -1,7 +1,7 @@
 package ftserver;
 
 import ftserver.fts.Engine;
-import iBoxDB.LocalServer.*;
+import iBoxDB.LocalServer.*; 
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +40,10 @@ public class AppListener implements ServletContextListener {
         DatabaseConfig cfg = db.getConfig();
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         cfg.CacheLength = tm / 3;
+        
+        //if update the metadata, set low cache
+        //cfg.CacheLength = cfg.mb(128);
+
         cfg.FileIncSize = (int) cfg.mb(4);
         cfg.SwapFileBuffer = (int) cfg.mb(4);
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"

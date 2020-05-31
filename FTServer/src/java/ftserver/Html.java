@@ -21,7 +21,7 @@ public class Html {
 
             Page page = new Page();
             page.url = url;
-            page.html = doc.html();
+            //page.html = doc.html();
             page.text = replace(doc.body().text());
 
             if (page.text.length() < 10) {
@@ -37,6 +37,44 @@ public class Html {
                     }
                 }
             }
+
+            String title = null;
+            String keywords = null;
+            String description = null;
+
+            try {
+                title = doc.title();
+            } catch (Throwable e) {
+
+            }
+            if (title == null) {
+                title = "";
+            }
+            if (title.length() < 1) {
+                title = url;
+            }
+            title = replace(title);
+            if (title.length() > 100) {
+                title = title.substring(0, 100);
+            }
+
+            keywords = getMetaContentByName(doc, "keywords");
+            for (char c : splitWords.toCharArray()) {
+                keywords = keywords.replaceAll("\\" + c, " ");
+            }
+            if (keywords.length() > 50) {
+                keywords = keywords.substring(0, 50);
+            }
+
+            description = getMetaContentByName(doc, "description");
+            if (description.length() > 300) {
+                description = description.substring(0, 300);
+            }
+
+            page.title = title;
+            page.keywords = keywords;
+            page.description = description;
+
             return page;
         } catch (Throwable e) {
             //e.printStackTrace();
@@ -86,38 +124,11 @@ public class Html {
 
         ArrayList<PageText> result = new ArrayList<PageText>();
 
-        Document doc = Jsoup.parse(page.html);
-
-        String title = null;
-        String keywords = null;
+        String title = page.title;
+        String keywords = page.keywords;
 
         String url = page.url;
         long textOrder = page.textOrder;
-
-        try {
-            title = doc.title();
-        } catch (Throwable e) {
-
-        }
-
-        if (title == null) {
-            title = "";
-        }
-        if (title.length() < 1) {
-            title = url;
-        }
-        title = replace(title);
-        if (title.length() > 100) {
-            title = title.substring(0, 100);
-        }
-
-        keywords = getMetaContentByName(doc, "keywords");
-        for (char c : splitWords.toCharArray()) {
-            keywords = keywords.replaceAll("\\" + c, " ");
-        }
-        if (keywords.length() > 100) {
-            keywords = keywords.substring(0, 100);
-        }
 
         PageText description = new PageText();
 
@@ -126,10 +137,8 @@ public class Html {
         description.title = title;
         description.keywords = keywords;
 
-        description.text = getMetaContentByName(doc, "description");
-        if (description.text.length() > 300) {
-            description.text = description.text.substring(0, 300);
-        }
+        description.text = page.description;
+
         description.priority = PageText.descriptionPriority;
         if (page.isKeyPage) {
             description.priority = PageText.descriptionKeyPriority;
