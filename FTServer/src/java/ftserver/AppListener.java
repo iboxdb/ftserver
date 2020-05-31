@@ -48,10 +48,10 @@ public class AppListener implements ServletContextListener {
         new Engine().Config(cfg);
 
         cfg.ensureTable(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")");
+        cfg.ensureIndex(Page.class, "Page", true, "textOrder");
 
         cfg.ensureTable(PageText.class, "PageText", "id");
         cfg.ensureIndex(PageText.class, "PageText", false, "textOrder");
-
         cfg.ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
 
         App.Auto = db.open();

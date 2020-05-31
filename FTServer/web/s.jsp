@@ -1,3 +1,5 @@
+<%@page import="java.util.logging.Logger"%>
+<%@page import="java.util.logging.Level"%>
 <%@page import="ftserver.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@include  file="_taghelper.jsp" %>
@@ -6,8 +8,11 @@
 <%    final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
-    IndexPage.addSearchTerm(name);
-
+    try {
+        IndexPage.addSearchTerm(name);
+    } catch (Throwable ex) {
+        Logger.getLogger(App.class.getName()).log(Level.INFO, " Search " + ex.getMessage() + " " + name);
+    }
 %>
 
 <!DOCTYPE html>
@@ -91,7 +96,7 @@
                 if (div_load !== null) {
                     var top = div_load.getBoundingClientRect().top;
                     var se = document.documentElement.clientHeight;
-                    
+
                     top = top - 1000;
                     if (top <= se) {
                         var startId = div_load.startId;

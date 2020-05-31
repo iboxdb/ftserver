@@ -1,3 +1,5 @@
+<%@page import="java.util.logging.Logger"%>
+<%@page import="java.util.logging.Level"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="ftserver.fts.*"%>
 <%@page import="ftserver.*"%>
@@ -79,7 +81,10 @@
 
 <div id="ldiv<%=IdToString(startId, '_')%>">
     <% for (PageText p : pages) {
+            if (p.priority == 0) {
 
+                continue;
+            }
             boolean isdesc = p.priority >= PageText.descriptionPriority;
             String content = isdesc ? p.text
                     : IndexAPI.getDesc(p.text, p.keyWord, 80);

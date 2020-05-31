@@ -131,7 +131,7 @@ public class IndexPage {
 
                         if (isShutdown) {
                             return;
-                        } 
+                        }
                         long sleep = SLEEP_TIME;
                         Thread.sleep(sleep);
                     } catch (Throwable ex) {

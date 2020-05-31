@@ -17,6 +17,13 @@ public class PageText {
 
     private static final long priorityOffset = 50;
 
+    public static PageText fromId(long id) {
+        PageText pt = new PageText();
+        pt.priority = id >> priorityOffset;
+        pt.textOrder = id - (pt.priority << priorityOffset);
+        return pt;
+    }
+
     public long id() {
         return textOrder | (priority << priorityOffset);
     }
