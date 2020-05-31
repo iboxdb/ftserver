@@ -7,7 +7,7 @@ Use NetBeans with [JDK8+] to build or download fts.zip(WAR) from WAR Folder
 Deploy to tomcat/jetty
 
 
-if using OpenJDK, use OpenJDK 11+ for better GC
+for OpenJDK, to use OpenJDK 11+ for better GC
 ```
 
 

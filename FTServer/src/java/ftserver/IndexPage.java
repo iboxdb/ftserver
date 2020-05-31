@@ -100,7 +100,7 @@ public class IndexPage {
         }
         boolean atNight = true;
 
-        int max_background = atNight ? 10_000 : 0;
+        int max_background = atNight ? 1000 : 0;
 
         final long SLEEP_TIME = 2000;
 
