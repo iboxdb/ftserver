@@ -3,8 +3,11 @@
 ### Setup
 
 ```
-Use NetBeans with [JDK8] to build or download fts.zip(WAR) from WAR Folder
+Use NetBeans with [JDK8+] to build or download fts.zip(WAR) from WAR Folder
 Deploy to tomcat/jetty
+
+
+if using OpenJDK, use OpenJDK 11+ for better GC
 ```
 
 
@@ -84,13 +87,36 @@ IndexAPI.removePage(url);
 
 #### Memory
 ````java
-PageText.max_text_length
-Bigger, faster, more memories.
-
-Smaller, less memory.
+//Bigger, faster, more memories.
+//Smaller, less memory.
+int PageText.max_text_length ;
 ````
 
-How to set big cache
+#### Add Custom information to Page
+```
+input format:
+
+line1 : Title ...
+line2 : Text Text ...
+```
+
+#### Private Server
+Open 
+```java
+public Page Html.get(String url);
+```
+Set your private WebSite text
+```java
+Page page = new Page();
+page.url = url;
+page.title = title;
+page.text = replace(doc.body().text());
+page... = ...
+return page;
+```
+
+
+#### How to set big cache
 ```java
 //-Xmx8G
 DatabaseConfig dbcfg = db.getConfig(); 
@@ -102,20 +128,6 @@ dbcfg.CacheLength = 2048L * 1024L * 1024L;
 //dbcfg.CacheLength = 2048 * 1024 * 1024;
 ```
 
-
-#### Private Server
-Open 
-```java
-public Page Html.get(String url);
-```
-Set your private WebSite text
-```java
-Page page = new Page();
-page.url = url;
-page.html = doc.html();
-page.text = replace(doc.body().text());
-return page;
-```
 
 #### More
 [C# ASP.NET Core Version](https://github.com/iboxdb/ftserver-cs)
