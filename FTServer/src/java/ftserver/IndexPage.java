@@ -93,7 +93,9 @@ public class IndexPage {
     }
 
     private synchronized static void runBGTask(HashSet<String> subUrls) {
-
+        if (isShutdown) {
+            return;
+        }
         boolean atNight = true;
 
         int max_background = atNight ? 10_000 : 0;
@@ -127,10 +129,13 @@ public class IndexPage {
                             Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
                         }
 
+                        if (isShutdown) {
+                            return;
+                        } 
                         long sleep = SLEEP_TIME;
                         Thread.sleep(sleep);
                     } catch (Throwable ex) {
-                        Logger.getLogger(App.class.getName()).log(Level.WARNING, ex.getMessage() + " " + url);
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, ex.getMessage() + " " + url);
                     }
                 });
             }
@@ -148,7 +153,7 @@ public class IndexPage {
             isShutdown = true;
             backgroundThread.shutdown();
             try {
-                backgroundThread.awaitTermination(30, TimeUnit.SECONDS);
+                backgroundThread.awaitTermination(60, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
                 Logger.getLogger(IndexPage.class.getName()).log(Level.SEVERE, null, ex);
             }
