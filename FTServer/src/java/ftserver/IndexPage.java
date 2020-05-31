@@ -92,7 +92,7 @@ public class IndexPage {
         IndexAPI.addPageTextIndex(text);
     }
 
-    private static void runBGTask(HashSet<String> subUrls) {
+    private synchronized static void runBGTask(HashSet<String> subUrls) {
 
         boolean atNight = true;
 
@@ -100,8 +100,14 @@ public class IndexPage {
 
         final long SLEEP_TIME = 2000;
 
+        if (subUrls.size() > 0) {
+            if (backgroundThread == null) {
+                backgroundThread = Executors.newSingleThreadExecutor();
+            }
+        }
         if (backgroundThreadCount.get() < max_background) {
-            for (final String url : subUrls) {
+            for (final String vurl : subUrls) {
+                final String url = Html.getUrl(vurl);
                 backgroundThreadCount.incrementAndGet();
                 backgroundThread.submit((Runnable) () -> {
                     if (isShutdown) {
@@ -132,13 +138,13 @@ public class IndexPage {
     }
 
     //background index thread
-    private final static ExecutorService backgroundThread = Executors.newSingleThreadExecutor();
+    private static ExecutorService backgroundThread = null; //Executors.newSingleThreadExecutor();
     private final static AtomicInteger backgroundThreadCount = new AtomicInteger(0);
 
     private static boolean isShutdown = false;
 
     public synchronized static void shutdown() {
-        if (backgroundThreadCount.get() > 0) {
+        if (backgroundThread != null) {
             isShutdown = true;
             backgroundThread.shutdown();
             try {
@@ -146,6 +152,7 @@ public class IndexPage {
             } catch (InterruptedException ex) {
                 Logger.getLogger(IndexPage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            backgroundThread = null;
         }
     }
 }

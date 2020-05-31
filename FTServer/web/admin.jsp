@@ -11,22 +11,21 @@
         if (url.startsWith("http://") || url.startsWith("https://")) {
             isdelete = false;
         } else if (url.startsWith("delete")) {
-
-            if ((url.contains("http://") || url.contains("https://"))) {
+            url = url.substring(6).trim();
+            if ((url.startsWith("http://") || url.startsWith("https://"))) {
                 isdelete = true;
             }
         }
 
         if (isdelete != null) {
-            url = Html.getUrl(url);
-
-            if (url.length() < 5) {
-                url = "not http";
-            } else if (isdelete) {
+            if (isdelete) {
                 IndexPage.removePage(url);
+                url = "deleted";
             } else {
-                url = IndexPage.addPage(url, true);
-                if (msg != null) {
+                url = Html.getUrl(url);
+
+                String rurl = IndexPage.addPage(url, true);
+                if (url.equals(rurl) && msg != null) {
                     msg = msg.trim();
                     if (msg.length() > 0) {
 
@@ -39,6 +38,7 @@
                         IndexPage.addPageCustomText(url, title, msg);
                     }
                 }
+                url = rurl;
             }
         }
     }
