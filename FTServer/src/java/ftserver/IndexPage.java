@@ -123,14 +123,7 @@ public class IndexPage {
 
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url);
                         String r = addPage(url, false);
-                        if (r == null) {
-                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Has indexed:" + url);
-                        } else if (url.equals(r)) {
-                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
-                        } else {
-                            Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
-                        }
-
+                        backgroundLog(url, r);
                         if (isShutdown) {
                             return;
                         }
@@ -141,6 +134,16 @@ public class IndexPage {
                     }
                 });
             }
+        }
+    }
+
+    public static void backgroundLog(String url, String output) {
+        if (output == null) {
+            Logger.getLogger(App.class.getName()).log(Level.INFO, "Has indexed:" + url);
+        } else if (url.equals(output)) {
+            Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
+        } else {
+            Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
         }
     }
 

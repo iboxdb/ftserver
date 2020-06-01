@@ -1,3 +1,5 @@
+<%@page import="java.util.logging.Logger"%>
+<%@page import="java.util.logging.Level"%>
 <%@page import="ftserver.*"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@include  file="_taghelper.jsp" %>
@@ -22,23 +24,35 @@
                 IndexPage.removePage(url);
                 url = "deleted";
             } else {
-                url = Html.getUrl(url);
-
-                String rurl = IndexPage.addPage(url, true);
-                if (url.equals(rurl) && msg != null) {
-                    msg = msg.trim();
-                    if (msg.length() > 0) {
-
-                        String title = url;
-                        int pos = msg.indexOf('\n');
-                        if (pos > 0) {
-                            title = msg.substring(0, pos);
-                            msg = msg.substring(pos).trim();
-                        }
-                        IndexPage.addPageCustomText(url, title, msg);
-                    }
+                if (msg == null) {
+                    msg = "";
                 }
-                url = rurl;
+
+                final String furl = Html.getUrl(url);
+                final String fmsg = msg.trim();
+                final String[] fresult = new String[]{"background running"};
+                Thread t = new Thread(() -> {
+                    Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + furl);
+                    String rurl = IndexPage.addPage(furl, true);
+                    IndexPage.backgroundLog(furl, rurl);
+                    if (furl.equals(rurl) && fmsg.length() > 0) {
+
+                        String ttitle = furl;
+                        String tmsg = null;
+                        int pos = fmsg.indexOf('\n');
+                        if (pos > 0) {
+                            ttitle = fmsg.substring(0, pos);
+                            tmsg = fmsg.substring(pos).trim();
+                        }
+                        IndexPage.addPageCustomText(furl, ttitle, tmsg);
+
+                    }
+
+                    fresult[0] = rurl;
+                });
+                t.start();
+                t.join(3000);
+                url = fresult[0];
             }
         }
     }
