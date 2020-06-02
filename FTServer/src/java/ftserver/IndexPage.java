@@ -121,7 +121,7 @@ public class IndexPage {
                     backgroundThreadCount.decrementAndGet();
                     try {
 
-                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url);
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url + " ," + backgroundThreadCount.get());
                         String r = addPage(url, false);
                         backgroundLog(url, r);
                         if (isShutdown) {
