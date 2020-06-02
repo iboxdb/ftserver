@@ -1,31 +1,36 @@
 <%@page import="java.io.RandomAccessFile"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
 <%!    private static String[] books = null;
 
     private static final Random ran = new Random();
-    private static String book1_path = "/home/user/github/ftspeed/ftspeed/libs/175315.txt";
-    private static String book2_path = "/home/user/github/phoenix.txt";
+    //UTF-8 Text
+    private static String book1_path = "175315.txt";
+    private static String book2_path = "phoenix.txt";
 %>
 
 <%    if (books == null) {
+        try {
+            String[] tmp = new String[2];
 
-        String[] tmp = new String[2];
+            RandomAccessFile rf = new RandomAccessFile(book1_path, "r");
+            byte[] bs = new byte[(int) rf.length()];
+            rf.readFully(bs);
+            rf.close();
+            tmp[0] = new String(bs);
 
-        RandomAccessFile rf = new RandomAccessFile(book1_path, "r");
-        byte[] bs = new byte[(int) rf.length()];
-        rf.readFully(bs);
-        rf.close();
-        tmp[0] = new String(bs);
+            rf = new RandomAccessFile(book2_path, "r");
+            bs = new byte[(int) rf.length()];
+            rf.readFully(bs);
+            rf.close();
+            tmp[1] = new String(bs);
 
-        rf = new RandomAccessFile(book2_path, "r");
-        bs = new byte[(int) rf.length()];
-        rf.readFully(bs);
-        rf.close();
-        tmp[1] = new String(bs);
-
-        books = tmp;
+            books = tmp;
+        } catch (Throwable e) {
+            out.println("No Book");
+            return;
+        }
     }
 %>
 
@@ -38,7 +43,7 @@
     String l = request.getParameter("length");
 
     if (b == null) {
-        b = "1";
+        b = "0";
         s = "0";
         l = "4040";
     }
@@ -86,7 +91,7 @@
                 length = ran.nextInt(200) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
-                try (Tag t = tag("a", "href:", url)) {                    
+                try (Tag t = tag("a", "href:", url)) {
                     text(" &nbsp; ");
                 }
                 tag("br");
