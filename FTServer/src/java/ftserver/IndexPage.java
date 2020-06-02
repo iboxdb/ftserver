@@ -81,6 +81,9 @@ public class IndexPage {
     }
 
     public static void addPageCustomText(String url, String title, String content) {
+        if (url == null || title == null || content == null) {
+            return;
+        }
         Page page = App.Auto.get(Page.class, "Page", url);
 
         PageText text = new PageText();

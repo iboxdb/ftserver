@@ -38,7 +38,7 @@
                     if (furl.equals(rurl) && fmsg.length() > 0) {
 
                         String ttitle = furl;
-                        String tmsg = null;
+                        String tmsg = fmsg;
                         int pos = fmsg.indexOf('\n');
                         if (pos > 0) {
                             ttitle = fmsg.substring(0, pos);
