@@ -67,7 +67,7 @@ public class IndexPage {
             long textOrder = App.Auto.newId(0, 0);
             long indexend = System.currentTimeMillis();
             Logger.getLogger(App.class.getName()).log(Level.INFO, "TIME IO:" + (ioend - begin) / 1000.0
-                    + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " " + url);
+                    + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " ");
 
             subUrls.remove(url);
             subUrls.remove(url + "/");
@@ -148,6 +148,7 @@ public class IndexPage {
         } else {
             Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
         }
+        Logger.getLogger(App.class.getName()).log(Level.INFO, "");
     }
 
     //background index thread

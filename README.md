@@ -85,13 +85,6 @@ When Delete
 IndexAPI.removePage(url);
 ````
 
-#### Memory
-````java
-//Bigger, faster, more memories.
-//Smaller, less memory.
-int PageText.max_text_length ;
-````
-
 #### Add Custom information to Page
 ```
 input format:
@@ -115,6 +108,12 @@ page... = ...
 return page;
 ```
 
+#### Memory
+````java
+//Bigger, faster, more memories.
+//Smaller, less memory.
+int PageText.max_text_length ;
+````
 
 #### How to set big cache
 ```java
