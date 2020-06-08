@@ -29,11 +29,16 @@ public class Html {
             }
 
             if (subUrls != null) {
+                String host = getHost(url);
                 Elements links = doc.select("a[href]");
                 for (Element link : links) {
                     String ss = link.attr("abs:href");
                     if (ss != null && ss.length() > 8) {
-                        subUrls.add(ss);
+                        ss = getUrl(ss);
+                        String h = getHost(ss);
+                        if (host.equals(h)) {
+                            subUrls.add(ss);
+                        }
                     }
                 }
             }
@@ -216,6 +221,21 @@ public class Html {
                 .replaceAll("　", " ")
                 .replaceAll("\\s+", " ")
                 .trim();
+    }
+
+    public static String getHost(String url) {
+        url = getUrl(url);
+        int p = url.indexOf("//");
+        if (p > 0) {
+            url = url.substring(p + 2);
+
+            p = url.indexOf("/");
+            if (p > 0) {
+                url = url.substring(0, p);
+            }
+            return url;
+        }
+        return url;
     }
 
     public static String getUrl(String name) {
