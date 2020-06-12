@@ -21,7 +21,9 @@
 
         if (isdelete != null) {
             if (isdelete) {
-                IndexPage.removePage(url);
+                synchronized (App.class) {
+                    IndexPage.removePage(url);
+                }
                 url = "deleted";
             } else {
                 if (msg == null) {
@@ -32,23 +34,24 @@
                 final String fmsg = msg.trim();
                 final String[] fresult = new String[]{"background running"};
                 Thread t = new Thread(() -> {
-                    Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + furl);
-                    String rurl = IndexPage.addPage(furl, true);
-                    IndexPage.backgroundLog(furl, rurl);
-                    if (furl.equals(rurl) && fmsg.length() > 0) {
+                    synchronized (App.class) {
+                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + furl);
+                        String rurl = IndexPage.addPage(furl, true);
+                        IndexPage.backgroundLog(furl, rurl);
+                        if (furl.equals(rurl) && fmsg.length() > 0) {
 
-                        String ttitle = furl;
-                        String tmsg = fmsg;
-                        int pos = fmsg.indexOf('\n');
-                        if (pos > 0) {
-                            ttitle = fmsg.substring(0, pos);
-                            tmsg = fmsg.substring(pos).trim();
+                            String ttitle = furl;
+                            String tmsg = fmsg;
+                            int pos = fmsg.indexOf('\n');
+                            if (pos > 0) {
+                                ttitle = fmsg.substring(0, pos);
+                                tmsg = fmsg.substring(pos).trim();
+                            }
+                            IndexPage.addPageCustomText(furl, ttitle, tmsg);
+
                         }
-                        IndexPage.addPageCustomText(furl, ttitle, tmsg);
-
+                        fresult[0] = rurl;
                     }
-
-                    fresult[0] = rurl;
                 });
                 t.start();
                 t.join(3000);

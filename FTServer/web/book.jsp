@@ -6,8 +6,11 @@
 
     private static final Random ran = new Random();
     //UTF-8 Text
-    private static String book1_path = "175315.txt";
-    private static String book2_path = "phoenix.txt";
+    //private static String book1_path = "175315.txt";
+    //private static String book2_path = "phoenix.txt";
+    private static String book1_path = "/home/user/github/hero.txt";
+    private static String book2_path = "/home/user/github/phoenix.txt";
+
 %>
 
 <%    if (books == null) {
@@ -83,9 +86,10 @@
         <h1>Hello World!</h1>
         <p><%= text%></p>
 
+         
         <%
             tag("br");
-            for (int i = 0; i < 2000; i++) {
+            for (int i = 0; i < 1100; i++) {
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(200) * 100 + 100;
