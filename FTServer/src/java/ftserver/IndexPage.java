@@ -125,8 +125,10 @@ public class IndexPage {
                     try {
 
                         Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url + " ," + backgroundThreadCount.get());
-                        String r = addPage(url, false);
-                        backgroundLog(url, r);
+                        synchronized (App.class) {
+                            String r = addPage(url, false);
+                            backgroundLog(url, r);
+                        }
                         if (isShutdown) {
                             return;
                         }
