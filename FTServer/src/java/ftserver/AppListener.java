@@ -12,6 +12,21 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/*
+Turn off virtual memory for 8G+ RAM Machine
+use DatabaseConfig.CacheLength and PageText.max_text_length to Control Memory
+
+Linux:
+ # free -h
+ # sudo swapoff -a
+ # free -h 
+
+Windows:
+System Properties(Win+Pause) - Advanced system settings - Advanced
+- Performance Settings - Advanced - Virtual Memory Change -
+uncheck Automatically manage paging file - select No paging file - 
+click Set - OK restart
+ */
 @WebListener
 public class AppListener implements ServletContextListener {
 
@@ -39,6 +54,7 @@ public class AppListener implements ServletContextListener {
         DB.root(path);
 
         //get more os memory
+        /*
         Logger.getLogger(AppListener.class.getName()).log(Level.INFO, "Loading Memory...");
         for (File file : new File(path).listFiles()) {
             RandomAccessFile rf;
@@ -54,16 +70,16 @@ public class AppListener implements ServletContextListener {
                 Logger.getLogger(AppListener.class.getName()).log(Level.INFO, null, ex);
             }
         }
-
+         */
         //Config
         DB db = new DB(1);
         DatabaseConfig cfg = db.getConfig();
         long tm = java.lang.Runtime.getRuntime().maxMemory();
-        
+
         cfg.CacheLength = tm / 3;
         //if update the metadata, set low cache
         //cfg.CacheLength = cfg.mb(128);
-        
+
         cfg.FileIncSize = (int) cfg.mb(4);
         cfg.SwapFileBuffer = (int) cfg.mb(4);
         Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
