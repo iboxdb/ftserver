@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static ftserver.App.*;
 
 public class IndexPage {
 
@@ -66,7 +65,7 @@ public class IndexPage {
 
             long textOrder = App.Auto.newId(0, 0);
             long indexend = System.currentTimeMillis();
-            Logger.getLogger(App.class.getName()).log(Level.INFO, "TIME IO:" + (ioend - begin) / 1000.0
+            log("TIME IO:" + (ioend - begin) / 1000.0
                     + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " ");
 
             subUrls.remove(url);
@@ -110,6 +109,10 @@ public class IndexPage {
         if (subUrls.size() > 0) {
             if (backgroundThread == null) {
                 backgroundThread = Executors.newSingleThreadExecutor();
+                backgroundThread.submit(() -> {
+                    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+                    //log("Low Priority");
+                });
             }
         }
         if (backgroundThreadCount.get() < max_background) {
@@ -123,9 +126,8 @@ public class IndexPage {
 
                     backgroundThreadCount.decrementAndGet();
                     try {
-
-                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + url + " ," + backgroundThreadCount.get());
                         synchronized (App.class) {
+                            log("For:" + url + " ," + backgroundThreadCount.get());
                             String r = addPage(url, false);
                             backgroundLog(url, r);
                         }
@@ -135,7 +137,7 @@ public class IndexPage {
                         long sleep = SLEEP_TIME;
                         Thread.sleep(sleep);
                     } catch (Throwable ex) {
-                        Logger.getLogger(App.class.getName()).log(Level.INFO, ex.getMessage() + " " + url);
+                        log(ex.getMessage() + " " + url);
                     }
                 });
             }
@@ -144,13 +146,13 @@ public class IndexPage {
 
     public static void backgroundLog(String url, String output) {
         if (output == null) {
-            Logger.getLogger(App.class.getName()).log(Level.INFO, "Has indexed:" + url);
+            log("Has indexed:" + url);
         } else if (url.equals(output)) {
-            Logger.getLogger(App.class.getName()).log(Level.INFO, "Indexed:" + url);
+            log("Indexed:" + url);
         } else {
-            Logger.getLogger(App.class.getName()).log(Level.INFO, "Retry:" + url);
+            log("Retry:" + url);
         }
-        Logger.getLogger(App.class.getName()).log(Level.INFO, "");
+        log("");
     }
 
     //background index thread
@@ -162,11 +164,12 @@ public class IndexPage {
     public synchronized static void shutdown() {
         if (backgroundThread != null) {
             isShutdown = true;
+            IndexAPI.pageIndexDelay = IndexAPI.pageIndexDelayShutdown;
             backgroundThread.shutdown();
             try {
                 backgroundThread.awaitTermination(60, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                Logger.getLogger(IndexPage.class.getName()).log(Level.SEVERE, null, ex);
+                log(ex.toString());
             }
             backgroundThread = null;
         }

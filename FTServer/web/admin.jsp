@@ -1,5 +1,3 @@
-<%@page import="java.util.logging.Logger"%>
-<%@page import="java.util.logging.Level"%>
 <%@page import="ftserver.*"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@include  file="_taghelper.jsp" %>
@@ -35,7 +33,7 @@
                 final String[] fresult = new String[]{"background running"};
                 Thread t = new Thread(() -> {
                     synchronized (App.class) {
-                        Logger.getLogger(App.class.getName()).log(Level.INFO, "For:" + furl);
+                        log( "For:" + furl);
                         String rurl = IndexPage.addPage(furl, true);
                         IndexPage.backgroundLog(furl, rurl);
                         if (furl.equals(rurl) && fmsg.length() > 0) {

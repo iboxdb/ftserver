@@ -2,15 +2,11 @@ package ftserver;
 
 import ftserver.fts.Engine;
 import iBoxDB.LocalServer.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.RandomAccessFile;
-import static java.lang.System.in;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File; 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import static ftserver.App.*;
 
 /*
 Turn off virtual memory for 8G+ RAM Machine
@@ -46,9 +42,9 @@ public class AppListener implements ServletContextListener {
             (new File(path)).mkdirs();
         }
 
-        Logger.getLogger(App.class.getName()).log(Level.INFO,
+        log(
                 System.getProperty("java.version"));
-        Logger.getLogger(App.class.getName()).log(Level.INFO,
+        log(
                 String.format("DB Path=%s ", path));
 
         DB.root(path);
@@ -82,7 +78,7 @@ public class AppListener implements ServletContextListener {
 
         cfg.FileIncSize = (int) cfg.mb(4);
         cfg.SwapFileBuffer = (int) cfg.mb(4);
-        Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
+        log( "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
                 + " AppMEM=" + tm / 1024 / 1024 + "MB");
 
         new Engine().Config(cfg);
@@ -96,7 +92,7 @@ public class AppListener implements ServletContextListener {
 
         App.Auto = db.open();
 
-        Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Started...");
+        log( "DB Started...");
 
     }
 
@@ -107,6 +103,6 @@ public class AppListener implements ServletContextListener {
             App.Auto.getDatabase().close();
         }
         App.Auto = null;
-        Logger.getLogger(App.class.getName()).log(Level.INFO, "DB Closed");
+        log( "DB Closed");
     }
 }

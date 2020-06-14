@@ -13,7 +13,7 @@
     try {
         IndexPage.addSearchTerm(name);
     } catch (Throwable ex) {
-        Logger.getLogger(App.class.getName()).log(Level.INFO, " Search " + ex.getMessage() + " " + name);
+        log( " Search " + ex.getMessage() + " " + name);
     }
 %>
 

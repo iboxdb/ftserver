@@ -5,8 +5,7 @@ import ftserver.fts.KeyWord;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static ftserver.App.*;
 
 public class IndexAPI {
 
@@ -204,12 +203,14 @@ public class IndexAPI {
         return discoveries;
     }
 
+    public static final long pageIndexDelayShutdown = -1;
     public static long pageIndexDelay = Long.MIN_VALUE;
 
     private static void delay() {
         if (pageIndexDelay == Long.MIN_VALUE) {
             return;
         }
+
         while (System.currentTimeMillis() < pageIndexDelay) {
             long d = pageIndexDelay - System.currentTimeMillis();
             if (d < 0) {
@@ -248,6 +249,10 @@ public class IndexAPI {
 
         for (PageText pt : ptlist) {
             delay();
+            if (pageIndexDelay == pageIndexDelayShutdown) {
+                log("Shutdown, url needs to re-index : " + url);
+                return false;
+            }
             addPageTextIndex(pt);
         }
         return true;
