@@ -5,6 +5,8 @@ import ftserver.fts.KeyWord;
 import iBoxDB.LocalServer.*;
 import java.util.Date;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IndexAPI {
 
@@ -202,6 +204,27 @@ public class IndexAPI {
         return discoveries;
     }
 
+    public static long pageIndexDelay = Long.MIN_VALUE;
+
+    private static void delay() {
+        if (pageIndexDelay == Long.MIN_VALUE) {
+            return;
+        }
+        while (System.currentTimeMillis() < pageIndexDelay) {
+            long d = pageIndexDelay - System.currentTimeMillis();
+            if (d < 0) {
+                d = 0;
+            }
+            if (d > 5000) {
+                d = 5000;
+            }
+            try {
+                Thread.sleep(d);
+            } catch (Throwable ex) {
+            }
+        }
+    }
+
     public static Boolean addPage(Page page) {
 
         if (App.Auto.get(Object.class, "Page", page.url) != null) {
@@ -224,6 +247,7 @@ public class IndexAPI {
         ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
 
         for (PageText pt : ptlist) {
+            delay();
             addPageTextIndex(pt);
         }
         return true;
@@ -236,6 +260,7 @@ public class IndexAPI {
             }
             box.d("PageText").insert(pt);
             ENGINE.indexText(box, pt.id(), pt.indexedText(), false);
+            delay();
             box.commit();
         }
     }

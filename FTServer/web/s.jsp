@@ -5,7 +5,9 @@
 <%@include  file="_taghelper.jsp" %>
 
 
-<%    final String queryString = request.getQueryString();
+
+<%    IndexAPI.pageIndexDelay = System.currentTimeMillis() + 5000L;
+    final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
     try {
