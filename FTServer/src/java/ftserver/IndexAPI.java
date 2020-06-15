@@ -203,8 +203,15 @@ public class IndexAPI {
         return discoveries;
     }
 
-    public static final long pageIndexDelayShutdown = -1;
-    public static long pageIndexDelay = Long.MIN_VALUE;
+    public static void delayIndex() {
+        pageIndexDelay = System.currentTimeMillis() + (30L * 1000L);
+    }
+
+    public static void shutdownIndex() {
+        pageIndexDelay = pageIndexDelayShutdown;
+    }
+    private static final long pageIndexDelayShutdown = -1;
+    private static long pageIndexDelay = Long.MIN_VALUE;
 
     private static void delay() {
         if (pageIndexDelay == Long.MIN_VALUE) {
@@ -216,8 +223,8 @@ public class IndexAPI {
             if (d < 0) {
                 d = 0;
             }
-            if (d > 5000) {
-                d = 5000;
+            if (d > (120 * 1000)) {
+                d = 120 * 1000;
             }
             try {
                 Thread.sleep(d);
@@ -264,7 +271,9 @@ public class IndexAPI {
                 return;
             }
             box.d("PageText").insert(pt);
-            ENGINE.indexText(box, pt.id(), pt.indexedText(), false);
+            ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
+                delay();
+            });
             delay();
             box.commit();
         }

@@ -6,14 +6,14 @@
 
 
 
-<%    IndexAPI.pageIndexDelay = System.currentTimeMillis() + 5000L;
+<%    IndexAPI.delayIndex();
     final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
     try {
         IndexPage.addSearchTerm(name);
     } catch (Throwable ex) {
-        log( " Search " + ex.getMessage() + " " + name);
+        log(" Search " + ex.getMessage() + " " + name);
     }
 %>
 

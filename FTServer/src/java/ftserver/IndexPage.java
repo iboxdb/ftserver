@@ -164,7 +164,7 @@ public class IndexPage {
     public synchronized static void shutdown() {
         if (backgroundThread != null) {
             isShutdown = true;
-            IndexAPI.pageIndexDelay = IndexAPI.pageIndexDelayShutdown;
+            IndexAPI.shutdownIndex();
             backgroundThread.shutdown();
             try {
                 backgroundThread.awaitTermination(60, TimeUnit.SECONDS);

@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
-<%    IndexAPI.pageIndexDelay = System.currentTimeMillis() + 5000L;
+<%    IndexAPI.delayIndex();
     long begin = System.currentTimeMillis();
 %>
 

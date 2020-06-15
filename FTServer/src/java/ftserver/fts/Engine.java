@@ -12,6 +12,11 @@ public class Engine {
     }
 
     public long indexText(Box box, long id, String str, boolean isRemove) {
+        return indexText(box, id, str, isRemove, null);
+    }
+
+    public long indexText(Box box, long id, String str, boolean isRemove, Runnable delay) {
+
         if (id == -1) {
             // -1 is internal default value as NULL
             return -1;
@@ -21,6 +26,9 @@ public class Engine {
         ArrayList<KeyWord> map = sUtil.fromString(id, cs, true);
 
         for (KeyWord kw : map) {
+            if (delay != null) {
+                delay.run();
+            }
             insertToBox(box, kw, isRemove);
             itCount++;
         }
