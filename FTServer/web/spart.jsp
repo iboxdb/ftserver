@@ -8,7 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
-<%    IndexAPI.delayIndex();
+<%    if (request.getParameter("admin") == null) {
+        DelayService.delayIndex();
+    }
     long begin = System.currentTimeMillis();
 %>
 

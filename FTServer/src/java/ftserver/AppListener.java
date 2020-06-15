@@ -1,8 +1,7 @@
 package ftserver;
 
-import ftserver.fts.Engine;
 import iBoxDB.LocalServer.*;
-import java.io.File; 
+import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -42,10 +41,8 @@ public class AppListener implements ServletContextListener {
             (new File(path)).mkdirs();
         }
 
-        log(
-                System.getProperty("java.version"));
-        log(
-                String.format("DB Path=%s ", path));
+        log(System.getProperty("java.version"));
+        log(String.format("DB Path=%s ", path));
 
         DB.root(path);
 
@@ -68,31 +65,10 @@ public class AppListener implements ServletContextListener {
         }
          */
         //Config
-        DB db = new DB(1);
-        DatabaseConfig cfg = db.getConfig();
-        long tm = java.lang.Runtime.getRuntime().maxMemory();
-
-        cfg.CacheLength = tm / 3;
-        //if update the metadata, set low cache
-        //cfg.CacheLength = cfg.mb(128);
-
-        cfg.FileIncSize = (int) cfg.mb(4);
-        cfg.SwapFileBuffer = (int) cfg.mb(4);
-        log( "DB Cache=" + cfg.CacheLength / 1024 / 1024 + "MB"
-                + " AppMEM=" + tm / 1024 / 1024 + "MB");
-
-        new Engine().Config(cfg);
-
-        cfg.ensureTable(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")");
-        cfg.ensureIndex(Page.class, "Page", true, "textOrder");
-
-        cfg.ensureTable(PageText.class, "PageText", "id");
-        cfg.ensureIndex(PageText.class, "PageText", false, "textOrder");
-        cfg.ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
-
-        App.Auto = db.open();
-
-        log( "DB Started...");
+        IndexServer db = new IndexServer();
+        App.Auto = db.getInstance(1).get();
+        App.Item = db.getInstance(2).get();
+        log("DB Started...");
 
     }
 
@@ -102,7 +78,11 @@ public class AppListener implements ServletContextListener {
         if (App.Auto != null) {
             App.Auto.getDatabase().close();
         }
+        if (App.Item != null) {
+            App.Item.getDatabase().close();
+        }
         App.Auto = null;
-        log( "DB Closed");
+        App.Item = null;
+        log("DB Closed");
     }
 }

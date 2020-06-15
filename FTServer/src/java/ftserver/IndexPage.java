@@ -18,12 +18,12 @@ public class IndexPage {
             pst.time = new Date();
             pst.keywords = keywords;
             pst.uid = UUID.randomUUID();
-            App.Auto.insert("/PageSearchTerm", pst);
+            App.Item.insert("/PageSearchTerm", pst);
         }
     }
 
     public static ArrayList<PageSearchTerm> getSearchTerm(int len) {
-        return App.Auto.select(PageSearchTerm.class, "from /PageSearchTerm limit 0 , ?", len);
+        return App.Item.select(PageSearchTerm.class, "from /PageSearchTerm limit 0 , ?", len);
     }
 
     public static Page getPage(String url) {
@@ -104,7 +104,7 @@ public class IndexPage {
 
         int max_background = atNight ? 1000 : 0;
 
-        final long SLEEP_TIME = 2000;
+        final long SLEEP_TIME = 1000;
 
         if (subUrls.size() > 0) {
             if (backgroundThread == null) {
@@ -164,7 +164,6 @@ public class IndexPage {
     public synchronized static void shutdown() {
         if (backgroundThread != null) {
             isShutdown = true;
-            IndexAPI.shutdownIndex();
             backgroundThread.shutdown();
             try {
                 backgroundThread.awaitTermination(60, TimeUnit.SECONDS);

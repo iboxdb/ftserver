@@ -139,6 +139,7 @@
                 <% request.setCharacterEncoding("utf-8");%>
                 <jsp:include page="spart.jsp" >
                     <jsp:param name="q" value="<%=url%>"></jsp:param>
+                    <jsp:param name="admin" value="true"></jsp:param>
                 </jsp:include>
 
             </div>

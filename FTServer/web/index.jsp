@@ -85,7 +85,7 @@
                         }
                     %>
 
-                    <br><a  href="javascript:location.reload()">Refresh Discoveries:</a> <br> 
+                    <br><a  href="./">Refresh Discoveries:</a> <br> 
                     <%
                         for (String str : IndexAPI.discover()) {
                             try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {

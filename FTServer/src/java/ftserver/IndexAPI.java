@@ -203,36 +203,6 @@ public class IndexAPI {
         return discoveries;
     }
 
-    public static void delayIndex() {
-        pageIndexDelay = System.currentTimeMillis() + (30L * 1000L);
-    }
-
-    public static void shutdownIndex() {
-        pageIndexDelay = pageIndexDelayShutdown;
-    }
-    private static final long pageIndexDelayShutdown = -1;
-    private static long pageIndexDelay = Long.MIN_VALUE;
-
-    private static void delay() {
-        if (pageIndexDelay == Long.MIN_VALUE) {
-            return;
-        }
-
-        while (System.currentTimeMillis() < pageIndexDelay) {
-            long d = pageIndexDelay - System.currentTimeMillis();
-            if (d < 0) {
-                d = 0;
-            }
-            if (d > (120 * 1000)) {
-                d = 120 * 1000;
-            }
-            try {
-                Thread.sleep(d);
-            } catch (Throwable ex) {
-            }
-        }
-    }
-
     public static Boolean addPage(Page page) {
 
         if (App.Auto.get(Object.class, "Page", page.url) != null) {
@@ -242,6 +212,9 @@ public class IndexAPI {
 
         page.createTime = new Date();
         page.textOrder = App.Auto.newId();
+
+        //log last page
+        App.Item.insert("/PageBegin", page);
         return App.Auto.insert("Page", page);
     }
 
@@ -255,11 +228,6 @@ public class IndexAPI {
         ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
 
         for (PageText pt : ptlist) {
-            delay();
-            if (pageIndexDelay == pageIndexDelayShutdown) {
-                log("Shutdown, url needs to re-index : " + url);
-                return false;
-            }
             addPageTextIndex(pt);
         }
         return true;
@@ -272,9 +240,8 @@ public class IndexAPI {
             }
             box.d("PageText").insert(pt);
             ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
-                delay();
+                DelayService.delay();
             });
-            delay();
             box.commit();
         }
     }
