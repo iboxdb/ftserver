@@ -104,7 +104,7 @@ public class IndexPage {
 
         int max_background = atNight ? 1000 : 0;
 
-        final long SLEEP_TIME = 1000;
+        final long SLEEP_TIME = 2000;
 
         if (subUrls.size() > 0) {
             if (backgroundThread == null) {

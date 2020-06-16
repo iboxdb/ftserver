@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
-<%    if (request.getParameter("admin") == null) {
+<%    if (request.getAttribute("admin") == null) {
         DelayService.delayIndex();
     }
     long begin = System.currentTimeMillis();

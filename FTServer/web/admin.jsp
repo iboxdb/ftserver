@@ -33,7 +33,7 @@
                 final String[] fresult = new String[]{"background running"};
                 Thread t = new Thread(() -> {
                     synchronized (App.class) {
-                        log( "For:" + furl);
+                        log("For:" + furl);
                         String rurl = IndexPage.addPage(furl, true);
                         IndexPage.backgroundLog(furl, rurl);
                         if (furl.equals(rurl) && fmsg.length() > 0) {
@@ -136,10 +136,10 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;" id="maindiv">
-                <% request.setCharacterEncoding("utf-8");%>
+                <% request.setCharacterEncoding("utf-8");
+                    request.setAttribute("admin", true);%>
                 <jsp:include page="spart.jsp" >
                     <jsp:param name="q" value="<%=url%>"></jsp:param>
-                    <jsp:param name="admin" value="true"></jsp:param>
                 </jsp:include>
 
             </div>
