@@ -46,24 +46,6 @@ public class AppListener implements ServletContextListener {
 
         DB.root(path);
 
-        //get more os memory
-        /*
-        Logger.getLogger(AppListener.class.getName()).log(Level.INFO, "Loading Memory...");
-        for (File file : new File(path).listFiles()) {
-            RandomAccessFile rf;
-            try {
-                rf = new RandomAccessFile(file, "r");
-                byte[] bs = new byte[1024 * 1024 * 32];
-                while (rf.read(bs) > 0) {
-
-                }
-                rf.close();
-                Logger.getLogger(AppListener.class.getName()).log(Level.INFO, file.getAbsolutePath());
-            } catch (Throwable ex) {
-                Logger.getLogger(AppListener.class.getName()).log(Level.INFO, null, ex);
-            }
-        }
-         */
         //Config
         IndexServer db = new IndexServer();
         App.Auto = db.getInstance(1).get();
