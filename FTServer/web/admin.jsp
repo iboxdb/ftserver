@@ -51,8 +51,10 @@
                         fresult[0] = rurl;
                     }
                 });
+                IndexPage.waitingThread = t;
                 t.start();
                 t.join(3000);
+
                 url = fresult[0];
             }
         }

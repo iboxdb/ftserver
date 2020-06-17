@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import static ftserver.App.*;
 
 public class IndexPage {
@@ -97,7 +96,8 @@ public class IndexPage {
     }
 
     private synchronized static void runBGTask(HashSet<String> subUrls) {
-        if (isShutdown) {
+
+        if (subUrls == null || isShutdown) {
             return;
         }
         boolean atNight = true;
@@ -106,38 +106,36 @@ public class IndexPage {
 
         final long SLEEP_TIME = 2000;
 
-        if (subUrls.size() > 0) {
-            if (backgroundThread == null) {
-                backgroundThread = Executors.newSingleThreadExecutor();
-                backgroundThread.submit(() -> {
-                    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-                    //log("Low Priority");
-                });
-            }
-        }
-        if (backgroundThreadCount.get() < max_background) {
-            for (final String vurl : subUrls) {
-                final String url = Html.getUrl(vurl);
-                backgroundThreadCount.incrementAndGet();
-                backgroundThread.submit((Runnable) () -> {
-                    if (isShutdown) {
-                        return;
+        if (backgroundThread == null) {
+            backgroundThread = new Thread(() -> {
+
+                while (!isShutdown) {
+                    Runnable act = backgroundThreadQueue.poll();
+                    if (act != null) {
+                        act.run();
                     }
 
-                    backgroundThreadCount.decrementAndGet();
-                    try {
-                        synchronized (App.class) {
-                            log("For:" + url + " ," + backgroundThreadCount.get());
-                            String r = addPage(url, false);
-                            backgroundLog(url, r);
+                    if (!isShutdown) {
+                        try {
+                            Thread.sleep(SLEEP_TIME);
+                        } catch (InterruptedException ex) {
+                            log(ex.getMessage());
                         }
-                        if (isShutdown) {
-                            return;
-                        }
-                        long sleep = SLEEP_TIME;
-                        Thread.sleep(sleep);
-                    } catch (Throwable ex) {
-                        log(ex.getMessage() + " " + url);
+                    }
+                }
+            });
+            backgroundThread.setPriority(Thread.MIN_PRIORITY);
+            backgroundThread.start();
+        }
+
+        if (backgroundThreadQueue.size() < max_background) {
+            for (final String vurl : subUrls) {
+                final String url = Html.getUrl(vurl);
+                backgroundThreadQueue.add(() -> {
+                    synchronized (App.class) {
+                        log("For:" + url + " ," + backgroundThreadQueue.size());
+                        String r = addPage(url, false);
+                        backgroundLog(url, r);
                     }
                 });
             }
@@ -145,6 +143,7 @@ public class IndexPage {
     }
 
     public static void backgroundLog(String url, String output) {
+
         if (output == null) {
             log("Has indexed:" + url);
         } else if (url.equals(output)) {
@@ -156,21 +155,34 @@ public class IndexPage {
     }
 
     //background index thread
-    private static ExecutorService backgroundThread = null; //Executors.newSingleThreadExecutor();
-    private final static AtomicInteger backgroundThreadCount = new AtomicInteger(0);
+    private static Thread backgroundThread = null;
+    public static Thread waitingThread = null;
+
+    private final static ConcurrentLinkedQueue<Runnable> backgroundThreadQueue = new ConcurrentLinkedQueue<>();
 
     private static boolean isShutdown = false;
 
-    public synchronized static void shutdown() {
+    public static void shutdown() {
+        if (waitingThread != null) {
+            try {
+                waitingThread.join();
+
+            } catch (InterruptedException ex) {
+                log(ex.getMessage());
+            }
+            waitingThread = null;
+        }
         if (backgroundThread != null) {
             isShutdown = true;
-            backgroundThread.shutdown();
             try {
-                backgroundThread.awaitTermination(60, TimeUnit.SECONDS);
+                backgroundThread.setPriority(Thread.MAX_PRIORITY);
+                backgroundThread.join();
             } catch (InterruptedException ex) {
-                log(ex.toString());
+                log(ex.getMessage());
             }
             backgroundThread = null;
         }
+
+        log("Background Task Ended");
     }
 }
