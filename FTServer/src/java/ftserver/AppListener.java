@@ -51,7 +51,7 @@ public class AppListener implements ServletContextListener {
         App.Auto = db.getInstance(1).get();
         App.Item = db.getInstance(2).get();
         log("DB Started...");
-
+        IndexPage.start();
     }
 
     @Override

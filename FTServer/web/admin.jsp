@@ -5,58 +5,35 @@
 <%    String url = request.getParameter("url");
     String msg = request.getParameter("msg");
     if (url != null) {
-        // when input "http://www.abc.com" or "delete http://www.abc.com"
+        // when input "http://www.abc.com" 
         url = url.trim();
-        Boolean isdelete = null;
+        boolean ishttp = false;
         if (url.startsWith("http://") || url.startsWith("https://")) {
-            isdelete = false;
-        } else if (url.startsWith("delete")) {
-            url = url.substring(6).trim();
-            if ((url.startsWith("http://") || url.startsWith("https://"))) {
-                isdelete = true;
-            }
+            ishttp = true;
         }
 
-        if (isdelete != null) {
-            if (isdelete) {
-                synchronized (App.class) {
-                    IndexPage.removePage(url);
-                }
-                url = "deleted";
-            } else {
-                if (msg == null) {
-                    msg = "";
-                }
-
-                final String furl = Html.getUrl(url);
-                final String fmsg = msg.trim();
-                final String[] fresult = new String[]{"background running"};
-                Thread t = new Thread(() -> {
-                    synchronized (App.class) {
-                        log("For:" + furl);
-                        String rurl = IndexPage.addPage(furl, true);
-                        IndexPage.backgroundLog(furl, rurl);
-                        if (furl.equals(rurl) && fmsg.length() > 0) {
-
-                            String ttitle = furl;
-                            String tmsg = fmsg;
-                            int pos = fmsg.indexOf('\n');
-                            if (pos > 0) {
-                                ttitle = fmsg.substring(0, pos);
-                                tmsg = fmsg.substring(pos).trim();
-                            }
-                            IndexPage.addPageCustomText(furl, ttitle, tmsg);
-
-                        }
-                        fresult[0] = rurl;
-                    }
-                });
-                IndexPage.waitingThread = t;
-                t.start();
-                t.join(3000);
-
-                url = fresult[0];
+        if (ishttp) {
+            if (msg == null) {
+                msg = "";
             }
+            msg = msg.trim();
+
+            final String furl = Html.getUrl(url);
+            String ttitle = null;
+            String tmsg = null;
+            if (msg.length() > 0) {
+                ttitle = furl;
+                tmsg = msg;
+                int pos = msg.indexOf('\n');
+                if (pos > 0) {
+                    ttitle = msg.substring(0, pos);
+                    tmsg = msg.substring(pos).trim();
+                }
+            }
+            IndexPage.runBGTask(furl, ttitle, tmsg);
+
+            url = "Background Index Running, See Console Output";
+
         }
     }
     if (url == null) {

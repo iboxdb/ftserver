@@ -11,7 +11,7 @@ public class Page {
     public String url;
 
     public long textOrder;
-    
+
     // too too big this html
     //public String html;
     public String text;
@@ -22,6 +22,8 @@ public class Page {
     public String title;
     public String keywords;
     public String description;
+
+    public boolean showinResults = true;
 
     private static final Random RAN = new Random();
 
