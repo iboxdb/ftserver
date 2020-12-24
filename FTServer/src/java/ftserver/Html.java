@@ -67,13 +67,13 @@ public class Html {
             for (char c : splitWords.toCharArray()) {
                 keywords = keywords.replaceAll("\\" + c, " ");
             }
-            if (keywords.length() > 50) {
-                keywords = keywords.substring(0, 50);
+            if (keywords.length() > 200) {
+                keywords = keywords.substring(0, 200);
             }
 
             description = getMetaContentByName(doc, "description");
-            if (description.length() > 300) {
-                description = description.substring(0, 300);
+            if (description.length() > 400) {
+                description = description.substring(0, 400);
             }
 
             page.title = title;

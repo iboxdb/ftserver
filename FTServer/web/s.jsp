@@ -36,8 +36,8 @@
             .stext{}
             .spartcss{
                 max-width: 600px;
-                white-space: nowrap;
-                overflow: hidden;
+                white-space: normal;
+                overflow: visible;
                 text-overflow:ellipsis;
             }
             .rt{

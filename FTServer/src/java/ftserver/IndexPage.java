@@ -8,9 +8,6 @@ import static ftserver.App.*;
 
 public class IndexPage {
 
-    public static ConcurrentLinkedDeque<String> urlList
-            = new ConcurrentLinkedDeque<String>();
-
     public static void addSearchTerm(String keywords) {
         if (keywords.length() < PageSearchTerm.MAX_TERM_LENGTH) {
             PageSearchTerm pst = new PageSearchTerm();
@@ -27,14 +24,6 @@ public class IndexPage {
 
     public static Page getPage(String url) {
         return App.Auto.get(Page.class, "Page", url);
-    }
-
-    private static void addUrlList(String url) {
-
-        urlList.add(url.replaceAll("<", ""));
-        while (urlList.size() > 3) {
-            urlList.remove();
-        }
     }
 
     public static void removePage(String url) {
@@ -71,7 +60,6 @@ public class IndexPage {
             subUrls.remove(url + "/");
             subUrls.remove(url.substring(0, url.length() - 1));
 
-            addUrlList(url);
             runBGTask(subUrls);
 
             return url;

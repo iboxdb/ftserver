@@ -73,17 +73,7 @@
                         }
                     %> 
 
-                    <br>Recent Records:<br>
-                    <%
-                        Iterator<String> itStr = IndexPage.urlList.descendingIterator();
-                        for (; itStr.hasNext();) {
-                            String str = itStr.next();
-                            try (Tag t = tag("a", "href:", str, "target:", "_blank")) {
-                                text(str);
-                            }
-                            tag("br");
-                        }
-                    %>
+                    <br>
 
                     <br><a  href="./">Refresh Discoveries:</a> <br> 
                     <%
