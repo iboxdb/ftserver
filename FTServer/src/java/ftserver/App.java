@@ -1,6 +1,6 @@
 package ftserver;
 
-import iBoxDB.LocalServer.*;
+import iboxdb.localserver.*;
 
 public class App {
 

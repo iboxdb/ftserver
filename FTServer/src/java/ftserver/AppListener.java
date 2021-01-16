@@ -1,27 +1,12 @@
 package ftserver;
 
-import iBoxDB.LocalServer.*;
+import iboxdb.localserver.*;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import static ftserver.App.*;
 
-/*
-Turn off virtual memory for 8G+ RAM Machine
-use DatabaseConfig.CacheLength and PageText.max_text_length to Control Memory
-
-Linux:
- # free -h
- # sudo swapoff -a
- # free -h 
-
-Windows:
-System Properties(Win+Pause) - Advanced system settings - Advanced
-- Performance Settings - Advanced - Virtual Memory Change -
-uncheck Automatically manage paging file - select No paging file - 
-click Set - OK restart
- */
 @WebListener
 public class AppListener implements ServletContextListener {
 
@@ -29,21 +14,12 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         //Path
-        String path = System.getProperty("user.home") + File.separatorChar + "ftsdata130" + File.separatorChar;
+        //String path = System.getProperty("user.home") + File.separatorChar + "DATA_FTS_J_140" + File.separatorChar;
+        String path = "../DATA_FTS_J_140";
+
         new File(path).mkdirs();
-
-        if (!new File(path).exists()) {
-
-            String tmpPath = sce.getServletContext().getRealPath("/")
-                    + "WEB-INF" + File.separatorChar + "DB" + File.separatorChar;
-
-            path = tmpPath;
-            (new File(path)).mkdirs();
-        }
-
         log(System.getProperty("java.version"));
-        log(String.format("DB Path=%s ", path));
-
+        log(String.format("DB Path=%s ", new File(path).getAbsolutePath()));
         DB.root(path);
 
         //Config

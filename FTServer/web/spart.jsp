@@ -1,10 +1,7 @@
-<%@page import="java.util.logging.Logger"%>
-<%@page import="java.util.logging.Level"%>
-<%@page import="java.util.HashSet"%>
+
+<%@page import="java.util.*"%>
 <%@page import="ftserver.fts.*"%>
 <%@page import="ftserver.*"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="iBoxDB.LocalServer.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 

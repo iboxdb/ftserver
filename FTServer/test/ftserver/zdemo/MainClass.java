@@ -1,6 +1,6 @@
 package ftserver.zdemo;
 
-import iBoxDB.LocalServer.*;
+import iboxdb.localserver.*;
 import ftserver.fts.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class MainClass {
     }
 
     public static void test_order() {
-        iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(3);
+        BoxSystem.DBDebug.DeleteDBFiles(3);
         DB db = new DB(3);
         Engine engine = new Engine();
         engine.Config(db.getConfig());
@@ -144,7 +144,7 @@ public class MainClass {
         };
 
         for (int tran = 0; tran < 2; tran++) {
-            iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(3);
+            BoxSystem.DBDebug.DeleteDBFiles(3);
             DB db = new DB(3);
             Engine engine = new Engine();
             engine.Config(db.getConfig());
@@ -242,7 +242,7 @@ public class MainClass {
         rf.readFully(bs);
 
         if (rebuild) {
-            iBoxDB.LocalServer.BoxSystem.DBDebug.DeleteDBFiles(dbid);
+            BoxSystem.DBDebug.DeleteDBFiles(dbid);
         }
         
         DB db = new DB(dbid);

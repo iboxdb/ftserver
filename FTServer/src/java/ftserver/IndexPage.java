@@ -85,7 +85,7 @@ public class IndexPage {
         text.text = content;
         text.keywords = "";
 
-        IndexAPI.addPageTextIndex(text);
+        IndexAPI.addPageTextIndex(text, 0);
     }
 
     public synchronized static void runBGTask(final String url, final String customTitle, final String customMsg) {

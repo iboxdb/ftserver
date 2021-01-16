@@ -1,6 +1,6 @@
 package ftserver.fts;
 
-import iBoxDB.LocalServer.NotColumn;
+import iboxdb.localserver.*;
 
 public final class KeyWordE extends KeyWord {
 

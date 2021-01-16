@@ -1,14 +1,13 @@
 package ftserver;
 
-import ftserver.fts.Engine;
-import ftserver.fts.KeyWord;
-import iBoxDB.LocalServer.*;
-import java.util.Date;
+import iboxdb.localserver.*;
+import ftserver.fts.*;
 import java.util.*;
 import static ftserver.App.*;
 
 public class IndexAPI {
 
+    public static long HuggersMemory = 0;
     final static Engine ENGINE = new Engine();
 
     public static long[] Search(ArrayList<PageText> outputPages,
@@ -226,14 +225,16 @@ public class IndexAPI {
         }
 
         ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
+        int count = 0;
 
         for (PageText pt : ptlist) {
-            addPageTextIndex(pt);
+            count++;
+            addPageTextIndex(pt, count == ptlist.size() ? 0 : HuggersMemory);
         }
         return true;
     }
 
-    public static void addPageTextIndex(PageText pt) {
+    public static void addPageTextIndex(PageText pt, long huggers) {
         try (Box box = App.Auto.cube()) {
             if (box.d("PageText", pt.id()).select(Object.class) != null) {
                 return;
@@ -242,7 +243,7 @@ public class IndexAPI {
             ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
                 DelayService.delay();
             });
-            box.commit();
+            box.commit(huggers);
         }
     }
 
@@ -254,12 +255,13 @@ public class IndexAPI {
         }
 
         ArrayList<PageText> ptlist = App.Auto.select(PageText.class, "from PageText where textOrder==?", page.textOrder);
-
+        int count = 0;
         for (PageText pt : ptlist) {
+            count++;
             try (Box box = App.Auto.cube()) {
                 ENGINE.indexText(box, pt.id(), pt.indexedText(), true);
                 box.d("PageText", pt.id()).delete();
-                box.commit();
+                box.commit(count == ptlist.size() ? 0 : HuggersMemory);
             }
         }
 

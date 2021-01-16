@@ -1,7 +1,7 @@
 package ftserver;
 
-import iBoxDB.LocalServer.*;
-import iBoxDB.LocalServer.IO.*;
+import iboxdb.localserver.*;
+import iboxdb.localserver.io.*;
 
 import static ftserver.App.*;
 import ftserver.fts.Engine;
@@ -36,13 +36,21 @@ public class IndexServer extends LocalDatabaseServer {
             long tm = java.lang.Runtime.getRuntime().maxMemory();
 
             CacheLength = tm / 3;
-            //if update the metadata, set low cache
-            //cfg.CacheLength = cfg.mb(128);
+            IndexAPI.HuggersMemory = tm / 8;
+            if (IndexAPI.HuggersMemory > mb(500)) {
+                IndexAPI.HuggersMemory = mb(500);
+            }
 
             FileIncSize = (int) mb(4);
             SwapFileBuffer = (int) mb(4);
+
+            
+            //-Xmx4G
+            log("-Xmx = " + (tm / 1024 / 1024) + " MB");
             log("DB Cache=" + CacheLength / 1024 / 1024 + "MB"
                     + " AppMEM=" + tm / 1024 / 1024 + "MB");
+            log("Huggers Cache = " + (IndexAPI.HuggersMemory / 1024 / 1024) + " MB");
+
             new Engine().Config(this);
 
             ensureTable(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")");

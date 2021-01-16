@@ -1,6 +1,5 @@
 <%@page import="ftserver.*"%>
-<%@page import="iBoxDB.LocalServer.*"%>
-<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 <%    long begin = System.currentTimeMillis();

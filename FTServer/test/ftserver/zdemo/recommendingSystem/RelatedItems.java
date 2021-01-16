@@ -1,6 +1,6 @@
 package ftserver.zdemo.recommendingSystem;
  
-import iBoxDB.LocalServer.NotColumn;
+import iboxdb.localserver.*;
 
 public class RelatedItems {
 

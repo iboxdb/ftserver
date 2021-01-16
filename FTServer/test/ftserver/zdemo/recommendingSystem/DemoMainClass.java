@@ -1,7 +1,7 @@
 package ftserver.zdemo.recommendingSystem;
 
+import iboxdb.localserver.*;
 import ftserver.fts.*;
-import iBoxDB.LocalServer.*;
 import java.util.*;
 
 public class DemoMainClass {

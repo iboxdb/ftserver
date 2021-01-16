@@ -1,6 +1,6 @@
 package ftserver;
 
-import iBoxDB.LocalServer.NotColumn;
+import iboxdb.localserver.*;
 import java.util.Date;
 import java.util.Random;
 

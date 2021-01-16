@@ -1,16 +1,17 @@
 <%@page import="ftserver.App"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
-<%@page import="javax.servlet.http.*" %>
-<%@page import="javax.servlet.jsp.*" %>
+
 <%@page import="java.io.*" %>
 <%@page import="java.util.*" %>
+<%@page import="iboxdb.localserver.*" %>
+
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 
     jspWriter.set(out);
 %>
 <%!
-    private static ThreadLocal<JspWriter> jspWriter = new ThreadLocal<JspWriter>();
+    private static ThreadLocal<Writer> jspWriter = new ThreadLocal<Writer>();
 
     private class Tag implements Closeable {
 
@@ -50,14 +51,14 @@
     public Tag tag(String name, Object... ason) {
         Map<String, Object> map = null;
         if (ason != null) {
-            map = (Map<String, Object>) iBoxDB.LocalServer.Ason.ason(ason);
+            map = (Map<String, Object>) Ason.ason(ason);
         }
         return new Tag(name, map);
     }
 
     public void text(String text) {
         try {
-            jspWriter.get().print(text);
+            jspWriter.get().write(text);
         } catch (Throwable ex) {
 
         }
@@ -76,7 +77,7 @@
     }
 
     public String version() {
-        return "1.5.1";
+        return "1.5.9";
     }
 
 %>

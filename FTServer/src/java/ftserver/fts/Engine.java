@@ -1,6 +1,6 @@
 package ftserver.fts;
 
-import iBoxDB.LocalServer.*;
+import iboxdb.localserver.*;
 import java.util.*;
 
 public class Engine {

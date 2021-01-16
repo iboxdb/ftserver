@@ -1,7 +1,7 @@
 package ftserver;
 
+import iboxdb.localserver.*;
 import ftserver.fts.KeyWord;
-import iBoxDB.LocalServer.NotColumn;
 import java.util.Date;
 
 public class PageText {
