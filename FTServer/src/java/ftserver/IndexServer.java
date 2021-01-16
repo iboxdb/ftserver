@@ -33,6 +33,7 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
+            //-Xmx4G
             long tm = java.lang.Runtime.getRuntime().maxMemory();
 
             CacheLength = tm / 3;
@@ -44,8 +45,6 @@ public class IndexServer extends LocalDatabaseServer {
             FileIncSize = (int) mb(16);
             SwapFileBuffer = (int) mb(16);
 
-            
-            //-Xmx4G
             log("-Xmx = " + (tm / 1024 / 1024) + " MB");
             log("DB Cache=" + CacheLength / 1024 / 1024 + "MB"
                     + " AppMEM=" + tm / 1024 / 1024 + "MB");
@@ -71,57 +70,18 @@ public class IndexServer extends LocalDatabaseServer {
 
     }
 
-    private static class IndexStream implements IBStream {
-
-        private IBStream s;
+    private static class IndexStream extends IBStreamWrapper {
 
         public IndexStream(IBStream iBStream) {
-            this.s = iBStream;
+            super(iBStream);
         }
 
         @Override
         public void BeginWrite(long appID, int maxLen) {
             DelayService.delay();
-            s.BeginWrite(appID, maxLen);
+            super.BeginWrite(appID, maxLen);
         }
 
-        @Override
-        public void Write(long position, byte[] buffer, int offset, int count) {
-            s.Write(position, buffer, offset, count);
-        }
-
-        @Override
-        public int Read(long position, byte[] buffer, int offset, int count) {
-            return s.Read(position, buffer, offset, count);
-        }
-
-        @Override
-        public long Length() {
-            return s.Length();
-        }
-
-        @Override
-        public void Dispose() {
-            if (s != null) {
-                s.Dispose();
-                s = null;
-            }
-        }
-
-        @Override
-        public void EndWrite() {
-            s.EndWrite();
-        }
-
-        @Override
-        public void Flush() {
-            s.Flush();
-        }
-
-        @Override
-        public void SetLength(long value) {
-            s.SetLength(value);
-        }
     }
 
 }
