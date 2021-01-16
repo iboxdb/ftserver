@@ -4,6 +4,7 @@ import iboxdb.localserver.*;
 import ftserver.fts.*;
 import java.util.*;
 import static ftserver.App.*;
+import java.text.NumberFormat;
 
 public class IndexAPI {
 
@@ -243,7 +244,8 @@ public class IndexAPI {
             ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
                 DelayService.delay();
             });
-            box.commit(huggers);
+            CommitResult cr = box.commit(huggers);
+            log("MEM:  " + NumberFormat.getInstance().format(cr.GetMemoryLength(box)));
         }
     }
 
@@ -261,7 +263,8 @@ public class IndexAPI {
             try (Box box = App.Auto.cube()) {
                 ENGINE.indexText(box, pt.id(), pt.indexedText(), true);
                 box.d("PageText", pt.id()).delete();
-                box.commit(count == ptlist.size() ? 0 : HuggersMemory);
+                CommitResult cr = box.commit(count == ptlist.size() ? 0 : HuggersMemory);
+                log("MEM:  " + NumberFormat.getInstance().format(cr.GetMemoryLength(box)));
             }
         }
 

@@ -143,7 +143,7 @@ public class IndexPage {
     public static void start() {
         isShutdown = false;
         backgroundThread = new Thread(() -> {
-            final long SLEEP_TIME = 2000;
+            final long SLEEP_TIME = 0;//2000;
 
             while (!isShutdown) {
                 Runnable act = backgroundThreadQueue.pollFirst();

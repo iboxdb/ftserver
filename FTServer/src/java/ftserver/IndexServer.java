@@ -37,12 +37,12 @@ public class IndexServer extends LocalDatabaseServer {
 
             CacheLength = tm / 3;
             IndexAPI.HuggersMemory = tm / 8;
-            if (IndexAPI.HuggersMemory > mb(500)) {
-                IndexAPI.HuggersMemory = mb(500);
+            if (IndexAPI.HuggersMemory > mb(550)) {
+                IndexAPI.HuggersMemory = mb(550);
             }
 
-            FileIncSize = (int) mb(4);
-            SwapFileBuffer = (int) mb(4);
+            FileIncSize = (int) mb(16);
+            SwapFileBuffer = (int) mb(16);
 
             
             //-Xmx4G
