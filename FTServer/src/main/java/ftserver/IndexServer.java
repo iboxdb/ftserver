@@ -5,6 +5,7 @@ import iboxdb.localserver.io.*;
 
 import static ftserver.App.*;
 import ftserver.fts.Engine;
+import java.io.File;
 
 public class IndexServer extends LocalDatabaseServer {
 
@@ -35,6 +36,11 @@ public class IndexServer extends LocalDatabaseServer {
         public IndexConfig() {
             //-Xmx4G
             long tm = java.lang.Runtime.getRuntime().maxMemory();
+            File mvnConfig = new File(".mvn/jvm.config");
+            if (mvnConfig.exists()) {
+                log("maven -Xmx setting " + mvnConfig.getAbsolutePath());
+            }
+            
 
             CacheLength = tm / 3;
             IndexAPI.HuggersMemory = tm / 8;

@@ -14,9 +14,10 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         //Path
-        //String path = System.getProperty("user.home") + File.separatorChar + "DATA_FTS_J_140" + File.separatorChar;
-        String path = "../DATA_FTS_J_140";
-
+        String dir = "DATA_FTS_JAVA_150";
+               
+        String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
+        
         new File(path).mkdirs();
         log(System.getProperty("java.version"));
         log(String.format("DB Path=%s ", new File(path).getAbsolutePath()));
