@@ -38,7 +38,7 @@ public class IndexServer extends LocalDatabaseServer {
             long tm = java.lang.Runtime.getRuntime().maxMemory();
             File mvnConfig = new File(".mvn/jvm.config");
             if (mvnConfig.exists()) {
-                log("maven -Xmx setting " + mvnConfig.getAbsolutePath());
+                log("Maven -Xmx setting " + mvnConfig.getAbsolutePath());
             }
             
 

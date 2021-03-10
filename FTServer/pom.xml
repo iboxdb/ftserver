@@ -103,7 +103,7 @@
                     <configuration>
                         <properties>                            
                             <cargo.hostname>localhost</cargo.hostname>
-                            <cargo.servlet.port>8082</cargo.servlet.port>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
                             <cargo.protocol>http</cargo.protocol>
                         </properties>
                     </configuration>
@@ -123,6 +123,7 @@
 
 </project>
 <!--
-export MAVEN_OPTS="-Xmx5G"
+export MAVEN_OPTS="-Xmx5G" 
+".mvn/jvm.config"
 cd /home/user/github/ftserver/FTServer; JAVA_HOME=/usr/lib/jvm/java-11 /home/user/netbeans12/java/maven/bin/mvn package cargo:run
 -->
