@@ -92,7 +92,7 @@
             for (int i = 0; i < 1100; i++) {
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
-                length = ran.nextInt(200) * 100 + 100;
+                length = ran.nextInt(500) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
                 try (Tag t = tag("a", "href:", url)) {
