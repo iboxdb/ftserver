@@ -23,7 +23,7 @@
     }
 
     boolean IsEnd(long[] ids) {
-        return ids[0] == -1 && ids[1] == -1;
+        return ids[0] < 0 && ids[1] < 0;
     }
 
     String ToKeyWordString(ArrayList<PageText> pages) {
