@@ -23,12 +23,7 @@
     }
 
     boolean IsEnd(long[] ids) {
-        for (long l : ids) {
-            if (l > 0) {
-                return false;
-            }
-        }
-        return true;
+        return ids[0] == -1 && ids[1] == -1;
     }
 
     String ToKeyWordString(ArrayList<PageText> pages) {
@@ -87,53 +82,53 @@
             }
             boolean isdesc = p.priority >= PageText.descriptionPriority;
             String content = isdesc ? p.text
-                    : IndexAPI.getDesc(p.text, p.keyWord, 80);
-            if (content.length() < 100) {
-                Page fpage = IndexPage.getPage(p.url);
-                content += " " + fpage.getRandomContent(100);
+                    : IndexPage.getDesc(p.text, p.keyWord, 150);
+
+            if (content.length() < 160 && p.page != null) {
+                content += " " + p.page.getRandomContent(160);
             }
             String[] keywords = p.keywords.split(" ");
 
-            try (Tag h3 = tag("h3")) {
-                try (Tag div = tag("div", "class:", "spartcss")) {
-                    try (Tag a = tag("a",
+            try ( Tag h3 = HTML.tag("h3")) {
+                try ( Tag div = HTML.tag("div", "class:", "spartcss")) {
+                    try ( Tag a = HTML.tag("a",
                             "class:", "stext",
                             "target:", "_blank",
                             "href:", p.url,
                             "onclick:", "sendlog(this.href, 'content')")) {
-                        text(p.title);
+                        HTML.text(p.title);
                     }
                 }
             }
 
-            try (Tag span = tag("span", "class:", "stext")) {
-                text(content);
+            try ( Tag span = HTML.tag("span", "class:", "stext")) {
+                HTML.text(content);
             }
-            tag("br");
+            HTML.tag("br");
 
-            try (Tag div = tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
+            try ( Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
                 if (!p.isAndSearch) {
-                    text("*");
+                    HTML.text("*");
                 }
-                text(p.url);
-                text(" ");
-                text(p.createTime.toString());
+                HTML.text(p.url);
+                HTML.text(" ");
+                HTML.text(p.createTime.toString());
 
-                tag("br");
+                HTML.tag("br");
 
                 for (String kw : keywords) {
                     String str = kw.trim();
                     if (str == null || str.length() < 1) {
                         continue;
                     }
-                    try (Tag t = tag("a",
+                    try ( Tag t = HTML.tag("a",
                             "href:", "s.jsp?q=" + encode(str),
                             "class:", "kw " + (isdesc ? "gt" : "gtt"))) {
-                        text(" &nbsp; ");
-                        text(str);
-                        text(" &nbsp; ");
+                        HTML.text(" &nbsp; ");
+                        HTML.text(str);
+                        HTML.text(" &nbsp; ");
                     };
-                    text(" &nbsp;");
+                    HTML.text(" &nbsp;");
                 }
 
             }

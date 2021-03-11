@@ -8,64 +8,70 @@
 <%
     response.setHeader("Cache-Control", "non-cache, no-store, must-revalidate");
 
-    jspWriter.set(out);
+    HTMLClass HTML = new HTMLClass(out);
 %>
 <%!
-    private static ThreadLocal<Writer> jspWriter = new ThreadLocal<Writer>();
+    public static abstract class Tag implements Closeable {
 
-    private class Tag implements Closeable {
+    }
 
-        private String name;
+    public static class HTMLClass {
 
-        public Tag(String _name, Map<String, Object> attributes) {
-            this.name = _name;
+        Writer jspWriter;
 
-            text("<");
-            text(name);
-            if (attributes != null) {
-                for (Map.Entry<String, Object> e : attributes.entrySet()) {
-                    text(" ");
-                    text(e.getKey());
-                    text("=\"");
-                    text(e.getValue().toString());
-                    text("\"");
-                }
+        private HTMLClass(Writer _jspWriter) {
+            jspWriter = _jspWriter;
+        }
+
+        public void text(String text) {
+            try {
+                jspWriter.write(text);
+            } catch (Throwable ex) {
+
             }
-            text(">");
-
         }
 
-        @Override
-        public void close() {
-            text("</");
-            text(name);
-            text(">");
+        public class TagImpl extends Tag {
+
+            private String name;
+
+            public TagImpl(String _name, Map<String, Object> attributes) {
+                this.name = _name;
+
+                text("<");
+                text(name);
+                if (attributes != null) {
+                    for (Map.Entry<String, Object> e : attributes.entrySet()) {
+                        text(" ");
+                        text(e.getKey());
+                        text("=\"");
+                        text(e.getValue().toString());
+                        text("\"");
+                    }
+                }
+                text(">");
+
+            }
+
+            @Override
+            public void close() {
+                text("</");
+                text(name);
+                text(">");
+            }
         }
 
-    }
-
-    public Tag tag(String name) {
-        return tag(name, (Object[]) null);
-    }
-
-    public Tag tag(String name, Object... ason) {
-        Map<String, Object> map = null;
-        if (ason != null) {
-            map = (Map<String, Object>) Ason.ason(ason);
+        public Tag tag(String name) {
+            return tag(name, (Object[]) null);
         }
-        return new Tag(name, map);
-    }
 
-    public void text(String text) {
-        try {
-            jspWriter.get().write(text);
-        } catch (Throwable ex) {
-
+        public Tag tag(String name, Object... ason) {
+            Map<String, Object> map = null;
+            if (ason != null) {
+                map = (Map<String, Object>) Ason.ason(ason);
+            }
+            return new TagImpl(name, map);
         }
-    }
-
-    public void freeWriter() {
-        jspWriter.set(null);
     }
 
     public String encode(String text) {
@@ -77,7 +83,7 @@
     }
 
     public String version() {
-        return "1.5.9";
+        return "1.6";
     }
 
 %>

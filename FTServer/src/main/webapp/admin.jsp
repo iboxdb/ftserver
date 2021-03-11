@@ -19,18 +19,8 @@
             msg = msg.trim();
 
             final String furl = Html.getUrl(url);
-            String ttitle = null;
-            String tmsg = null;
-            if (msg.length() > 0) {
-                ttitle = furl;
-                tmsg = msg;
-                int pos = msg.indexOf('\n');
-                if (pos > 0) {
-                    ttitle = msg.substring(0, pos);
-                    tmsg = msg.substring(pos).trim();
-                }
-            }
-            IndexPage.runBGTask(furl, ttitle, tmsg);
+
+            IndexPage.runBGTask(furl, msg);
 
             url = "Background Index Running, See Console Output";
 

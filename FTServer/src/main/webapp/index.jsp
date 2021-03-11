@@ -65,10 +65,10 @@
                     <br>Recent Searches:<br>
                     <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {
                             String str = pst.keywords;
-                            try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
-                                text(str);
+                            try ( Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                                HTML.text(str);
                             }
-                            text(", &nbsp; ");
+                            HTML.text(", &nbsp; ");
                         }
                     %> 
 
@@ -76,19 +76,19 @@
 
                     <br><a  href="./">Refresh Discoveries:</a> <br> 
                     <%
-                        for (String str : IndexAPI.discover()) {
-                            try (Tag t = tag("a", "href:", "s.jsp?q=" + encode(str))) {
-                                text(str);
+                        for (String str : IndexPage.discover()) {
+                            try ( Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                                HTML.text(str);
                             }
-                            text(" &nbsp; ");
+                            HTML.text(" &nbsp; ");
                         }
 
-                        tag("br");
+                        HTML.tag("br");
                     %>
                     <br>
 
                 </div>
-                <% text("Load Time: " + (System.currentTimeMillis() - begin) / 1000.0 + "s");
+                <% HTML.text("Load Time: " + (System.currentTimeMillis() - begin) / 1000.0 + "s");
                 %>
             </div>
         </div>

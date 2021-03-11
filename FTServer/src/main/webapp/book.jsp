@@ -86,19 +86,19 @@
         <h1>Hello World!</h1>
         <p><%= text%></p>
 
-         
+
         <%
-            tag("br");
+            HTML.tag("br");
             for (int i = 0; i < 1100; i++) {
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(500) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
-                try (Tag t = tag("a", "href:", url)) {
-                    text(" &nbsp; ");
+                try ( Tag t = HTML.tag("a", "href:", url)) {
+                    HTML.text(" &nbsp; ");
                 }
-                tag("br");
+                HTML.tag("br");
             }
         %>
     </body>

@@ -34,7 +34,7 @@ public class IndexPage {
         return App.Item.select(PageSearchTerm.class, "from /PageSearchTerm limit 0 , ?", len);
     }
 
-     public static String getDesc(String str, KeyWord kw, int length) {
+    public static String getDesc(String str, KeyWord kw, int length) {
         if (kw.I == -1) {
             return str;
         }
@@ -52,15 +52,11 @@ public class IndexPage {
         }
         return discoveries;
     }
-    
 
-    public static void removePage(String url) {
-        IndexAPI.removePage(url);
-    }
+    public static String addPage(String url, String userDescription, boolean isKeyPage) {
 
-    public static String addPage(String url, boolean isKeyPage) {
         if (!isKeyPage) {
-            if (App.Auto.get(Object.class, "Page", url) != null) {
+            if (App.Item.count("from Page where url==? limit 0,1", url) > 0) {
                 return null;
             }
         }
@@ -74,15 +70,17 @@ public class IndexPage {
         if (p == null) {
             return "temporarily unreachable";
         } else {
-            IndexAPI.removePage(url);
+            p.userDescription = userDescription;
+            p.show = true;
             p.isKeyPage = isKeyPage;
-            IndexAPI.addPage(p);
-            IndexAPI.addPageIndex(url);
-
-            long textOrder = App.Auto.newId(0, 0);
+            long textOrder = IndexAPI.addPage(p);
+            if (IndexAPI.addPageIndex(textOrder)) {
+                IndexAPI.DisableOldPage(url);
+            }
+            long dbaddr = App.Indices.size() + IndexServer.IndexDBStart - 1;
             long indexend = System.currentTimeMillis();
             log("TIME IO:" + (ioend - begin) / 1000.0
-                    + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " ");
+                    + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " (" + dbaddr + ") ");
 
             subUrls.remove(url);
             subUrls.remove(url + "/");
@@ -94,36 +92,13 @@ public class IndexPage {
         }
     }
 
-    public static void addPageCustomText(String url, String title, String content) {
-        if (url == null || title == null || content == null) {
-            return;
-        }
-        if (url.isEmpty() || title.isEmpty() || content.isEmpty()) {
-            return;
-        }
-        Page page = App.Auto.get(Page.class, "Page", url);
-        if (page == null) {
-            return;
-        }
-        PageText text = new PageText();
-        text.textOrder = page.textOrder;
-        text.priority = PageText.userPriority;
-        text.url = page.url;
-        text.title = title;
-        text.text = content;
-        text.keywords = "";
-
-        IndexAPI.addPageTextIndex(text, 0);
-    }
-
-    public synchronized static void runBGTask(final String url, final String customTitle, final String customMsg) {
+    public synchronized static void runBGTask(final String url, String customContent) {
         backgroundThreadQueue.addFirst(() -> {
             synchronized (App.class) {
                 final String furl = Html.getUrl(url);
                 log("(KeyPage)For:" + furl);
-                String rurl = IndexPage.addPage(furl, true);
+                String rurl = IndexPage.addPage(furl, customContent, true);
                 IndexPage.backgroundLog(furl, rurl);
-                IndexPage.addPageCustomText(furl, customTitle, customMsg);
             }
         });
     }
@@ -143,7 +118,7 @@ public class IndexPage {
                 backgroundThreadQueue.addLast(() -> {
                     synchronized (App.class) {
                         log("For:" + url + " ," + backgroundThreadQueue.size());
-                        String r = addPage(url, false);
+                        String r = addPage(url, null, false);
                         backgroundLog(url, r);
                     }
                 });
