@@ -3,6 +3,7 @@ package ftserver;
 import java.util.*;
 import java.util.concurrent.*;
 import static ftserver.App.*;
+import ftserver.fts.KeyWord;
 import iboxdb.localserver.*;
 
 public class IndexPage {
@@ -33,9 +34,25 @@ public class IndexPage {
         return App.Item.select(PageSearchTerm.class, "from /PageSearchTerm limit 0 , ?", len);
     }
 
-    public static Page getPage(String url) {
-        return App.Auto.get(Page.class, "Page", url);
+     public static String getDesc(String str, KeyWord kw, int length) {
+        if (kw.I == -1) {
+            return str;
+        }
+        return IndexAPI.ENGINE.getDesc(str, kw, length);
     }
+
+    public static ArrayList<String> discover() {
+        ArrayList<String> discoveries = new ArrayList<>();
+
+        try ( Box box = App.Index.cube()) {
+            for (String skw : IndexAPI.ENGINE.discover(box, 'a', 'z', 2,
+                    '\u2E80', '\u9fa5', 2)) {
+                discoveries.add(skw);
+            }
+        }
+        return discoveries;
+    }
+    
 
     public static void removePage(String url) {
         IndexAPI.removePage(url);
