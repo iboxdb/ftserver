@@ -2,18 +2,16 @@ package ftserver;
 
 import iboxdb.localserver.*;
 import iboxdb.localserver.io.*;
-
+import java.util.ArrayList;
 import ftserver.fts.Engine;
-import java.io.File;
 
 import static ftserver.App.*;
-import java.util.ArrayList;
 
 public class IndexServer extends LocalDatabaseServer {
 
     public static long SwitchToReadonlyIndexLength = 1024L * 1024L * 500L;
-    public static long ItemDB = 2L;
 
+    public static long ItemDB = 2L;
     public static long IndexDBStart = 10L;
 
     @Override
@@ -42,14 +40,6 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
-
-            long tm = java.lang.Runtime.getRuntime().maxMemory();
-            log("Xmx = " + (tm / 1024 / 1024) + " MB");
-
-            File mvnConfig = new File(".mvn/jvm.config");
-            if (mvnConfig.exists()) {
-                log("Maven -Xmx setting " + mvnConfig.getAbsolutePath());
-            }
 
             CacheLength = mb(512);
             log("DB Cache = " + (CacheLength / 1024 / 1024) + " MB");

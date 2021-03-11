@@ -14,6 +14,14 @@ public class AppListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
+        long tm = java.lang.Runtime.getRuntime().maxMemory();
+        log("Xmx = " + (tm / 1024 / 1024) + " MB");
+
+        File mvnConfig = new File(".mvn/jvm.config");
+        if (mvnConfig.exists()) {
+            log("Maven 3 -Xmx setting " + mvnConfig.getAbsolutePath());
+        }
+
         //Path
         String dir = "DATA_FTS_JAVA_150";
 
