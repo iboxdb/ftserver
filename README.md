@@ -3,8 +3,11 @@
 ### Setup
 
 ```
-Use NetBeans with [JDK8+] to build or download fts.zip(WAR) from WAR Folder
-Deploy to tomcat/jetty
+Use NetBeans to build 
+
+or
+
+[user@localhost FTServer]$ mvn package cargo:run
 
 
 for OpenJDK, to use OpenJDK 11+ for better GC
@@ -25,14 +28,12 @@ for OpenJDK, to use OpenJDK 11+ for better GC
 ### The Results Order
 The results order based on the **id()** number in **class PageText**,  descending order.
 
-Page has many PageTexts.
-
-
+A Page has many PageTexts. if don't need multiple Texts, modify **Html.getDefaultTexts(Page)**, only returns one PageText.
 
 the Page.GetRandomContent() method is used to keep the Search-Page-Content always changing, doesn't affect the real PageText order.
 
-if you have many pages(>100,000),  use the ID number to control the order instead of loading all pages to memory. 
-Or you can load top 100-1000 pages to memory then re-order it by favor. 
+Use the ID number to control the order instead of loading all pages to memory. 
+Or load top 100 pages to memory then re-order it by favor. 
 
 
 #### Search Format
@@ -67,31 +68,6 @@ and set the default nextpage_startId=Long.MaxValue,
 in javascript the big number have to write as String ("'" + nextpage_startId + "'")
 
 
-#### The Page-Text and the Text-Index -Process flow
-
-When Insert
-
-1.insert page --> 2.insert index
-````java
-IndexAPI.addPage(p);
-IndexAPI.addPageIndex(url);
-````
-
-
-When Delete
-
-1.delete index --> 2.delete page
-````java
-IndexAPI.removePage(url);
-````
-
-#### Add Custom information to Page
-```
-input format:
-
-line1 : Title ...
-line2 : Text Text ...
-```
 
 #### Private Server
 Open 
@@ -108,41 +84,26 @@ page... = ...
 return page;
 ```
 
-#### Memory
-````java
-//Bigger, faster, more memories.
-//Smaller, less memory.
-int PageText.max_text_length ;
-````
+#### Maximum Opened Files
 
-#### How to set big cache
-```java
-//-Xmx8G
-DatabaseConfig dbcfg = db.getConfig(); 
-dbcfg.CacheLength = dbcfg.mb(2048);
-//Or
-dbcfg.CacheLength = 2048L * 1024L * 1024L;
+```sh
+[user@localhost ~]$ cat /proc/sys/fs/file-max
+803882
+[user@localhost ~]$ ulimit -a | grep files
+open files                      (-n) 500000
+[user@localhost ~]$  ulimit -Hn
+500000
+[user@localhost ~]$ ulimit -Sn
+500000
+[user@localhost ~]$ 
 
-//Wrong, overflow
-//dbcfg.CacheLength = 2048 * 1024 * 1024;
-```
 
-#### Turn off SWAP
+$ vi /etc/security/limits.conf
+*         hard    nofile      500000
+*         soft    nofile      500000
+root      hard    nofile      500000
+root      soft    nofile      500000
 
-```
-Turn off virtual memory for 8G+ RAM Machine
-use DatabaseConfig.CacheLength and PageText.max_text_length to Control Memory
-
-Linux:
- # free -h
- # sudo swapoff -a
- # free -h 
-
-Windows:
-System Properties(Win+Pause) - Advanced system settings - Advanced
-- Performance Settings - Advanced - Virtual Memory Change -
-uncheck Automatically manage paging file - select No paging file - 
-click Set - OK restart
 ```
 
 

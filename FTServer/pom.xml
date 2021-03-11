@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ftserver</groupId>
-    <artifactId>FTServer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>ftserver</artifactId>
+    <version>1.0</version>
     <packaging>war</packaging>
 
     <name>FTServer</name>
