@@ -3,18 +3,25 @@ package ftserver;
 import iboxdb.localserver.*;
 import iboxdb.localserver.io.*;
 
-import static ftserver.App.*;
 import ftserver.fts.Engine;
 import java.io.File;
 
+import static ftserver.App.*;
+import java.util.ArrayList;
+
 public class IndexServer extends LocalDatabaseServer {
+
+    public static long SwitchToReadonlyIndexLength = 1024L * 1024L * 500L;
+    public static long ItemDB = 2L;
+
+    public static long IndexDBStart = 10L;
 
     @Override
     protected DatabaseConfig BuildDatabaseConfig(long address) {
-        if (address == 1) {
+        if (address >= IndexDBStart) {
             return new IndexConfig();
         }
-        if (address == 2) {
+        if (address == ItemDB) {
             return new ItemConfig();
         }
         return null;
@@ -23,9 +30,10 @@ public class IndexServer extends LocalDatabaseServer {
     private static class ItemConfig extends BoxFileStreamConfig {
 
         public ItemConfig() {
-            CacheLength = mb(64);
+            CacheLength = mb(256);
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
-            ensureTable(Page.class, "/PageBegin", "textOrder", "url(" + Page.MAX_URL_LENGTH + ")");
+            ensureTable(Page.class, "Page", "textOrder");
+            ensureIndex(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")", "textOrder");
         }
     }
 
@@ -34,35 +42,18 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
-            //-Xmx4G
+
             long tm = java.lang.Runtime.getRuntime().maxMemory();
+            log("Xmx = " + (tm / 1024 / 1024) + " MB");
+
             File mvnConfig = new File(".mvn/jvm.config");
             if (mvnConfig.exists()) {
                 log("Maven -Xmx setting " + mvnConfig.getAbsolutePath());
             }
-            
 
-            CacheLength = tm / 3;
-            IndexAPI.HuggersMemory = tm / 8;
-            if (IndexAPI.HuggersMemory > mb(550)) {
-                IndexAPI.HuggersMemory = mb(550);
-            }
-
-            FileIncSize = (int) mb(16);
-            SwapFileBuffer = (int) mb(16);
-
-            log("-Xmx = " + (tm / 1024 / 1024) + " MB");
-            log("DB Cache=" + CacheLength / 1024 / 1024 + "MB"
-                    + " AppMEM=" + tm / 1024 / 1024 + "MB");
-            log("Huggers Cache = " + (IndexAPI.HuggersMemory / 1024 / 1024) + " MB");
-
+            CacheLength = mb(512);
+            log("DB Cache = " + (CacheLength / 1024 / 1024) + " MB");
             new Engine().Config(this);
-
-            ensureTable(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")");
-            ensureIndex(Page.class, "Page", true, "textOrder");
-
-            ensureTable(PageText.class, "PageText", "id");
-            ensureIndex(PageText.class, "PageText", false, "textOrder");
         }
 
         @Override
@@ -86,6 +77,40 @@ public class IndexServer extends LocalDatabaseServer {
         public void BeginWrite(long appID, int maxLen) {
             DelayService.delay();
             super.BeginWrite(appID, maxLen);
+        }
+
+        long length = 0;
+
+        @Override
+        public void SetLength(long value) {
+            super.SetLength(value);
+            length = value;
+        }
+
+        @Override
+        public void Flush() {
+            super.Flush();
+            if (length > IndexServer.SwitchToReadonlyIndexLength) {
+
+                ArrayList<AutoBox> newIndices = new ArrayList<AutoBox>(App.Indices);
+                newIndices.remove(newIndices.size() - 1);
+
+                long addr = App.Index.getDatabase().localAddress();
+                newIndices.add(new ReadonlyIndexServer().getInstance(addr).get());
+                addr++;
+                log("\r\nSwitch To DB (" + addr + ")");
+                newIndices.add(new IndexServer().getInstance(addr).get());
+
+                for (int i = 0; i < newIndices.size() - 10; i++) {
+                    addr = newIndices.get(i).getDatabase().localAddress();
+                    newIndices.set(i, new ReadonlyIndexServer().getInstance(addr).get());
+                    ReadonlyIndexServer.DeleteOldSwap(addr);
+                }
+
+                App.Indices = newIndices;
+                App.Index = newIndices.get(newIndices.size() - 1);
+                System.gc();
+            }
         }
 
     }

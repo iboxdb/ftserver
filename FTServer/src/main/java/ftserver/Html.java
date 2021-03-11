@@ -4,8 +4,11 @@ import java.util.*;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
+import static ftserver.App.*;
 
 public class Html {
+
+    static String splitWords = " ,.　，。";
 
     public static Page get(String url, HashSet<String> subUrls) {
         try {
@@ -22,11 +25,21 @@ public class Html {
             Page page = new Page();
             page.url = url;
             //page.html = doc.html();
-            page.text = replace(doc.body().text());
+            String text = replace(doc.body().text());
 
-            if (page.text.length() < 10) {
+            if (text.length() < 10) {
+                //some website can't get html
+                log("No HTML " + url);
                 return null;
             }
+            if (text.length() > 100_000) {
+                log("BIG HTML " + url);
+                return null;
+            }
+            if (text.length() > 50_000) {
+                log("[BigURL] " + url);
+            }
+            page.text = text;
 
             if (subUrls != null) {
                 String host = getHost(url);
@@ -36,7 +49,8 @@ public class Html {
                     if (ss != null && ss.length() > 8) {
                         ss = getUrl(ss);
                         String h = getHost(ss);
-                        if (host.equals(h)) {
+                        //if (host.equals(h)) 
+                        {
                             subUrls.add(ss);
                         }
                     }
@@ -56,11 +70,13 @@ public class Html {
                 title = "";
             }
             if (title.length() < 1) {
-                title = url;
+                //ignore no title
+                log("No Title " + url);
+                return null;
             }
             title = replace(title);
-            if (title.length() > 100) {
-                title = title.substring(0, 100);
+            if (title.length() > 200) {
+                title = title.substring(0, 200);
             }
 
             keywords = getMetaContentByName(doc, "keywords");
@@ -72,8 +88,8 @@ public class Html {
             }
 
             description = getMetaContentByName(doc, "description");
-            if (description.length() > 400) {
-                description = description.substring(0, 400);
+            if (description.length() > 500) {
+                description = description.substring(0, 500);
             }
 
             page.title = title;
@@ -119,7 +135,25 @@ public class Html {
         return replace(description);
     }
 
-    static String splitWords = " ,.　，。";
+    public static PageText getDefaultText(Page page, long id) {
+        PageText pt = PageText.fromId(id);
+        pt.url = page.url;
+        pt.title = page.title;
+        if (pt.priority >= PageText.descriptionPriority) {
+            pt.keywords = page.keywords;
+        }
+        if (pt.priority == PageText.userPriority) {
+            pt.text = page.userDescription;
+        }
+        if (pt.priority == PageText.descriptionPriority || pt.priority == PageText.descriptionKeyPriority) {
+            pt.text = page.description;
+        }
+
+        if (pt.priority == PageText.contextPriority) {
+            pt.text = page.text;
+        }
+        return pt;
+    }
 
     public static ArrayList<PageText> getDefaultTexts(Page page) {
         if (page.textOrder < 1) {
@@ -129,87 +163,18 @@ public class Html {
 
         ArrayList<PageText> result = new ArrayList<PageText>();
 
-        String title = page.title;
-        String keywords = page.keywords;
-
-        String url = page.url;
-        long textOrder = page.textOrder;
-
-        PageText description = new PageText();
-
-        description.textOrder = textOrder;
-        description.url = url;
-        description.title = title;
-        description.keywords = keywords;
-
-        description.text = page.description;
-
-        description.priority = PageText.descriptionPriority;
-        if (page.isKeyPage) {
-            description.priority = PageText.descriptionKeyPriority;
+        if (page.userDescription != null && page.userDescription.length() > 0) {
+            result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.userPriority)));
         }
-        result.add(description);
-
-        String content = page.text.trim() + "..";
-        int maxLength = PageText.max_text_length;
-
-        int wordCount = 0;
-        for (int i = 0; i < content.length(); i++) {
-            char c = content.charAt(i);
-            if (c < 256) {
-                wordCount++;
-            } else {
-                boolean isword = IndexAPI.ENGINE.sUtil.isWord(c);
-                if (isword) {
-                    wordCount++;
-                }
-            }
+        if (page.description != null && page.description.length() > 0) {
+            long p = page.isKeyPage ? PageText.descriptionKeyPriority : PageText.descriptionPriority;
+            result.add(getDefaultText(page, PageText.toId(page.textOrder, p)));
         }
-        if (((double) wordCount / (double) content.length()) > 0.8) {
-            maxLength *= 4;
-        }
-
-        long startPriority = PageText.descriptionPriority - 1;
-        while (startPriority > 0 && content.length() > 0) {
-
-            PageText text = new PageText();
-            text.textOrder = textOrder;
-            text.url = url;
-            text.title = title;
-            text.keywords = "";
-
-            text.text = null;
-            StringBuilder texttext = new StringBuilder(maxLength + 100);
-
-            int last = Math.min(maxLength, content.length() - 1);
-            int p1 = 0;
-            for (char c : splitWords.toCharArray()) {
-                int t = content.lastIndexOf(c, last);
-                if (t >= 0) {
-                    p1 = Math.max(p1, t);
-                }
-            }
-            if (p1 == 0) {
-                p1 = last;
-            }
-
-            texttext.append(content.substring(0, p1 + 1));
-
-            content = content.substring(p1 + 1);
-
-            if (content.length() > 0 && content.length() < 100) {
-                texttext.append(" ").append(content);
-                content = "";
-            }
-
-            text.text = texttext.toString();
-            text.priority = startPriority;
-            result.add(text);
-            startPriority--;
+        if (page.text != null && page.text.length() > 0) {
+            result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.contextPriority)));
         }
 
         return result;
-
     }
 
     private static String replace(String content) {

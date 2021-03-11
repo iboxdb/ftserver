@@ -23,7 +23,9 @@ public class Page {
     public String keywords;
     public String description;
 
-    public boolean showinResults = true;
+    public String userDescription;
+
+    public boolean show = true;
 
     private static final Random RAN = new Random();
 

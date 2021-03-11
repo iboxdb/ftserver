@@ -1,20 +1,31 @@
 package ftserver;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.*;
 import java.util.concurrent.*;
 import static ftserver.App.*;
+import iboxdb.localserver.*;
 
 public class IndexPage {
 
     public static void addSearchTerm(String keywords) {
+        addSearchTerm(keywords, false);
+    }
+
+    public static void addSearchTerm(String keywords, boolean isShutdown) {
         if (keywords.length() < PageSearchTerm.MAX_TERM_LENGTH) {
             PageSearchTerm pst = new PageSearchTerm();
             pst.time = new Date();
             pst.keywords = keywords;
             pst.uid = UUID.randomUUID();
-            App.Item.insert("/PageSearchTerm", pst);
+
+            long huggersMem = 1024L * 1024L * 10L;
+            if (isShutdown) {
+                huggersMem = 0;
+            }
+            try ( Box box = App.Item.cube()) {
+                box.d("/PageSearchTerm").insert(pst);
+                box.commit(huggersMem);
+            }
         }
     }
 
