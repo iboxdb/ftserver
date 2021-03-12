@@ -277,12 +277,15 @@ public class IndexAPI {
     }
 
     public static long addPage(Page page) {
-        page.createTime = new Date();
-        page.textOrder = App.Item.newId();
-        if (App.Item.insert("Page", page)) {
-            return page.textOrder;
+        try ( Box box = App.Item.cube()) {
+            page.createTime = new Date();
+            page.textOrder = box.newId();
+            box.d("Page").insert(page, 1);
+            if (box.commit() == CommitResult.OK) {
+                return page.textOrder;
+            }
+            return -1L;
         }
-        return -1L;
     }
 
     public static boolean addPageIndex(final long textOrder) {
