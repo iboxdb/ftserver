@@ -29,6 +29,7 @@ public class IndexServer extends LocalDatabaseServer {
 
         public ItemConfig() {
             CacheLength = mb(256);
+            SwapFileBuffer = (int)mb(20);
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
             ensureTable(Page.class, "Page", "textOrder");
             ensureIndex(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")", "textOrder");
@@ -42,6 +43,7 @@ public class IndexServer extends LocalDatabaseServer {
         public IndexConfig() {
 
             CacheLength = mb(512);
+            SwapFileBuffer = (int)mb(20);
             log("DB Cache = " + (CacheLength / 1024 / 1024) + " MB");
             new Engine().Config(this);
         }

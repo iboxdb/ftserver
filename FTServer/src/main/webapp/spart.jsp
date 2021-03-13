@@ -5,9 +5,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
-<%    if (request.getAttribute("admin") == null) {
-        DelayService.delayIndex();
-    }
+<%    DelayService.delayIndex();
     long begin = System.currentTimeMillis();
 %>
 
@@ -55,7 +53,8 @@
 %>
 
 
-<%    long pageCount = 12;
+<%    long pageCount = 8;
+    //pageCount = 2;
     long[] startId = new long[]{Long.MAX_VALUE};
 
     String name = request.getParameter("q");
