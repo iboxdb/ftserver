@@ -22,7 +22,7 @@
 
             IndexPage.runBGTask(furl, msg);
 
-            url = "Background Index Running, See Console Output";
+            url = "BackgroundIndexRunning-SeeConsoleOutput";
 
         }
     }

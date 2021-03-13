@@ -68,7 +68,7 @@ public class IndexPage {
         long ioend = System.currentTimeMillis();
 
         if (p == null) {
-            return "temporarily unreachable";
+            return "Temporarily Unreachable";
         } else {
             p.userDescription = userDescription;
             p.show = true;
