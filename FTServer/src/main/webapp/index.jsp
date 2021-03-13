@@ -74,7 +74,7 @@
 
                     <br>
 
-                    <br><a  href="./">Refresh Discoveries:</a> <br> 
+                    <br><a  href="./">Refresh Discoveries:</a> &nbsp;  
                     <%
                         for (String str : IndexPage.discover()) {
                             try ( Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {

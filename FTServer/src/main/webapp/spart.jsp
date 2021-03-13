@@ -88,9 +88,9 @@
             }
             String[] keywords = p.keywords.split(" ");
 
-            try ( Tag h3 = HTML.tag("h3")) {
-                try ( Tag div = HTML.tag("div", "class:", "spartcss")) {
-                    try ( Tag a = HTML.tag("a",
+            try (Tag h3 = HTML.tag("h3")) {
+                try (Tag div = HTML.tag("div", "class:", "spartcss")) {
+                    try (Tag a = HTML.tag("a",
                             "class:", "stext",
                             "target:", "_blank",
                             "href:", p.url,
@@ -100,12 +100,13 @@
                 }
             }
 
-            try ( Tag span = HTML.tag("span", "class:", "stext")) {
+            try (Tag span = HTML.tag("span", "class:", "stext")) {
                 HTML.text(content);
             }
             HTML.tag("br");
 
-            try ( Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
+            try (Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
+                HTML.text("[ " + p.dbOrder + " ] ");
                 if (!p.isAndSearch) {
                     HTML.text("*");
                 }
@@ -120,7 +121,7 @@
                     if (str == null || str.length() < 1) {
                         continue;
                     }
-                    try ( Tag t = HTML.tag("a",
+                    try (Tag t = HTML.tag("a",
                             "href:", "s.jsp?q=" + encode(str),
                             "class:", "kw " + (isdesc ? "gt" : "gtt"))) {
                         HTML.text(" &nbsp; ");
