@@ -283,6 +283,11 @@ public class IndexAPI {
     }
 
     public static long addPage(Page page) {
+        Page oldPage = GetOldPage(page.url);
+        if (oldPage != null && oldPage.show && oldPage.text.equals(page.text)) {
+            log("Page is not changed. " + page.url);
+            return -1L;
+        }
         try ( Box box = App.Item.cube()) {
             page.createTime = new Date();
             page.textOrder = box.newId();
@@ -341,4 +346,11 @@ public class IndexAPI {
         }
     }
 
+    public static Page GetOldPage(String url) {
+        ArrayList<Page> pages = App.Item.select(Page.class, "from Page where url==? limit 0,1", url);
+        if (pages.size() > 0) {
+            return pages.get(0);
+        }
+        return null;
+    }
 }

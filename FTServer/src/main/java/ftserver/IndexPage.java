@@ -74,7 +74,7 @@ public class IndexPage {
             p.show = true;
             p.isKeyPage = isKeyPage;
             long textOrder = IndexAPI.addPage(p);
-            if (IndexAPI.addPageIndex(textOrder)) {
+            if (textOrder >= 0 && IndexAPI.addPageIndex(textOrder)) {
                 IndexAPI.DisableOldPage(url);
             }
             long dbaddr = App.Indices.size() + IndexServer.IndexDBStart - 1;
