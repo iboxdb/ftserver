@@ -56,7 +56,7 @@ public class PageText {
     //keywords
     public String keywords;
 
-    public Date createTime = new Date();
+    public Date createTime;
 
     @NotColumn
     public String indexedText() {

@@ -121,6 +121,7 @@ public class IndexAPI {
         }
 
         StartIdParam startId = new StartIdParam(t_startId);
+        long _beginId = startId.startId[0];
         //And
         while (startId.isAnd()) {
             AutoBox auto = App.Indices.get((int) startId.startId[0]);
@@ -134,7 +135,10 @@ public class IndexAPI {
                 return startId.startId;
             }
         }
-
+        long _endId = startId.startId[0];
+        if ((_beginId - _endId) > 50) {
+            //log("Long Search: " + name);
+        }
         //OR            
         ArrayList<StringBuilder> ors = startId.ToOrCondition(name);
         while (startId.isOr()) {
@@ -168,6 +172,7 @@ public class IndexAPI {
                     pt = Html.getDefaultText(p, id);
                     pt.keyWord = kw;
                     pt.page = p;
+                    pt.createTime = p.createTime;
                     pt.isAndSearch = true;
                     pages.add(pt);
                 }
@@ -230,6 +235,7 @@ public class IndexAPI {
                         pt = Html.getDefaultText(p, id);
                         pt.keyWord = kw;
                         pt.page = p;
+                        pt.createTime = p.createTime;
                         pt.isAndSearch = false;
                         outputPages.add(pt);
                     }
