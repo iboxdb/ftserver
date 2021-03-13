@@ -47,6 +47,8 @@
 
     if (b == null) {
         b = "0";
+    }
+    if (s == null) {
         s = "0";
         l = "4040";
     }
@@ -71,6 +73,9 @@
     title = title.replaceAll("\t|\r|\n|\"", "");
     description = description.replaceAll("\t|\r|\n|\"", "");
 
+    if (book == 0) {
+        text += "  " + new Date();
+    }
 %>
 
 <!DOCTYPE html>
@@ -92,7 +97,7 @@
             for (int i = 0; i < 1100; i++) {
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
-                length = ran.nextInt(500) * 100 + 100;
+                length = ran.nextInt(600) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
                 try ( Tag t = HTML.tag("a", "href:", url)) {
