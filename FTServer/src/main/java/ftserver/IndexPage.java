@@ -23,7 +23,7 @@ public class IndexPage {
             if (isShutdown) {
                 huggersMem = 0;
             }
-            try ( Box box = App.Item.cube()) {
+            try (Box box = App.Item.cube()) {
                 box.d("/PageSearchTerm").insert(pst);
                 box.commit(huggersMem);
             }
@@ -44,7 +44,7 @@ public class IndexPage {
     public static ArrayList<String> discover() {
         ArrayList<String> discoveries = new ArrayList<>();
 
-        try ( Box box = App.Index.cube()) {
+        try (Box box = App.Index.cube()) {
             for (String skw : IndexAPI.ENGINE.discover(box, 'a', 'z', 2,
                     '\u2E80', '\u9fa5', 2)) {
                 discoveries.add(skw);
@@ -93,13 +93,14 @@ public class IndexPage {
     }
 
     public synchronized static void runBGTask(final String url, String customContent) {
+        String ansi_reset = "\u001B[0m";
+        String ansi_red = "\u001B[31m";
         backgroundThreadQueue.addFirst(() -> {
-            synchronized (App.class) {
-                final String furl = Html.getUrl(url);
-                log("(KeyPage)For:" + furl);
-                String rurl = IndexPage.addPage(furl, customContent, true);
-                IndexPage.backgroundLog(furl, rurl);
-            }
+            final String furl = Html.getUrl(url);
+            log(ansi_red + "(KeyPage)For:" + furl + ansi_reset);
+            String rurl = IndexPage.addPage(furl, customContent, true);
+            IndexPage.backgroundLog(furl, rurl);
+
         });
     }
 
@@ -116,11 +117,9 @@ public class IndexPage {
             for (final String vurl : subUrls) {
                 final String url = Html.getUrl(vurl);
                 backgroundThreadQueue.addLast(() -> {
-                    synchronized (App.class) {
-                        log("For:" + url + " ," + backgroundThreadQueue.size());
-                        String r = addPage(url, null, false);
-                        backgroundLog(url, r);
-                    }
+                    log("For:" + url + " ," + backgroundThreadQueue.size());
+                    String r = addPage(url, null, false);
+                    backgroundLog(url, r);
                 });
             }
         }
