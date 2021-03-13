@@ -84,7 +84,7 @@
                     : IndexPage.getDesc(p.text, p.keyWord, 150);
 
             if (content.length() < 160 && p.page != null) {
-                content += " " + p.page.getRandomContent(160);
+                content += "..." + p.page.getRandomContent(160);
             }
             String[] keywords = p.keywords.split(" ");
 
