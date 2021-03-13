@@ -10,7 +10,6 @@ or
 [user@localhost FTServer]$ mvn package cargo:run
 
 
-for OpenJDK, to use OpenJDK 11+ for better GC
 ```
 
 
