@@ -2,6 +2,7 @@ package ftserver.zdemo;
 
 import iboxdb.localserver.*;
 import ftserver.fts.*;
+import ftserver.zdemo.recommendingSystem.DemoMainClass;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,14 +22,13 @@ public class MainClass {
 
         System.out.println(java.lang.Runtime.getRuntime().maxMemory());
         DB.root("/tmp/");
-        //DB.root("/home/user/ftsdb/err");
+
         test1();
-        
+        //test_order();
+        //DemoMainClass.main(args);
         //-Xmx=4G
         //test_big_n();
         //test_big_e();
-
-        //test_order();
     }
 
     public static void test_order() {
@@ -183,53 +183,51 @@ public class MainClass {
         }
     }
 
-    // 150 seconds test
     public static void test_big_n() throws FileNotFoundException, IOException, InterruptedException {
         String book = "/github/hero.txt";  //UTF-8
         long dbid = 1;
         boolean rebuild = false;
-        int istran = 0;
-        String split = "10000"; // "。";
+        int istran = 13;
+        String split = "。"; //"10000";
         String strkw = "黄蓉 郭靖 洪七公";
-        //strkw = "洪七公 黄蓉 郭靖";
-        //strkw = "黄蓉 郭靖 公";
-        //strkw = "郭靖 黄蓉";
-        
-        //strkw = "黄蓉";
-        //strkw = "时察";
-        //strkw = "的";
-        //strkw = "七十二路";
-        //strkw = "十八掌";
-        //strkw = "日日夜夜无穷无尽的";
-        //strkw = "牛家村边绕 日日夜夜无穷无尽的";
-        //strkw = "这几天";
-        //strkw = "有 这几天";
-        //strkw = "这几天 有";
-        //strkw = "牛家村边绕";
+        strkw = "洪七公 黄蓉 郭靖";
+        strkw = "黄蓉 郭靖 公";
+        strkw = "郭靖 黄蓉";
+
+        strkw = "黄蓉";
+        strkw = "时察";
+        strkw = "的";
+        strkw = "七十二路";
+        strkw = "十八掌";
+        strkw = "日日夜夜无穷无尽的";
+        strkw = "牛家村边绕 日日夜夜无穷无尽的";
+        strkw = "这几天";
+        strkw = "有 这几天";
+        strkw = "这几天 有";
+        strkw = "牛家村边绕";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
-    // 30 seconds test
     public static void test_big_e() throws FileNotFoundException, IOException, InterruptedException {
-        String book = "/phoenix.txt"; //UTF-8
+        String book = "/github/phoenix.txt"; //UTF-8
         long dbid = 2;
         boolean rebuild = false;
         int istran = 0;//10;
         String split = "\\.";
         String strkw = "Harry";
-        //strkw = "Harry Philosopher";
-        //strkw = "Philosopher";
-        //strkw = "\"Harry Philosopher\"";
-        //strkw = "\"He looks\"";
-        //strkw = "He looks";
-        //strkw = "\"he drove toward town he thought\"";
-        //strkw = "\"he drove toward\"";
-        //strkw = "\"he thought\"";
-        //strkw = "\"he thought\" toward";
-        //strkw = "toward \"he thought\"";
-        //strkw = "he thought";
-        //strkw = "he thought toward";
-        //strkw = "He";
+        strkw = "Harry Philosopher";
+        strkw = "Philosopher";
+        strkw = "\"Harry Philosopher\"";
+        strkw = "\"He looks\"";
+        strkw = "He looks";
+        strkw = "\"he drove toward town he thought\"";
+        strkw = "\"he drove toward\"";
+        strkw = "\"he thought\"";
+        strkw = "\"he thought\" toward";
+        strkw = "toward \"he thought\"";
+        strkw = "he thought";
+        strkw = "he thought toward";
+        strkw = "He";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
@@ -244,7 +242,7 @@ public class MainClass {
         if (rebuild) {
             BoxSystem.DBDebug.DeleteDBFiles(dbid);
         }
-        
+
         DB db = new DB(dbid);
 
         rf.close();
@@ -279,9 +277,9 @@ public class MainClass {
 
         final Engine engine = new Engine();
         engine.Config(db.getConfig());
-        
+
         DatabaseConfig dbcfg = db.getConfig();
-        dbcfg.CacheLength = dbcfg.mb(1300); 
+        dbcfg.CacheLength = dbcfg.mb(1300);
 
         final AutoBox auto = db.open();
 
