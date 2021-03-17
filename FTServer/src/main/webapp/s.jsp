@@ -32,13 +32,19 @@
                 margin-left: 10px;
                 font-weight:lighter;
                 overflow-x: hidden;
+                
             }
-            .stext{}
+            .stext{
+               font-size: 22px; 
+            }
+            .stext_s{
+               font-size: 18px; 
+            }
             .spartcss{
-                max-width: 600px;
                 white-space: normal;
                 overflow: visible;
                 text-overflow:ellipsis;
+                font-weight: bold;
             }
             .rt{
                 color: red;
@@ -52,6 +58,7 @@
             .kw{
                 background-color: #eee;
             }
+           
         </style> 
         <script>
             var extitle = "";
@@ -141,14 +148,14 @@
     </head>
     <body > 
         <div class="ui left aligned grid">
-            <div class="column"  style="max-width: 600px;"> 
+            <div class="column"  style="max-width: 800px;"> 
                 <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
                     <div class="ui label input">
 
                         <div class="ui action input">
-                            <a href="./"><i class="teal disk outline icon" style="font-size:42px"></i> </a>
-                            <input name="q"  value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()" />
-                            <input id="btnsearch" type="submit"  class="ui teal right button" value="Search" /> 
+                            <a href="./"><i class="teal disk outline icon" style="font-size:60px"></i> </a>
+                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()" />
+                            <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
                         </div>
                     </div>
                 </form> 
@@ -164,15 +171,14 @@
         </div>
 
         <div class="ui grid">
-            <div class="ten wide column" style="max-width: 600px;" id="maindiv">
+            <div class="fontsize ten wide column" style="max-width: 800px;" id="maindiv">
                 <jsp:include page="spart.jsp" ></jsp:include>
 
             </div>
-            <div class="six wide column" style="max-width: 200px;">
-
+            <div class="six wide column" style="max-width: 80px;">
 
                 <div class="ui segment">
-                    <h4>Full Text Search</h4> 
+                    <h4>FTS</h4> 
                 </div> 
 
 

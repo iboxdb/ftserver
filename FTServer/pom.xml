@@ -123,7 +123,6 @@
 
 </project>
 <!--
-export MAVEN_OPTS="-Xmx5G" 
 ".mvn/jvm.config"
 cd /home/user/github/ftserver/FTServer; JAVA_HOME=/usr/lib/jvm/java-11 /home/user/netbeans12/java/maven/bin/mvn package cargo:run
 -->

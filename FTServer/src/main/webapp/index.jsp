@@ -59,7 +59,7 @@
                     }
                 </script>
 
-                <div class="ui message" style="text-align: left">
+                <div class="ui message" style="text-align: left; font-size: 20px">
                     <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Pages (add http/https to server)</a><br>
 
                     <br>Recent Searches:<br>

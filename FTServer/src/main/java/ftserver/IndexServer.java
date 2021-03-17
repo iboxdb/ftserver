@@ -9,7 +9,7 @@ import static ftserver.App.*;
 
 public class IndexServer extends LocalDatabaseServer {
 
-    public static long SwitchToReadonlyIndexLength = 1024L * 1024L * 500L;
+    public static long SwitchToReadonlyIndexLength = 1024L * 1024L * 500L * 1L;
 
     public static long ItemDB = 2L;
     public static long IndexDBStart = 10L;
@@ -42,10 +42,11 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
-
-            CacheLength = mb(512);
+            int lenMB = (int) (SwitchToReadonlyIndexLength / 1024L / 1024L);
+            CacheLength = mb(lenMB);
             SwapFileBuffer = (int) mb(20);
-            log("DB Cache = " + (CacheLength / 1024 / 1024) + " MB");
+            log("DB Cache = " + lenMB + " MB");
+            log("DB Switch Length = " + lenMB + " MB");
             new Engine().Config(this);
         }
 

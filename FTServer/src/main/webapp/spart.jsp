@@ -88,7 +88,8 @@
             }
             String[] keywords = p.keywords.split(" ");
 
-            try (Tag h3 = HTML.tag("h3")) {
+            //try (Tag h3 = HTML.tag("h3")) 
+            {
                 try (Tag div = HTML.tag("div", "class:", "spartcss")) {
                     try (Tag a = HTML.tag("a",
                             "class:", "stext",
@@ -105,16 +106,7 @@
             }
             HTML.tag("br");
 
-            try (Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " spartcss")) {
-                HTML.text("[ " + p.dbOrder + " ] ");
-                if (!p.isAndSearch) {
-                    HTML.text("*");
-                }
-                HTML.text(p.url);
-                HTML.text(" ");
-                HTML.text(p.createTime.toString());
-
-                HTML.tag("br");
+            try (Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " ")) {
 
                 for (String kw : keywords) {
                     String str = kw.trim();
@@ -123,16 +115,27 @@
                     }
                     try (Tag t = HTML.tag("a",
                             "href:", "s.jsp?q=" + encode(str),
-                            "class:", "kw " + (isdesc ? "gt" : "gtt"))) {
+                            "class:", "kw " + (isdesc ? "gt" : "gtt") + " stext_s")) {
                         HTML.text(" &nbsp; ");
                         HTML.text(str);
                         HTML.text(" &nbsp; ");
                     };
                     HTML.text(" &nbsp;");
                 }
+                if (keywords.length > 1) {
+                    HTML.tag("br");
+                }
+
+                HTML.text("[ " + p.dbOrder + " ] ");
+                if (!p.isAndSearch) {
+                    HTML.text("*");
+                }
+                HTML.text(p.url);
+                HTML.text(" ");
+                HTML.text(p.createTime.toString());
 
             }
-
+            HTML.tag("br");
         }%>
 </div>
 <div class="ui teal message" id="s<%= IdToString(startId, '_')%>">
