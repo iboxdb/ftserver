@@ -156,6 +156,7 @@ public class Html {
         PageText pt = PageText.fromId(id);
         pt.url = page.url;
         pt.title = page.title;
+        pt.createTime = page.createTime;
         if (pt.priority >= PageText.descriptionPriority) {
             pt.keywords = page.keywords;
         }

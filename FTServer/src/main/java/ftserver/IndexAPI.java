@@ -172,7 +172,6 @@ public class IndexAPI {
                     pt = Html.getDefaultText(p, id);
                     pt.keyWord = kw;
                     pt.page = p;
-                    pt.createTime = p.createTime;
                     pt.isAndSearch = true;
                     pages.add(pt);
                 }
@@ -235,7 +234,6 @@ public class IndexAPI {
                         pt = Html.getDefaultText(p, id);
                         pt.keyWord = kw;
                         pt.page = p;
-                        pt.createTime = p.createTime;
                         pt.isAndSearch = false;
                         outputPages.add(pt);
                     }
