@@ -19,7 +19,7 @@ public class IndexPage {
             pst.keywords = keywords;
             pst.uid = UUID.randomUUID();
 
-            long huggersMem = 1024L * 1024L * 10L;
+            long huggersMem = 1024L * 1024L * 3L;
             if (isShutdown) {
                 huggersMem = 0;
             }
