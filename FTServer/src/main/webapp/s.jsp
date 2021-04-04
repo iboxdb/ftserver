@@ -18,7 +18,7 @@
 %>
 
 <!DOCTYPE html>
-<html dir="auto">
+<html>
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="description" content="<%=name.replaceAll("\"", "")%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
@@ -58,7 +58,9 @@
             .kw{
                 background-color: #eee;
             }
-           
+            .rtl{
+                text-align: initial !important;
+            }
         </style> 
         <script>
             var extitle = "";
@@ -170,7 +172,7 @@
             </div>
         </div>
 
-        <div class="ui grid">
+        <div class="rtl ui grid">
             <div class="fontsize ten wide column" style="max-width: 800px;" id="maindiv">
                 <jsp:include page="spart.jsp" ></jsp:include>
 

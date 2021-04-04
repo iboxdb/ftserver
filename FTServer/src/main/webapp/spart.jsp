@@ -73,7 +73,7 @@
 
 %>
 
-<div id="ldiv<%=IdToString(startId, '_')%>">
+<div id="ldiv<%=IdToString(startId, '_')%>" >
     <% for (PageText p : pages) {
             if (p.priority == 0) {
 
@@ -90,7 +90,7 @@
 
             //try (Tag h3 = HTML.tag("h3")) 
             {
-                try (Tag div = HTML.tag("div", "class:", "spartcss")) {
+                try (Tag div = HTML.tag("div", "class:", "spartcss", "dir:", "auto")) {
                     try (Tag a = HTML.tag("a",
                             "class:", "stext",
                             "target:", "_blank",
@@ -101,7 +101,7 @@
                 }
             }
 
-            try (Tag span = HTML.tag("span", "class:", "stext")) {
+            try (Tag span = HTML.tag("div", "class:", "stext", "dir:", "auto")) {
                 HTML.text(content);
             }
             HTML.tag("br");

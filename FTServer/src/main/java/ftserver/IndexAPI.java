@@ -117,7 +117,7 @@ public class IndexAPI {
             String name, long[] t_startId, long pageCount) {
         name = name.trim();
         if (name.length() > 100) {
-            return new long[]{-1};
+            return new long[]{-1, -1, -1};
         }
 
         StartIdParam startId = new StartIdParam(t_startId);
@@ -160,7 +160,7 @@ public class IndexAPI {
             String name, long startId, long pageCount) {
         name = name.trim();
 
-        try ( Box box = auto.cube()) {
+        try (Box box = auto.cube()) {
             for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
                 pageCount--;
                 startId = kw.I - 1;
@@ -184,7 +184,7 @@ public class IndexAPI {
     private static void SearchOr(AutoBox auto, List<PageText> outputPages,
             ArrayList<StringBuilder> ors, long[] startId, long pageCount) {
 
-        try ( Box box = auto.cube()) {
+        try (Box box = auto.cube()) {
 
             Iterator<KeyWord>[] iters = new Iterator[ors.size()];
 
@@ -290,7 +290,7 @@ public class IndexAPI {
                 log("Page is changed. " + page.url);
             }
         }
-        try ( Box box = App.Item.cube()) {
+        try (Box box = App.Item.cube()) {
             page.createTime = new Date();
             page.textOrder = box.newId();
             box.d("Page").insert(page, 1);
@@ -320,7 +320,7 @@ public class IndexAPI {
     }
 
     public static void addPageTextIndex(PageText pt, long huggers) {
-        try ( Box box = App.Index.cube()) {
+        try (Box box = App.Index.cube()) {
 
             ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
                 DelayService.delay();
@@ -331,7 +331,7 @@ public class IndexAPI {
     }
 
     public static void DisableOldPage(String url) {
-        try ( Box box = App.Item.cube()) {
+        try (Box box = App.Item.cube()) {
             ArrayList<Page> page = new ArrayList<Page>();
 
             for (Page p : box.select(Page.class, "from Page where url==? limit 1,10", url)) {
