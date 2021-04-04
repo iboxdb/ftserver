@@ -22,7 +22,11 @@ public class StringUtil {
             set.add(c);
         }
         set.add((char) 0);
-        set.add((char) 8203);
+        set.add((char) 8203);// 0x200B
+        // http://www.unicode-symbol.com/block/Punctuation.html
+        for (int i = 0x2000; i <= 0x206F; i++) {
+            set.add((char) i);
+        }
 
     }
 
@@ -38,6 +42,8 @@ public class StringUtil {
             return true;
         }
         //Russian
+        // https://unicode-table.com/en/blocks/cyrillic/
+        // https://unicode-table.com/en/blocks/cyrillic-supplement/
         if (c >= 0x0400 && c <= 0x052f) {
             return true;
         }
@@ -45,8 +51,57 @@ public class StringUtil {
         if (c >= 0xc0 && c <= 0xff) {
             return true;
         }
+        if (isWordRight2Left(c)) {
+            return true;
+        }
         //special
         return c == '-' || c == '#';
+    }
+
+    private final boolean isWordRight2Left(char c) {
+        // https://unicode-table.com/en/blocks/hebrew/
+        // https://www.compart.com/en/unicode/block/U+0590
+        if (c >= 0x05D0 && c <= 0x05EE) {
+            //not implemented yet            
+            //return true;
+        }
+        // https://unicode-table.com/en/blocks/arabic/
+        // https://www.compart.com/en/unicode/bidiclass/AL
+
+        if (c >= 0x0617 && c <= 0x061A) {
+            return true;
+        }
+
+        if (c >= 0x0620 && c <= 0x065F) {
+            return true;
+        }
+        if (c >= 0x0660 && c <= 0x0669) {
+            return true;
+        }
+
+        if (c >= 0x066E && c <= 0x06D3) {
+            return true;
+        }
+        if (c >= 0x06D5 && c <= 0x06D5) {
+            return true;
+        }
+        if (c >= 0x06EE && c <= 0x06FC) {
+            return true;
+        }
+        if (c >= 0x06FF && c <= 0x06FF) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/arabic-supplement/
+        if (c >= 0x0750 && c <= 0x077F) {
+            return true;
+        }
+        // https://unicode-table.com/en/blocks/arabic-extended-a/
+        if (c >= 0x08A0 && c <= 0x08FF) {
+            return true;
+        }
+
+        return false;
     }
 
     public char[] clear(String str) {

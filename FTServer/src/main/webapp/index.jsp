@@ -5,7 +5,7 @@
 <%    long begin = System.currentTimeMillis();
 %>
 <!DOCTYPE html>
-<html>
+<html dir="auto">
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="description" content="iBoxDB NoSQL Database Full Text Search Server FTS">
