@@ -45,8 +45,8 @@ public class IndexPage {
         ArrayList<String> discoveries = new ArrayList<>();
 
         try (Box box = App.Index.cube()) {
-            for (String skw : IndexAPI.ENGINE.discover(box, 'a', 'z', 2,
-                    '\u2E80', '\u9fa5', 2)) {
+            for (String skw : IndexAPI.ENGINE.discover(box, (char) 0x0001, (char) 0x0900, 2,
+                    (char) 0x0901, (char) 0xEEEE, 2)) {
                 discoveries.add(skw);
             }
         }

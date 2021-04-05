@@ -15,7 +15,7 @@ public class Html {
             if (url == null || url.length() > Page.MAX_URL_LENGTH || url.length() < 8) {
                 return null;
             }
-            Document doc = Jsoup.connect(url).timeout(15 * 1000).get();
+            Document doc = Jsoup.connect(url).timeout(30 * 1000).get();
             if (!doc.hasText()) {
                 return null;
             }

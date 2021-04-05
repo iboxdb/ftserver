@@ -32,13 +32,13 @@
                 margin-left: 10px;
                 font-weight:lighter;
                 overflow-x: hidden;
-                
+
             }
             .stext{
-               font-size: 22px; 
+                font-size: 22px; 
             }
             .stext_s{
-               font-size: 18px; 
+                font-size: 18px; 
             }
             .spartcss{
                 white-space: normal;
@@ -156,7 +156,7 @@
 
                         <div class="ui action input">
                             <a href="./"><i class="teal disk outline icon" style="font-size:60px"></i> </a>
-                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()" />
+                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
                             <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
                         </div>
                     </div>

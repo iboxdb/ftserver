@@ -5,7 +5,7 @@
 <%    long begin = System.currentTimeMillis();
 %>
 <!DOCTYPE html>
-<html dir="auto">
+<html>
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="description" content="iBoxDB NoSQL Database Full Text Search Server FTS">
@@ -44,7 +44,7 @@
                 <form class="ui large form"  action="s.jsp"  onsubmit="formsubmit()"  >
                     <div class="ui label input">
                         <div class="ui action input">
-                            <input name="q"  value=""  required onfocus="formfocus()" />
+                            <input name="q"  value=""  required onfocus="formfocus()"  dir="auto" />
                             <input id="btnsearch" type="submit"  class="ui teal right button big" 
                                    value="Search"    /> 
                         </div> 
@@ -65,7 +65,7 @@
                     <br>Recent Searches:<br>
                     <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {
                             String str = pst.keywords;
-                            try ( Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                            try (Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
                                 HTML.text(str);
                             }
                             HTML.text(", &nbsp; ");
@@ -77,7 +77,7 @@
                     <br><a  href="./">Refresh Discoveries:</a> &nbsp;  
                     <%
                         for (String str : IndexPage.discover()) {
-                            try ( Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
+                            try (Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
                                 HTML.text(str);
                             }
                             HTML.text(" &nbsp; ");
