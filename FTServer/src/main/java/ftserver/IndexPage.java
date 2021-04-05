@@ -42,15 +42,18 @@ public class IndexPage {
     }
 
     public static ArrayList<String> discover() {
-        ArrayList<String> discoveries = new ArrayList<>();
-
         try (Box box = App.Index.cube()) {
-            for (String skw : IndexAPI.ENGINE.discover(box, (char) 0x0001, (char) 0x2000, 2,
-                    (char) 0x2001, (char) 0xEEEE, 2)) {
-                discoveries.add(skw);
-            }
+            ArrayList<String> result = new ArrayList<String>();
+            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0061, (char) 0x007A, 2,
+                    (char) 0x4E00, (char) 0x9FFF, 2));
+
+            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0621, (char) 0x064A, 2,
+                    (char) 0x3040, (char) 0x312F, 2));
+
+            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0410, (char) 0x044F, 2,
+                    (char) 0xAC00, (char) 0xD7AF, 2));
+            return result;
         }
-        return discoveries;
     }
 
     public static String addPage(String url, String userDescription, boolean isKeyPage) {

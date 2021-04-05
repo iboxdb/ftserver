@@ -13,6 +13,7 @@ public class Html {
     public static Page get(String url, HashSet<String> subUrls) {
         try {
             if (url == null || url.length() > Page.MAX_URL_LENGTH || url.length() < 8) {
+                log("URL Length: " + url + " :" + (url != null ? url.length() : ""));
                 return null;
             }
             Document doc = Jsoup.connect(url).timeout(30 * 1000).get();

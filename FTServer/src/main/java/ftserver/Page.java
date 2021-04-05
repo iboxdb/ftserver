@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Page {
 
-    public final static int MAX_URL_LENGTH = 200;
+    public final static int MAX_URL_LENGTH = 400;
 
     public String url;
 

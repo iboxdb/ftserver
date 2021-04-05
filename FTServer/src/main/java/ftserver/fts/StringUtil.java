@@ -31,9 +31,20 @@ public class StringUtil {
 
     }
 
-    //Chinese  [\u2E80-\u9fa5]
-    //Japanese [\u0800-\u4e00]|
-    //Korean   [\uAC00-\uD7A3] [\u3130-\u318F] 
+    //https://unicode-table.com/en/blocks/cjk-unified-ideographs/
+    //Chinese  Range: 4E00—9FFF Quantity of characters: 20992 
+    // https://unicode-table.com/en/blocks/cjk-unified-ideographs-extension-a/
+    // CJK Unified Ideographs Extension A
+    // Range: 3400—4DBF Quantity of characters: 6592 
+//https://unicode-table.com/en/blocks/hiragana/    
+//Japanese Range: 3040—309F Quantity of characters: 96 
+//https://unicode-table.com/en/blocks/katakana/
+// Range: 30A0—30FF Quantity of characters: 96 
+//https://unicode-table.com/en/blocks/bopomofo/
+// Range: 3100—312F Quantity of characters: 48
+//https://unicode-table.com/en/blocks/hangul-syllables/
+//Korean Range: AC00—D7AF Quantity of characters: 11184     
+//[\uAC00-\uD7A3] [\u3130-\u318F] 
     public final boolean isWord(char c) {
         // https://unicode-table.com/en/blocks/basic-latin/
         // 0-9
@@ -89,6 +100,21 @@ public class StringUtil {
         if (isWordRight2Left(c)) {
             return true;
         }
+
+        // https://unicode-table.com/en/blocks/hangul-jamo/
+        if (c >= 0x1100 && c <= 0x11FF) {
+            return true;
+        }
+        //https://unicode-table.com/en/blocks/hangul-jamo-extended-b/
+        if (c >= 0xD7B0 && c <= 0xD7FF) {
+            return true;
+        }
+        //Japanese
+        /*
+        if (c >= 0x3040 && c <= 0x312F) {
+            return true;
+        }
+         */
 
         // https://unicode-table.com/en/blocks/latin-extended-additional/
         if (c >= 0x1E00 && c <= 0x1EFF) {
