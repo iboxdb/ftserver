@@ -35,26 +35,70 @@ public class StringUtil {
     //Japanese [\u0800-\u4e00]|
     //Korean   [\uAC00-\uD7A3] [\u3130-\u318F] 
     public final boolean isWord(char c) {
-        //English
-        if (c >= 'a' && c <= 'z') {
+        // https://unicode-table.com/en/blocks/basic-latin/
+        // 0-9
+        if (c >= 0x30 && c <= 0x39) {
             return true;
         }
-        if (c >= '0' && c <= '9') {
+        // A - Z
+        if (c >= 0x41 && c <= 0x5A) {
             return true;
         }
+        // a - z
+        if (c >= 0x61 && c <= 0x7A) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/latin-1-supplement/
+        if (c >= 0xC0 && c <= 0xFF) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/latin-extended-a/
+        if (c >= 0x0100 && c <= 0x017F) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/latin-extended-b/
+        if (c >= 0x0180 && c <= 0x024F) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/ipa-extensions/
+        if (c >= 0x0250 && c <= 0x02AF) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/greek-coptic/
+        if (c >= 0x0370 && c <= 0x03FF) {
+            return true;
+        }
+
         //Russian
         // https://unicode-table.com/en/blocks/cyrillic/
         // https://unicode-table.com/en/blocks/cyrillic-supplement/
         if (c >= 0x0400 && c <= 0x052f) {
             return true;
         }
-        //Germen
-        if (c >= 0xc0 && c <= 0xff) {
+
+        // https://unicode-table.com/en/blocks/armenian/
+        if (c >= 0x0530 && c <= 0x058F) {
             return true;
         }
+
         if (isWordRight2Left(c)) {
             return true;
         }
+
+        // https://unicode-table.com/en/blocks/latin-extended-additional/
+        if (c >= 0x1E00 && c <= 0x1EFF) {
+            return true;
+        }
+        // https://unicode-table.com/en/blocks/greek-extended/
+        if (c >= 0x1F00 && c <= 0x1FFF) {
+            return true;
+        }
+
         //special
         return c == '-' || c == '#';
     }
