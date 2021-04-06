@@ -76,6 +76,11 @@
     if (book == 0) {
         text += "  " + new Date();
     }
+
+    boolean nodesc = ran.nextInt(5) == 0;
+    if (nodesc) {
+        description = "";
+    }
 %>
 
 <!DOCTYPE html>
@@ -100,7 +105,7 @@
                 length = ran.nextInt(600) * 100 + 100;
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
-                try ( Tag t = HTML.tag("a", "href:", url)) {
+                try (Tag t = HTML.tag("a", "href:", url)) {
                     HTML.text(" &nbsp; ");
                 }
                 HTML.tag("br");

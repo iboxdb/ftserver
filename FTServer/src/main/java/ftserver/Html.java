@@ -100,11 +100,7 @@ public class Html {
             description = getMetaContentByName(doc, "description");
             if (description.length() == 0) {
                 log("Can't find description " + url);
-                int desLen = 200;
-                if (desLen > text.length()) {
-                    desLen = text.length();
-                }
-                description = text.substring(0, desLen);
+                page.text += " " + title;
             }
             if (description.length() > 500) {
                 description = description.substring(0, 500);
