@@ -83,7 +83,7 @@
     }
 
     public String version() {
-        return "1.6";
+        return "1.7";
     }
 
 %>

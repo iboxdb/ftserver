@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class PageSearchTerm {
 
-    public final static int MAX_TERM_LENGTH = 24;
+    public final static int MAX_TERM_LENGTH = 64;
 
     public Date time;
     public String keywords;
