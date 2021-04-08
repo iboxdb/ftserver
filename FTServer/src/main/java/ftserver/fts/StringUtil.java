@@ -29,7 +29,7 @@ public class StringUtil {
             set.add((char) i);
         }
 
-        https://unicode-table.com/en/blocks/arabic/
+        //https://unicode-table.com/en/blocks/arabic/
         //Punctuation Arabic
         set.add((char) 0x060C);
         set.add((char) 0x060D);
