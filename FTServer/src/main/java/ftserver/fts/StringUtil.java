@@ -29,6 +29,16 @@ public class StringUtil {
             set.add((char) i);
         }
 
+        https://unicode-table.com/en/blocks/arabic/
+        //Punctuation Arabic
+        set.add((char) 0x060C);
+        set.add((char) 0x060D);
+        set.add((char) 0x061B);
+        set.add((char) 0x061E);
+        set.add((char) 0x061F);
+        set.add((char) 0x06D4);
+        
+        
     }
 
     //https://unicode-table.com/en/blocks/cjk-unified-ideographs/
@@ -88,7 +98,7 @@ public class StringUtil {
         //Russian
         // https://unicode-table.com/en/blocks/cyrillic/
         // https://unicode-table.com/en/blocks/cyrillic-supplement/
-        if (c >= 0x0400 && c <= 0x052f) {
+        if (c >= 0x0400 && c <= 0x052F) {
             return true;
         }
 
