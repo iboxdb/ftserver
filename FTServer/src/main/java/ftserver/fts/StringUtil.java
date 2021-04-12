@@ -37,8 +37,10 @@ public class StringUtil {
         set.add((char) 0x061E);
         set.add((char) 0x061F);
         set.add((char) 0x06D4);
-        
-        
+
+        //Devanagari
+        set.add((char) 0x0964);
+        set.add((char) 0x0965);
     }
 
     //https://unicode-table.com/en/blocks/cjk-unified-ideographs/
@@ -90,6 +92,11 @@ public class StringUtil {
             return true;
         }
 
+        // https://unicode-table.com/en/blocks/combining-diacritical-marks/
+        if (c >= 0x0300 && c <= 0x036F) {
+            return true;
+        }
+
         // https://unicode-table.com/en/blocks/greek-coptic/
         if (c >= 0x0370 && c <= 0x03FF) {
             return true;
@@ -108,6 +115,12 @@ public class StringUtil {
         }
 
         if (isWordRight2Left(c)) {
+            return true;
+        }
+
+        // https://unicode-table.com/en/blocks/devanagari/
+        // India
+        if (c >= 0x0900 && c <= 0x097F) {
             return true;
         }
 
