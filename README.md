@@ -13,7 +13,7 @@ or
 ```
 
 
-![](https://github.com/iboxdb/ftserver/raw/master/FTServer/web/css/fts2.png)
+![](FTServer/src/main/webapp/css/fts.png)
 
 ### Dependencies
 [iBoxDB](http://www.iboxdb.com)
