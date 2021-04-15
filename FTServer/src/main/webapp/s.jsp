@@ -6,8 +6,7 @@
 
 
 
-<%    DelayService.delayIndex();
-    final String queryString = request.getQueryString();
+<%    final String queryString = request.getQueryString();
 
     String name = request.getParameter("q").replaceAll("<", "").trim();
     try {

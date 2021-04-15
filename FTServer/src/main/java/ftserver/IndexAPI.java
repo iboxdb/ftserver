@@ -124,6 +124,7 @@ public class IndexAPI {
         long _beginId = startId.startId[0];
         //And
         while (startId.isAnd()) {
+            DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[0]);
             startId.startId[2] = SearchAnd(auto, outputPages, name, startId.startId[2], pageCount - outputPages.size());
             for (PageText pt : outputPages) {
@@ -142,6 +143,7 @@ public class IndexAPI {
         //OR            
         ArrayList<StringBuilder> ors = startId.ToOrCondition(name);
         while (startId.isOr()) {
+            DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[1]);
             SearchOr(auto, outputPages, ors, startId.startId, pageCount);
             for (PageText pt : outputPages) {

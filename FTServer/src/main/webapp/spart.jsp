@@ -5,8 +5,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 <%@include  file="_taghelper.jsp" %>
 
-<%    DelayService.delayIndex();
-    long begin = System.currentTimeMillis();
+<%    long begin = System.currentTimeMillis();
 %>
 
 <%!    String IdToString(long[] ids, char p) {
