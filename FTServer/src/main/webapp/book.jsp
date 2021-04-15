@@ -65,7 +65,7 @@
 
     String content = books[book].substring(startIndex, endIndex);
 
-    String title = content.length() > 100 ? content.substring(0, 100) : content;
+    String title = content.length() > 200 ? content.substring(0, 200) : content;
     String description = content.length() > 300 ? content.substring(100, 300) : content;
     String text = content.length() > 500 ? content.substring(300) : content;
     String keywords = "keyword1 keywords2,keyword3 hello";

@@ -83,8 +83,8 @@
             String content = isdesc ? p.text
                     : IndexPage.getDesc(p.text, p.keyWord, 150);
 
-            if (content.length() < 160 && p.page != null) {
-                content += "..." + p.page.getRandomContent(160);
+            if (content.length() < 200 && p.page != null) {
+                content += "..." + p.page.getRandomContent(200);
             }
             String[] keywords = p.keywords.split(" ");
 
