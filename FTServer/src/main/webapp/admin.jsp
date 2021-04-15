@@ -105,8 +105,11 @@
 
         <div class="ui grid">
             <div class="ten wide column" style="max-width: 600px;" id="maindiv">
-                <% request.setCharacterEncoding("utf-8");
-                    request.setAttribute("admin", true);%>
+                <%
+                    request.setCharacterEncoding("utf-8");
+                    request.setAttribute("admin", true);
+                    url = "";
+                %>
                 <jsp:include page="spart.jsp" >
                     <jsp:param name="q" value="<%=url%>"></jsp:param>
                 </jsp:include>
