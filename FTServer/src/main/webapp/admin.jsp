@@ -110,10 +110,6 @@
                     request.setAttribute("admin", true);
                     url = "";
                 %>
-                <jsp:include page="spart.jsp" >
-                    <jsp:param name="q" value="<%=url%>"></jsp:param>
-                </jsp:include>
-
             </div>
             <div class="six wide column" style="max-width: 200px;">
 

@@ -116,12 +116,13 @@ public class IndexAPI {
     public static long[] Search(List<PageText> outputPages,
             String name, long[] t_startId, long pageCount) {
         name = name.trim();
-        if (name.length() > 100) {
+        if (name.length() > 150) {
             return new long[]{-1, -1, -1};
         }
 
         StartIdParam startId = new StartIdParam(t_startId);
-        long _beginId = startId.startId[0];
+        long beginTime = System.currentTimeMillis();
+        long maxTime = 1000 * 3;
         //And
         while (startId.isAnd()) {
             DelayService.delayIndex();
@@ -135,11 +136,11 @@ public class IndexAPI {
             if (outputPages.size() >= pageCount) {
                 return startId.startId;
             }
+            if ((System.currentTimeMillis() - beginTime) > maxTime) {
+                return startId.startId;
+            }
         }
-        long _endId = startId.startId[0];
-        if ((_beginId - _endId) > 50) {
-            //log("Long Search: " + name);
-        }
+
         //OR            
         ArrayList<StringBuilder> ors = startId.ToOrCondition(name);
         while (startId.isOr()) {
@@ -152,6 +153,9 @@ public class IndexAPI {
                 }
             }
             if (outputPages.size() >= pageCount) {
+                break;
+            }
+            if ((System.currentTimeMillis() - beginTime) > maxTime) {
                 break;
             }
         }
