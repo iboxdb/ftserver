@@ -122,7 +122,7 @@ public class IndexAPI {
 
         StartIdParam startId = new StartIdParam(t_startId);
         long beginTime = System.currentTimeMillis();
-        long maxTime = 1000 * 3;
+        long maxTime = 1000 * 2;
         //And
         while (startId.isAnd()) {
             DelayService.delayIndex();
