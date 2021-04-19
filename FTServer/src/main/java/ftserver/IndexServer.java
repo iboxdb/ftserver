@@ -98,7 +98,7 @@ public class IndexServer extends LocalDatabaseServer {
                 for (int i = 0; i < newIndices.size() - 10; i++) {
                     addr = newIndices.get(i).getDatabase().localAddress();
                     newIndices.set(i, new ReadonlyIndexServer().getInstance(addr).get());
-                    ReadonlyIndexServer.DeleteOldSwap(addr);
+                    //ReadonlyIndexServer.DeleteOldSwap(addr);
                 }
 
                 App.Indices = newIndices;
