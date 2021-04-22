@@ -16,7 +16,7 @@ public class Html {
                 log("URL Length: " + url + " :" + (url != null ? url.length() : ""));
                 return null;
             }
-            Document doc = Jsoup.connect(url).timeout(30 * 1000).get();
+            Document doc = Jsoup.connect(url).get();
             if (!doc.hasText()) {
                 return null;
             }
@@ -29,6 +29,21 @@ public class Html {
                 return null;
             }
 
+            if (subUrls != null) {
+                String host = getHost(url);
+                Elements links = doc.select("a[href]");
+                for (Element link : links) {
+                    String ss = link.attr("abs:href");
+                    if (ss != null && ss.length() > 8) {
+                        ss = getUrl(ss);
+                        String h = getHost(ss);
+                        //if (host.equals(h)) 
+                        {
+                            subUrls.add(ss);
+                        }
+                    }
+                }
+            }
             fixSpan(doc);
 
             Page page = new Page();
@@ -50,22 +65,6 @@ public class Html {
                 log("[BigURL] " + url);
             }
             page.text = text;
-
-            if (subUrls != null) {
-                String host = getHost(url);
-                Elements links = doc.select("a[href]");
-                for (Element link : links) {
-                    String ss = link.attr("abs:href");
-                    if (ss != null && ss.length() > 8) {
-                        ss = getUrl(ss);
-                        String h = getHost(ss);
-                        //if (host.equals(h)) 
-                        {
-                            subUrls.add(ss);
-                        }
-                    }
-                }
-            }
 
             String title = null;
             String keywords = null;
@@ -240,8 +239,16 @@ public class Html {
     }
 
     private static void fixSpan(Document doc) {
-        for (Element e : doc.getElementsByTag("span")) {
-            e.text(" " + e.text() + " ");
+        for (String s : new String[]{"span", "td", "th", "li", "a"}) {
+            for (Element e : doc.getElementsByTag(s)) {
+                if (e.childNodeSize() == 1) {
+                    try {
+                        e.text(" " + e.text() + " ");
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
