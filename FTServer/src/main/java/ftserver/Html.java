@@ -239,7 +239,7 @@ public class Html {
     }
 
     private static void fixSpan(Document doc) {
-        for (String s : new String[]{"span", "td", "th", "li", "a"}) {
+        for (String s : new String[]{"span", "td", "th", "li", "a", "option", "p"}) {
             for (Element e : doc.getElementsByTag(s)) {
                 if (e.childNodeSize() == 1) {
                     try {
