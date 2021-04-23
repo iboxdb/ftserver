@@ -23,7 +23,7 @@ public class AppListener implements ServletContextListener {
         }
 
         //Path
-        String dir = "DATA_FTS_JAVA_160";
+        String dir = "DATA_FTS_JAVA_161";
 
         String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
 
