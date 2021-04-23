@@ -287,6 +287,7 @@ public class IndexAPI {
     }
 
     public static long addPage(Page page) {
+        /*
         Page oldPage = GetOldPage(page.url);
         if (oldPage != null && oldPage.show) {
             if (oldPage.text.equals(page.text)) {
@@ -296,6 +297,7 @@ public class IndexAPI {
                 log("Page is changed. " + page.url);
             }
         }
+         */
         try (Box box = App.Item.cube()) {
             page.createTime = new Date();
             page.textOrder = box.newId();
