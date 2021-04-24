@@ -15,6 +15,7 @@ or
 
 ![](FTServer/src/main/webapp/css/fts.png)
 
+
 ### Dependencies
 [iBoxDB](http://www.iboxdb.com)
 
@@ -22,6 +23,14 @@ or
 
 [Jsoup](http://jsoup.org/)
 
+
+#### Search Format
+
+[Word1 Word2 Word3] => text has **Word1** and **Word2** and **Word3**
+
+["Word1 Word2 Word3"] => text has **"Word1 Word2 Word3"** as a whole
+
+Search [https http] => get almost all pages
 
 
 ### The Results Order
@@ -34,14 +43,6 @@ the Page.GetRandomContent() method is used to keep the Search-Page-Content alway
 Use the ID number to control the order instead of loading all pages to memory. 
 Or load top 100 pages to memory then re-order it by favor. 
 
-
-#### Search Format
-
-[Word1 Word2 Word3] => text has **Word1** and **Word2** and **Word3**
-
-["Word1 Word2 Word3"] => text has **"Word1 Word2 Word3"** as a whole
-
-Search [https http] => get almost all pages
 
 #### Search Method
 search (... String keywords, long **startId**, long **count**)
