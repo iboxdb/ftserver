@@ -30,6 +30,7 @@ public class IndexServer extends LocalDatabaseServer {
         public ItemConfig() {
             CacheLength = mb(256);
             SwapFileBuffer = (int) mb(20);
+	    FileIncSize = (int) mb(20);
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
             ensureTable(Page.class, "Page", "textOrder");
             //the 'textOrder' is used to control url's order
