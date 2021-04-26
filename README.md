@@ -19,6 +19,8 @@ $ cd FTServer
 $ mvn package cargo:run
 ```
 
+5. Open [http://localhost:8080/](http://localhost:8080/)
+
 
 ![](FTServer/src/main/webapp/css/fts.png)
 
