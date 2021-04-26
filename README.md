@@ -8,7 +8,7 @@
 
 1. [Install Java 11](https://jdk.java.net/)
 
-2. [Install Maven](https://maven.apache.org/)
+2. [Install Maven 3](https://maven.apache.org/)
 
 3. Download this Project.
 
