@@ -1,27 +1,29 @@
-## Lightweight Full Text Search Server for Java
-
-### Setup
-
-```
-Use NetBeans to build 
-
-or
-
-[user@localhost FTServer]$ mvn package cargo:run
+## Full Text Search Lightweight Server for Java
 
 
+### User Guide
+
+
+#### Setup
+
+1. [Install Java 11](https://jdk.java.net/)
+
+2. [Install Maven](https://maven.apache.org/)
+
+3. Download this Project.
+
+4. Run
+
+```sh
+$ cd FTServer
+$ mvn package cargo:run
 ```
 
 
 ![](FTServer/src/main/webapp/css/fts.png)
 
 
-### Dependencies
-[iBoxDB](http://www.iboxdb.com)
-
-[Semantic-UI](http://semantic-ui.com/)
-
-[Jsoup](http://jsoup.org/)
+Input a Full URL to index the Page, then search.
 
 
 #### Search Format
@@ -33,7 +35,19 @@ or
 Search [https http] => get almost all pages
 
 
-### The Results Order
+
+### Develop Guide
+
+#### Dependencies
+
+[iBoxDB](http://www.iboxdb.com)
+
+[Semantic-UI](http://semantic-ui.com/)
+
+[Jsoup](http://jsoup.org/)
+
+
+#### The Results Order
 The results order based on the **id()** number in **class PageText**,  descending order.
 
 A Page has many PageTexts. if don't need multiple Texts, modify **Html.getDefaultTexts(Page)**, returns only one PageText.
@@ -84,7 +98,7 @@ page... = ...
 return page;
 ```
 
-#### Maximum Opened Files
+#### Set Maximum Opened Files
 
 ```sh
 [user@localhost ~]$ cat /proc/sys/fs/file-max
@@ -105,7 +119,6 @@ root      hard    nofile      500000
 root      soft    nofile      500000
 
 ```
-
 
 
 #### More
