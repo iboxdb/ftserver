@@ -4,11 +4,11 @@ import iboxdb.localserver.*;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+//import javax.servlet.annotation.WebListener;
 import static ftserver.App.*;
 import java.util.ArrayList;
 
-@WebListener
+//@WebListener
 public class AppListener implements ServletContextListener {
 
     @Override
