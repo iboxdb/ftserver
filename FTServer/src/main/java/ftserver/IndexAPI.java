@@ -330,8 +330,12 @@ public class IndexAPI {
     public static void addPageTextIndex(PageText pt, long huggers) {
         try (Box box = App.Index.cube()) {
 
-            ENGINE.indexText(box, pt.id(), pt.indexedText(), false, () -> {
-                DelayService.delay();
+            ENGINE.indexText(box, pt.id(), pt.indexedText(), false,
+                    new Runnable() {
+                @Override
+                public void run() {
+                    DelayService.delay();
+                }
             });
             CommitResult cr = box.commit(huggers);
             log("MEM:  " + NumberFormat.getInstance().format(cr.GetMemoryLength(box)));

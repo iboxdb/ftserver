@@ -95,15 +95,18 @@ public class IndexPage {
         }
     }
 
-    public synchronized static void runBGTask(final String url, String customContent) {
-        String ansi_reset = "\u001B[0m";
-        String ansi_red = "\u001B[31m";
-        backgroundThreadQueue.addFirst(() -> {
-            final String furl = Html.getUrl(url);
-            log(ansi_red + "(KeyPage)For:" + furl + ansi_reset);
-            String rurl = IndexPage.addPage(furl, customContent, true);
-            IndexPage.backgroundLog(furl, rurl);
+    public synchronized static void runBGTask(final String url, final String customContent) {
+        final String ansi_reset = "\u001B[0m";
+        final String ansi_red = "\u001B[31m";
+        backgroundThreadQueue.addFirst(new Runnable() {
+            @Override
+            public void run() {
+                final String furl = Html.getUrl(url);
+                log(ansi_red + "(KeyPage)For:" + furl + ansi_reset);
+                String rurl = IndexPage.addPage(furl, customContent, true);
+                IndexPage.backgroundLog(furl, rurl);
 
+            }
         });
     }
 
@@ -119,10 +122,13 @@ public class IndexPage {
         if (backgroundThreadQueue.size() < max_background) {
             for (final String vurl : subUrls) {
                 final String url = Html.getUrl(vurl);
-                backgroundThreadQueue.addLast(() -> {
-                    log("For:" + url + " ," + backgroundThreadQueue.size());
-                    String r = addPage(url, null, false);
-                    backgroundLog(url, r);
+                backgroundThreadQueue.addLast(new Runnable() {
+                    @Override
+                    public void run() {
+                        log("For:" + url + " ," + backgroundThreadQueue.size());
+                        String r = addPage(url, null, false);
+                        backgroundLog(url, r);
+                    }
                 });
             }
         }
@@ -147,20 +153,23 @@ public class IndexPage {
 
     public static void start() {
         isShutdown = false;
-        backgroundThread = new Thread(() -> {
-            final long SLEEP_TIME = 0;//2000;
+        backgroundThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final long SLEEP_TIME = 0;//2000;
 
-            while (!isShutdown) {
-                Runnable act = backgroundThreadQueue.pollFirst();
-                if (act != null) {
-                    act.run();
-                }
+                while (!isShutdown) {
+                    Runnable act = backgroundThreadQueue.pollFirst();
+                    if (act != null) {
+                        act.run();
+                    }
 
-                if (!isShutdown) {
-                    try {
-                        Thread.sleep(SLEEP_TIME);
-                    } catch (InterruptedException ex) {
-                        log(ex.getMessage());
+                    if (!isShutdown) {
+                        try {
+                            Thread.sleep(SLEEP_TIME);
+                        } catch (InterruptedException ex) {
+                            log(ex.getMessage());
+                        }
                     }
                 }
             }
