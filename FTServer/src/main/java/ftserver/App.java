@@ -13,6 +13,9 @@ public class App {
 
     //for Readonly PageIndex
     public static ArrayList<AutoBox> Indices;
+    
+    
+    public static boolean IsAndroid;
 
     public static void log(String msg) {
         System.out.println(msg);

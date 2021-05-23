@@ -20,6 +20,9 @@ public class IndexPage {
             pst.uid = UUID.randomUUID();
 
             long huggersMem = 1024L * 1024L * 3L;
+            if (App.IsAndroid) {
+                huggersMem = 0;
+            }
             if (isShutdown) {
                 huggersMem = 0;
             }

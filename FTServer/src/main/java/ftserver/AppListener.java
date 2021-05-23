@@ -4,16 +4,23 @@ import iboxdb.localserver.*;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-//import javax.servlet.annotation.WebListener;
+import javax.servlet.annotation.WebListener;
 import static ftserver.App.*;
 import java.util.ArrayList;
 
-//@WebListener
+@WebListener
 public class AppListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
+        App.IsAndroid = false;
+        try {
+            App.IsAndroid = Class.forName("dalvik.system.DexClassLoader") != null;
+        } catch (Throwable e) {
+
+        }
+        log("IsAndroid = " + App.IsAndroid);
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         log("Xmx = " + (tm / 1024 / 1024) + " MB");
 

@@ -8,32 +8,53 @@
     //UTF-8 Text
     //private static String book1_path = "175315.txt";
     //private static String book2_path = "phoenix.txt";
-    private static String book1_path = "/home/user/github/hero.txt";
+    private static String book1_path = "/home/user/github/hero.txt.no";
     private static String book2_path = "/home/user/github/phoenix.txt";
 
 %>
 
+<%!    public static String RamdomBook(int startChar, int endChar, int emptyChar, int emptylen, int maxlen) {
+        Random ran = new Random();
+        char[] cs = new char[maxlen];
+        for (int i = 0; i < cs.length; i++) {
+            if (ran.nextInt(emptylen) == 0) {
+                cs[i] = (char) emptyChar;
+            } else {
+                char c = (char) (ran.nextInt(endChar - startChar) + startChar);
+                cs[i] = c;
+            }
+        }
+        return new String(cs);
+    }
+%>
 <%    if (books == null) {
+
         try {
             String[] tmp = new String[2];
 
-            RandomAccessFile rf = new RandomAccessFile(book1_path, "r");
-            byte[] bs = new byte[(int) rf.length()];
-            rf.readFully(bs);
-            rf.close();
-            tmp[0] = new String(bs);
+            if (!new File(book1_path).exists()) {
+                tmp[0] = RamdomBook(0x4E00, 0x9FFF, (int) '　', 150, 600000);
+                tmp[1] = RamdomBook(0x0061, 0x007A, (int) ' ', 16, 1000000);
+            } else {
+                RandomAccessFile rf = new RandomAccessFile(book1_path, "r");
+                byte[] bs = new byte[(int) rf.length()];
+                rf.readFully(bs);
+                rf.close();
+                tmp[0] = new String(bs);
 
-            rf = new RandomAccessFile(book2_path, "r");
-            bs = new byte[(int) rf.length()];
-            rf.readFully(bs);
-            rf.close();
-            tmp[1] = new String(bs);
+                rf = new RandomAccessFile(book2_path, "r");
+                bs = new byte[(int) rf.length()];
+                rf.readFully(bs);
+                rf.close();
+                tmp[1] = new String(bs);
+            }
 
             books = tmp;
         } catch (Throwable e) {
             out.println("No Book");
             return;
         }
+
     }
 %>
 
@@ -103,7 +124,7 @@
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(600) * 100 + 100;
-                
+
                 length = ran.nextInt(6000);
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 

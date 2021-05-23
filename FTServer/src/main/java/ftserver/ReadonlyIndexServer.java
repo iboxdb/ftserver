@@ -22,7 +22,8 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         public ReadonlyConfig(long address) {
             super(GetStreamsImpl(address));
             this.address = address;
-            this.CacheLength = mb(32);
+            int cacheLenMb = App.IsAndroid ? 4 : 32;
+            this.CacheLength = mb(cacheLenMb);
         }
 
         private static File[] GetStreamsImpl(long address) {

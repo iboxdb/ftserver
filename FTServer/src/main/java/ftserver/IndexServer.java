@@ -28,8 +28,12 @@ public class IndexServer extends LocalDatabaseServer {
     private static class ItemConfig extends BoxFileStreamConfig {
 
         public ItemConfig() {
-            CacheLength = mb(256);
-            SwapFileBuffer = (int) mb(20);
+            if (App.IsAndroid) {
+                CacheLength = mb(128);
+            } else {
+                CacheLength = mb(256);
+                SwapFileBuffer = (int) mb(20);
+            }
             FileIncSize = (int) mb(20);
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
             ensureTable(Page.class, "Page", "textOrder");
@@ -43,9 +47,14 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
-            int lenMB = (int) (SwitchToReadonlyIndexLength / 1024L / 1024L);
-            CacheLength = mb(lenMB);
-            SwapFileBuffer = (int) mb(20);
+            int lenMB = 256;
+            if (App.IsAndroid) {
+                CacheLength = mb(lenMB);
+            } else {
+                lenMB = (int) (SwitchToReadonlyIndexLength / 1024L / 1024L);
+                CacheLength = mb(lenMB);
+                SwapFileBuffer = (int) mb(20);
+            }
             log("DB Cache = " + lenMB + " MB");
             log("DB Switch Length = " + lenMB + " MB");
             new Engine().Config(this);
