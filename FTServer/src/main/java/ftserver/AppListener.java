@@ -17,10 +17,12 @@ public class AppListener implements ServletContextListener {
         App.IsAndroid = false;
         try {
             App.IsAndroid = Class.forName("dalvik.system.DexClassLoader") != null;
+            sce.getServletContext().setAttribute(App.class.getName(), App.class);
         } catch (Throwable e) {
 
         }
         log("IsAndroid = " + App.IsAndroid);
+        System.setProperty("fts.isAndroid", Boolean.toString(App.IsAndroid));
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         log("Xmx = " + (tm / 1024 / 1024) + " MB");
 
@@ -35,7 +37,7 @@ public class AppListener implements ServletContextListener {
         String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
 
         new File(path).mkdirs();
-        log(System.getProperty("java.version"));
+        log("java.version = " + System.getProperty("java.version"));
         log(String.format("DB Path=%s ", new File(path).getAbsolutePath()));
         DB.root(path);
 

@@ -56,7 +56,7 @@ public class IndexServer extends LocalDatabaseServer {
                 SwapFileBuffer = (int) mb(20);
             }
             log("DB Cache = " + lenMB + " MB");
-            log("DB Switch Length = " + lenMB + " MB");
+            log("DB Switch Length = " + (SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
             new Engine().Config(this);
         }
 
