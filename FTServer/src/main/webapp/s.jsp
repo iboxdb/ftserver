@@ -160,7 +160,7 @@
                             <div class="ui label input">
 
                                 <div class="ui action input">
-                                    <a href="./"><i class="teal disk outline icon" style="font-size:60px"></i> </a>
+
                                     <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
                                     <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
                                 </div>
@@ -182,6 +182,9 @@
                         <jsp:include page="spart.jsp" ></jsp:include>
                     </div>
                 </div>
+
+
+                <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
 
             </div>
         </div>            
