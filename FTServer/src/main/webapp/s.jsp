@@ -60,6 +60,9 @@
             .rtl{
                 text-align: initial !important;
             }
+
+            .column {
+            }
         </style> 
         <script>
             var extitle = "";
@@ -147,45 +150,41 @@
             }
         </script>
     </head>
-    <body > 
-        <div class="ui left aligned grid">
-            <div class="column"  style="max-width: 800px;"> 
-                <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
-                    <div class="ui label input">
+    <body> 
+        <div class="ui center aligned grid" >
+            <div class="column" style="max-width: 95%" >
 
-                        <div class="ui action input">
-                            <a href="./"><i class="teal disk outline icon" style="font-size:60px"></i> </a>
-                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
-                            <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
-                        </div>
+                <div class="ui grid">
+                    <div class="column" > 
+                        <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
+                            <div class="ui label input">
+
+                                <div class="ui action input">
+                                    <a href="./"><i class="teal disk outline icon" style="font-size:60px"></i> </a>
+                                    <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
+                                    <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
+                                </div>
+                            </div>
+                        </form> 
+                        <script>
+                            function formsubmit() {
+                                document.getElementById('btnsearch').disabled = "disabled";
+                            }
+                            function formfocus() {
+                                document.getElementById('btnsearch').disabled = undefined;
+                            }
+                        </script>
                     </div>
-                </form> 
-                <script>
-                    function formsubmit() {
-                        document.getElementById('btnsearch').disabled = "disabled";
-                    }
-                    function formfocus() {
-                        document.getElementById('btnsearch').disabled = undefined;
-                    }
-                </script>
-            </div>
-        </div>
+                </div>
 
-        <div class="rtl ui grid">
-            <div class="fontsize ten wide column" style="max-width: 800px;" id="maindiv">
-                <jsp:include page="spart.jsp" ></jsp:include>
+                <div class="rtl ui grid">
+                    <div class="fontsize column" id="maindiv">
+                        <jsp:include page="spart.jsp" ></jsp:include>
+                    </div>
+                </div>
 
             </div>
-            <div class="six wide column" style="max-width: 80px;">
-
-                <div class="ui segment">
-                    <h4>FTS</h4> 
-                </div> 
-
-
-            </div>
-        </div>
-
+        </div>            
     </body>
 </html>
 

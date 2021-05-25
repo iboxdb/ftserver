@@ -24,9 +24,9 @@ public class AppListener implements ServletContextListener {
         log("IsAndroid = " + App.IsAndroid);
         System.setProperty("fts.isAndroid", Boolean.toString(App.IsAndroid));
         long tm = java.lang.Runtime.getRuntime().maxMemory();
-        tm = (tm / 1024 / 1024);
+        tm = (tm / 1024L / 1024L);
         log("-Xmx " + tm + " MB");// Test on 4G setting.
-        if (tm < 1500L) {
+        if (tm < 2000L) {
             log("Low Memory System, Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) + 1;
             Config.Readonly_CacheLength = Config.mb(tm / 100) + 1;

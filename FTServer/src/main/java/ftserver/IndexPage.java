@@ -121,6 +121,9 @@ public class IndexPage {
         boolean atNight = true;
 
         int max_background = atNight ? 1000 : 0;
+        if (App.IsAndroid && max_background > 100) {
+            max_background = 100;
+        }
 
         if (backgroundThreadQueue.size() < max_background) {
             for (final String vurl : subUrls) {

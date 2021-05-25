@@ -70,19 +70,18 @@
     </head>
     <body > 
         <div class="ui left aligned grid">
-            <div class="column"  style="max-width: 600px;"> 
-                <h3>input HTTP or HTTPS  ://URL</h3>
+            <div class="column" > 
                 <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()" method="post">
                     <div class="ui label input">
 
                         <div class="ui action input">
-                            <a href="./"><i class="teal add outline icon" style="font-size:42px"></i> </a>
+                            <a href="./"><i class="teal outline icon" style="font-size:25px">FTS</i></a>
                             <input name="url"  value="<%=url%>" required onfocus="formfocus()" />
                             <input id="btnsearch" type="submit"  class="ui teal right button" 
-                                   value=" ADD PAGE "  /> 
+                                   value=" ADD "  /> 
                         </div>
 
-                        <div class="ui">Informtion:</div>
+                        <div class="ui">Description:</div>
                         <div class="ui action input">
 
                             <textarea name="msg" maxlength="200" height="200px"></textarea>
@@ -90,6 +89,8 @@
 
                     </div>
                 </form> 
+                            
+                <h3>Input HTTP or HTTPS  ://URL</h3>
                 <script>
                     function formsubmit() {
                         document.getElementById('btnsearch').disabled = "disabled";

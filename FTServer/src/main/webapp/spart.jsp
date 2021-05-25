@@ -137,7 +137,7 @@
             HTML.tag("br");
         }%>
 </div>
-<div class="ui teal message" id="s<%= IdToString(startId, '_')%>">
+<div class="ui teal message" id="s<%= IdToString(startId, '_')%>" dir="auto">
     <%
         String content = ((System.currentTimeMillis() - begin) / 1000.0) + "s, "
                 + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";

@@ -28,7 +28,7 @@
             }
 
             .column {
-                max-width: 60%;
+                max-width: 95%;
             }
 
         </style> 
@@ -60,25 +60,26 @@
                 </script>
 
                 <div class="ui message" style="text-align: left; font-size: 20px">
-                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Pages (add http/https to server)</a><br>
-
-                    <br>Recent Searches:<br>
+                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Page Index</a><br>
+                    
+                    <!-- <br>Recent Searches: -->
+                    <br>
                     <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {
                             String str = pst.keywords;
                             try (Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
-                                HTML.text(str);
+                                HTML.text("[" + str + "]");
                             }
-                            HTML.text(", &nbsp; ");
+                            HTML.text(" &nbsp; ");
                         }
                     %> 
 
                     <br>
 
-                    <br><a  href="./">Refresh Discoveries:</a> &nbsp;  
+                    <br><a  href="./">Refresh Discoveries:</a> &nbsp;  <br>
                     <%
                         for (String str : IndexPage.discover()) {
                             try (Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
-                                HTML.text(str);
+                                HTML.text("[" + str + "]");
                             }
                             HTML.text(" &nbsp; ");
                         }
