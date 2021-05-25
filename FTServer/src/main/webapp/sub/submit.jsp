@@ -1,9 +1,25 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    //SetHead Cookie
+    Cookie[] reqCookies = request.getCookies();
+    if (reqCookies == null) {
+        reqCookies = new Cookie[0];
+    }
+    Cookie testCookie = new Cookie("test", "0");
+    for (Cookie c : reqCookies) {
+        if (testCookie.getName().equalsIgnoreCase(c.getName())) {
+            testCookie = c;
+        }
+    }
+
+    testCookie = new Cookie(testCookie.getName(), Integer.toString(Integer.valueOf(testCookie.getValue()) + 1));
+    response.addCookie(testCookie);
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Android JSP Test</title>
     </head>
     <body>
         <h1>GET</h1>
@@ -22,7 +38,17 @@
 
         <%= request.getParameter("ip1")%>
         <br>
-        <%= request.getParameter("tt1") %>
+        <%= request.getParameter("tt1")%>
+        <br> Cookies : <br>
+
+        <%
+            for (Cookie c : reqCookies) {
+                out.println(c.getName() + " - " + c.getValue() + "<br>");
+                if (testCookie.getName().equalsIgnoreCase(c.getName())) {
+                    testCookie = c;
+                }
+            }
+        %>
 
     </body>    
 </html>
