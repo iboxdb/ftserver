@@ -69,13 +69,12 @@
         </script>
     </head>
     <body > 
-        <div class="ui left aligned grid">
+        <div class="ui center aligned grid">
             <div class="column" > 
                 <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()" method="post">
                     <div class="ui label input">
 
                         <div class="ui action input">
-                            <a href="./"><i class="teal outline icon" style="font-size:25px">FTS</i></a>
                             <input name="url"  value="<%=url%>" required onfocus="formfocus()" />
                             <input id="btnsearch" type="submit"  class="ui teal right button" 
                                    value=" ADD "  /> 
@@ -89,8 +88,10 @@
 
                     </div>
                 </form> 
-                            
+
                 <h3>Input HTTP or HTTPS  ://URL</h3>
+
+                <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
                 <script>
                     function formsubmit() {
                         document.getElementById('btnsearch').disabled = "disabled";
