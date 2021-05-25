@@ -24,7 +24,15 @@ public class AppListener implements ServletContextListener {
         log("IsAndroid = " + App.IsAndroid);
         System.setProperty("fts.isAndroid", Boolean.toString(App.IsAndroid));
         long tm = java.lang.Runtime.getRuntime().maxMemory();
-        log("Xmx = " + (tm / 1024 / 1024) + " MB");
+        tm = (tm / 1024 / 1024);
+        log("-Xmx " + tm + " MB");// Test on 4G setting.
+        if (tm < 1500L) {
+            log("Low Memory System, Reset Config");
+            Config.SwitchToReadonlyIndexLength = Config.mb(tm / 3) + 1;
+            Config.Readonly_CacheLength = Config.mb(tm / 100) + 1;
+            Config.ItemConfig_CacheLength = Config.mb(tm / 20) + 1;
+            Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 100) + 1;
+        }
 
         File mvnConfig = new File(".mvn/jvm.config");
         if (mvnConfig.exists()) {

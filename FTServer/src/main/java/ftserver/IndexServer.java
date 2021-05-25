@@ -9,8 +9,6 @@ import static ftserver.App.*;
 
 public class IndexServer extends LocalDatabaseServer {
 
-    public static long SwitchToReadonlyIndexLength = 1024L * 1024L * 500L * 1L;
-
     public static long ItemDB = 2L;
     public static long IndexDBStart = 10L;
 
@@ -28,13 +26,14 @@ public class IndexServer extends LocalDatabaseServer {
     private static class ItemConfig extends BoxFileStreamConfig {
 
         public ItemConfig() {
-            if (App.IsAndroid) {
-                CacheLength = mb(128);
-            } else {
-                CacheLength = mb(256);
-                SwapFileBuffer = (int) mb(20);
-            }
-            FileIncSize = (int) mb(20);
+
+            CacheLength = Config.ItemConfig_CacheLength;
+            SwapFileBuffer = Config.ItemConfig_SwapFileBuffer;
+            FileIncSize = Config.ItemConfig_SwapFileBuffer;
+
+            log("ItemConfig CacheLength = " + (CacheLength / 1024L / 1024L) + " MB");
+            log("ItemConfig SwapFileBuffer = " + (SwapFileBuffer / 1024L / 1024L) + " MB");
+
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
             ensureTable(Page.class, "Page", "textOrder");
             //the 'textOrder' is used to control url's order
@@ -47,16 +46,15 @@ public class IndexServer extends LocalDatabaseServer {
     private static class IndexConfig extends BoxFileStreamConfig {
 
         public IndexConfig() {
-            int lenMB = 256;
-            if (App.IsAndroid) {
-                CacheLength = mb(lenMB);
-            } else {
-                lenMB = (int) (SwitchToReadonlyIndexLength / 1024L / 1024L);
-                CacheLength = mb(lenMB);
-                SwapFileBuffer = (int) mb(20);
+
+            CacheLength = Config.SwitchToReadonlyIndexLength;
+            SwapFileBuffer = Config.ItemConfig_SwapFileBuffer;
+            if (SwapFileBuffer < FileIncSize) {
+                FileIncSize = SwapFileBuffer;
             }
-            log("DB Cache = " + lenMB + " MB");
-            log("DB Switch Length = " + (SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
+
+            //log("DB Cache = " + lenMB + " MB");
+            log("DB Switch Length = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
             new Engine().Config(this);
         }
 
@@ -94,7 +92,7 @@ public class IndexServer extends LocalDatabaseServer {
         @Override
         public void Flush() {
             super.Flush();
-            if (length > IndexServer.SwitchToReadonlyIndexLength) {
+            if (length > Config.SwitchToReadonlyIndexLength) {
 
                 ArrayList<AutoBox> newIndices = new ArrayList<AutoBox>(App.Indices);
                 newIndices.remove(newIndices.size() - 1);
@@ -105,10 +103,12 @@ public class IndexServer extends LocalDatabaseServer {
                 log("\r\nSwitch To DB (" + addr + ")");
                 newIndices.add(new IndexServer().getInstance(addr).get());
 
-                for (int i = 0; i < newIndices.size() - 10; i++) {
+                for (int i = 0; i < newIndices.size() - 2; i++) {
                     addr = newIndices.get(i).getDatabase().localAddress();
                     newIndices.set(i, new ReadonlyIndexServer().getInstance(addr).get());
-                    //ReadonlyIndexServer.DeleteOldSwap(addr);
+                    if (App.IsAndroid) {
+                        ReadonlyIndexServer.DeleteOldSwap(addr);
+                    }
                 }
 
                 App.Indices = newIndices;
