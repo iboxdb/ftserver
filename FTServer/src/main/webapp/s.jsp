@@ -20,6 +20,7 @@
 <html>
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="<%=name.replaceAll("\"", "")%> what is? iBoxDB NoSQL Document Database Full Text Search FTS">
         <title><%=name.replaceAll("\"", "")%>, what is? iBoxDB NoSQL Document Database Full Text Search</title>
 
