@@ -29,10 +29,10 @@
         <style>
             body {
                 margin-top: 10px;
-                margin-left: 10px;
-                font-weight:lighter;
-                overflow-x: hidden;
-
+                max-width: 95%;
+            }            
+            .column {
+                max-width: 95%;
             }
             .stext{
                 font-size: 22px; 
@@ -62,8 +62,6 @@
                 text-align: initial !important;
             }
 
-            .column {
-            }
         </style> 
         <script>
             var extitle = "";
@@ -153,9 +151,9 @@
     </head>
     <body> 
         <div class="ui center aligned grid" >
-            <div class="column" style="max-width: 95%" >
+            <div class="column"  >
 
-                <div class="ui grid">
+                <div class="ui  center aligned grid">
                     <div class="column" > 
                         <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
                             <div class="ui label input">
@@ -178,8 +176,8 @@
                     </div>
                 </div>
 
-                <div class="rtl ui grid">
-                    <div class="fontsize column" id="maindiv">
+                <div class="ui center aligned grid">
+                    <div class="fontsize rtl column" id="maindiv">
                         <jsp:include page="spart.jsp" ></jsp:include>
                     </div>
                 </div>

@@ -15,19 +15,12 @@
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 
         <style>
-            td{ 
-                white-space:nowrap; 
-                overflow: hidden
-            }
-
+           
             body {
                 margin-top: 10px;
-                overflow:hidden;
+                max-width: 95%;
             }
-            body > .grid {
-
-            }
-
+           
             .column {
                 max-width: 95%;
             }

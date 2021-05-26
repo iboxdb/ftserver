@@ -36,16 +36,17 @@
     <head>        
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Administrator</title>
+        <title>Index Page</title>
 
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 
         <style>
             body {
                 margin-top: 10px;
-                margin-left: 10px;
-                font-weight:lighter;
-                overflow-x: hidden;
+                max-width: 95%;
+            }            
+            .column {
+                max-width: 95%;
             }
             .stext{
 
@@ -69,7 +70,7 @@
             }
         </script>
     </head>
-    <body > 
+    <body> 
         <div class="ui center aligned grid">
             <div class="column" > 
                 <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()" method="post">
@@ -106,20 +107,9 @@
             </div>
         </div>
 
-        <div class="ui grid">
-            <div class="ten wide column" style="max-width: 600px;" id="maindiv">
-                <%
-                    request.setCharacterEncoding("utf-8");
-                    request.setAttribute("admin", true);
-                    url = "";
-                %>
-            </div>
-            <div class="six wide column" style="max-width: 200px;">
-
-
-
-            </div>
-        </div>
+        <%
+            request.setAttribute("admin", true);
+        %>
 
     </body>
 </html>
