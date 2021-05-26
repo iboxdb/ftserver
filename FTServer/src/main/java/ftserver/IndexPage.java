@@ -125,19 +125,21 @@ public class IndexPage {
             max_background = 100;
         }
 
-        if (backgroundThreadQueue.size() < max_background) {
-            for (final String vurl : subUrls) {
-                final String url = Html.getUrl(vurl);
-                backgroundThreadQueue.addLast(new Runnable() {
-                    @Override
-                    public void run() {
-                        log("For:" + url + " ," + backgroundThreadQueue.size());
-                        String r = addPage(url, null, false);
-                        backgroundLog(url, r);
-                    }
-                });
+        for (final String vurl : subUrls) {
+            if (backgroundThreadQueue.size() > max_background) {
+                break;
             }
+            final String url = Html.getUrl(vurl);
+            backgroundThreadQueue.addLast(new Runnable() {
+                @Override
+                public void run() {
+                    log("For:" + url + " ," + backgroundThreadQueue.size());
+                    String r = addPage(url, null, false);
+                    backgroundLog(url, r);
+                }
+            });
         }
+
     }
 
     public static void backgroundLog(String url, String output) {
