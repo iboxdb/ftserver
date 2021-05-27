@@ -153,7 +153,7 @@
         <div class="ui center aligned grid" >
             <div class="column"  >
 
-                <div class="ui  center aligned grid">
+                <div class="ui center aligned grid">
                     <div class="column" > 
                         <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
                             <div class="ui label input">
