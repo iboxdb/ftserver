@@ -37,14 +37,14 @@
         <h1>GET</h1>
         <form target="submit.jsp" method="get">
             <input type="text"  name="ip1" /><br>
-            <textarea name="tt1" rows="5" cols="100"></textarea><br>
+            <textarea name="tt1" rows="10" cols="30"></textarea><br>
             <input type="submit"  name="s1" />
         </form>
 
         <h1>POST</h1>
         <form target="submit.jsp" method="post">
             <input type="text"  name="ip1" /><br>
-            <textarea name="tt1" rows="5" cols="100"></textarea><br>
+            <textarea name="tt1" rows="10" cols="30"></textarea><br>
             <input type="submit"  name="s2" />
         </form>
 
