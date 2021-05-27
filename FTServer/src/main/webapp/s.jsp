@@ -150,41 +150,39 @@
         </script>
     </head>
     <body> 
+
+        <div class="ui center aligned grid">
+            <div class="column" > 
+                <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
+                    <div class="ui label input">
+
+                        <div class="ui action input">
+
+                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
+                            <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
+                        </div>
+                    </div>
+                </form> 
+                <script>
+                    function formsubmit() {
+                        document.getElementById('btnsearch').disabled = "disabled";
+                    }
+                    function formfocus() {
+                        document.getElementById('btnsearch').disabled = undefined;
+                    }
+                </script>
+            </div>
+        </div>
+
+        <div class="ui center aligned grid">
+            <div class="fontsize rtl column" id="maindiv">
+                <jsp:include page="spart.jsp" ></jsp:include>
+            </div>
+        </div>
+
         <div class="ui center aligned grid" >
-            <div class="column"  >
-
-                <div class="ui center aligned grid">
-                    <div class="column" > 
-                        <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
-                            <div class="ui label input">
-
-                                <div class="ui action input">
-
-                                    <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
-                                    <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
-                                </div>
-                            </div>
-                        </form> 
-                        <script>
-                            function formsubmit() {
-                                document.getElementById('btnsearch').disabled = "disabled";
-                            }
-                            function formfocus() {
-                                document.getElementById('btnsearch').disabled = undefined;
-                            }
-                        </script>
-                    </div>
-                </div>
-
-                <div class="ui center aligned grid">
-                    <div class="fontsize rtl column" id="maindiv">
-                        <jsp:include page="spart.jsp" ></jsp:include>
-                    </div>
-                </div>
-
-
+            <div class="column" >
                 <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
-
             </div>
         </div>            
     </body>
