@@ -8,7 +8,7 @@
     //UTF-8 Text
     //private static String book1_path = "175315.txt";
     //private static String book2_path = "phoenix.txt";
-    private static String book1_path = "/home/user/github/hero.txt.no";
+    private static String book1_path = "/home/user/github/hero.txt";
     private static String book2_path = "/home/user/github/phoenix.txt";
 
 %>
