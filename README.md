@@ -131,7 +131,7 @@ root      soft    nofile      500000
 
 [C# ASP.NET Core Version](https://github.com/iboxdb/ftserver-cs)
 
-[FTServer for Android](https://sourceforge.net/p/ftserver-android/code/)
+[FTServer for Android with APK](https://sourceforge.net/p/ftserver-android/code/)
 
 
 <br />
