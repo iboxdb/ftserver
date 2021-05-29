@@ -15,21 +15,27 @@
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 
         <style>
-           
+
             body {
                 margin-top: 10px;
-                max-width: 95%;
+                padding: 10px;
             }
-           
+
+            .grid{
+                max-width: 100%;
+                width:100%;
+                text-align: center;
+            }
             .column {
-                max-width: 95%;
             }
 
         </style> 
 
     </head>
     <body> 
-        <div class="ui middle aligned center aligned grid">
+
+
+        <div class="grid">
             <div class="column"  >
 
                 <h2 class="ui teal header" > 
@@ -55,7 +61,7 @@
 
                 <div class="ui message" style="text-align: left; font-size: 20px">
                     <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Page Index</a><br>
-                    
+
                     <!-- <br>Recent Searches: -->
                     <br>
                     <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {

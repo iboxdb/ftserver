@@ -29,10 +29,14 @@
         <style>
             body {
                 margin-top: 10px;
-                max-width: 95%;
-            }            
+                padding: 10px;
+            }
+            .grid{
+                max-width: 100%;
+                width:100%;
+                text-align: center;
+            }
             .column {
-                max-width: 95%;
             }
             .stext{
                 font-size: 22px; 
@@ -151,7 +155,7 @@
     </head>
     <body> 
 
-        <div class="ui center aligned grid">
+        <div class="grid">
             <div class="column" > 
                 <form class="ui large form"  action="s.jsp" onsubmit="formsubmit()">
                     <div class="ui label input">
@@ -174,13 +178,13 @@
             </div>
         </div>
 
-        <div class="ui center aligned grid">
+        <div class="grid">
             <div class="fontsize rtl column" id="maindiv">
                 <jsp:include page="spart.jsp" ></jsp:include>
             </div>
         </div>
 
-        <div class="ui center aligned grid" >
+        <div class="grid" >
             <div class="column" >
                 <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
             </div>

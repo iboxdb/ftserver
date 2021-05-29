@@ -43,10 +43,15 @@
         <style>
             body {
                 margin-top: 10px;
-                max-width: 95%;
-            }            
+                padding: 10px;
+            }
+
+            .grid{
+                max-width: 100%;
+                width:100%;
+                text-align: center;
+            }
             .column {
-                max-width: 95%;
             }
             .stext{
 
@@ -71,7 +76,7 @@
         </script>
     </head>
     <body> 
-        <div class="ui center aligned grid">
+        <div class="grid">
             <div class="column" > 
                 <form class="ui large form"  action="admin.jsp" onsubmit="formsubmit()" method="post">
                     <div class="ui label input">
