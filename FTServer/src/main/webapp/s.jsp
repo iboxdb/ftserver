@@ -29,7 +29,7 @@
         <style>
             body {
                 margin-top: 10px;
-                padding: 10px;
+                padding: 20px;
             }
             .grid{
                 max-width: 100%;
