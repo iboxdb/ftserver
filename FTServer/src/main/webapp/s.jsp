@@ -179,7 +179,8 @@
         </div>
 
         <div class="grid">
-            <div class="fontsize rtl column" id="maindiv">
+            <div class="rtl column" id="maindiv">
+                <br>
                 <jsp:include page="spart.jsp" ></jsp:include>
             </div>
         </div>
