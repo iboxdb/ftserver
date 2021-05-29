@@ -180,6 +180,8 @@ public class IndexAPI {
                     pt.page = p;
                     pt.isAndSearch = true;
                     pages.add(pt);
+                } else {
+                    App.log("Old Version Page Not Showing: " + p.url); 
                 }
             }
             

@@ -18,5 +18,10 @@
         <h3>Free to Modify</h3>
         <h5>Time: <%= new java.util.Date()%></h5>
 
+        <%
+            //System Encoding UTF-8
+            //String str = sun.security.action.GetPropertyAction.privilegedGetProperty("file.encoding");
+            //out.println( "System Encoding " + str );
+        %>
     </body>
 </html>
