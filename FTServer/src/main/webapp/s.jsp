@@ -65,7 +65,9 @@
             .rtl{
                 text-align: initial !important;
             }
-
+            #maindiv{
+                overflow-x: hidden;
+            }
         </style> 
         <script>
             var extitle = "";
@@ -113,7 +115,7 @@
                     var top = div_load.getBoundingClientRect().top;
                     var se = document.documentElement.clientHeight;
 
-                    top = top - 1000;
+                    top = top - 500;
                     if (top <= se) {
                         var startId = div_load.startId;
                         div_load = null;

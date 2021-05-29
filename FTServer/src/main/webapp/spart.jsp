@@ -52,7 +52,7 @@
 %>
 
 
-<%    long pageCount = 4;
+<%    long pageCount = 8;
     //pageCount = 2;
     long[] startId = new long[]{Long.MAX_VALUE};
 
@@ -71,8 +71,8 @@
         pageCount = 1;
     }
     if (App.IsAndroid) {
-        if (pageCount > 2) {
-            pageCount = 2;
+        if (pageCount > 4) {
+            pageCount = 4;
         }
     }
 
