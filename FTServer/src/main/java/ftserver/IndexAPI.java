@@ -119,14 +119,18 @@ public class IndexAPI {
         if (name.length() > 150) {
             return new long[]{-1, -1, -1};
         }
-
+        long maxTime = 1000 * 2;
+        if (pageCount == 1) {
+            maxTime = 500;
+        }
         StartIdParam startId = new StartIdParam(t_startId);
         long beginTime = System.currentTimeMillis();
-        long maxTime = 1000 * 2;
+
         //And
         while (startId.isAnd()) {
             DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[0]);
+            auto = ReadonlyIndexServer.TryReadonly(auto, Config.mb(Config.SwitchToReadonlyIndexLength / 8));
             startId.startId[2] = SearchAnd(auto, outputPages, name, startId.startId[2], pageCount - outputPages.size());
             for (PageText pt : outputPages) {
                 if (pt.dbOrder < 0) {
@@ -146,6 +150,7 @@ public class IndexAPI {
         while (startId.isOr()) {
             DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[1]);
+            auto = ReadonlyIndexServer.TryReadonly(auto, Config.mb(Config.SwitchToReadonlyIndexLength / 8));
             SearchOr(auto, outputPages, ors, startId.startId, pageCount);
             for (PageText pt : outputPages) {
                 if (pt.dbOrder < 0) {
