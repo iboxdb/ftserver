@@ -52,7 +52,7 @@
 %>
 
 
-<%    long pageCount = 8;
+<%    long pageCount = 4;
     //pageCount = 2;
     long[] startId = new long[]{Long.MAX_VALUE};
 
@@ -63,6 +63,16 @@
         startId = new long[ss.length];
         for (int i = 0; i < ss.length; i++) {
             startId[i] = Long.parseLong(ss[i]);
+        }
+    }
+
+    boolean isFirstLoad = startId[0] == Long.MAX_VALUE;
+    if (isFirstLoad) {
+        pageCount = 1;
+    }
+    if (App.IsAndroid) {
+        if (pageCount > 2) {
+            pageCount = 2;
         }
     }
 
