@@ -29,9 +29,9 @@ public class AppListener implements ServletContextListener {
         if (tm < 2000L) {
             log("Low Memory System, Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) + 1;
-            Config.Readonly_CacheLength = Config.mb(tm / 100) + 1;
+            Config.Readonly_CacheLength = Config.mb(tm / 150) + 1;
             Config.ItemConfig_CacheLength = Config.mb(tm / 30) + 1;
-            Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 100) + 1;
+            Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
 
             if (Config.Readonly_CacheLength < Config.mb(5)) {
                 log("set Readonly_CacheLength = 1");
