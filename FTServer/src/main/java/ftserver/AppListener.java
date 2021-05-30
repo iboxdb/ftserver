@@ -34,9 +34,10 @@ public class AppListener implements ServletContextListener {
             Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
 
             if (Config.Readonly_CacheLength < Config.mb(5)) {
-                log("set Readonly_CacheLength = 1");
+
                 Config.Readonly_CacheLength = 1;
             }
+            log("ReadOnly CacheLength = " + (Config.Readonly_CacheLength / 1024L / 1024L) + " MB (" + Config.Readonly_CacheLength + ")");
         }
 
         File mvnConfig = new File(".mvn/jvm.config");
