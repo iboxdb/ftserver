@@ -7,13 +7,14 @@ import java.io.*;
 import static ftserver.App.*;
 
 public class ReadonlyIndexServer extends LocalDatabaseServer {
-    
+
     private static long lowReadonlyCache = Config.mb(1);
-    
-    public static AutoBox TryReadonly(AutoBox auto, long resetCache) {
+
+    public static AutoBox TryReadonly(AutoBox auto) {
         if (Config.Readonly_CacheLength < lowReadonlyCache) {
             if (auto.getDatabase().getConfig() instanceof ReadonlyConfig) {
                 ReadonlyIndexServer server = new ReadonlyIndexServer();
+                long resetCache = Config.SwitchToReadonlyIndexLength / 5;
                 server.resetCacheLength = resetCache;
                 //App.log("Reset Readonly Cache to " + resetCache);
                 return server.getInstance(auto.getDatabase().localAddress()).get();
@@ -21,9 +22,9 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         }
         return auto;
     }
-    
+
     private long resetCacheLength = -1;
-    
+
     @Override
     protected DatabaseConfig
             BuildDatabaseConfig(long address) {
@@ -33,18 +34,18 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         }
         return cfg;
     }
-    
+
     private static class ReadonlyConfig
             extends ReadonlyStreamConfig {
-        
+
         private long address;
-        
+
         public ReadonlyConfig(long address) {
             super(GetStreamsImpl(address));
             this.address = address;
             this.CacheLength = Config.Readonly_CacheLength;
         }
-        
+
         private static File[] GetStreamsImpl(long address) {
             String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
             if (App.IsAndroid) {
@@ -52,9 +53,9 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             }
             return new File[]{new File(pa), new File(pa)};
         }
-        
+
     }
-    
+
     public static void DeleteOldSwap(long address) {
         String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
         pa += ".swp";
