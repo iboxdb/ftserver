@@ -33,7 +33,7 @@ public class AppListener implements ServletContextListener {
             Config.ItemConfig_CacheLength = Config.mb(tm / 30) + 1;
             Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
 
-            if (Config.Readonly_CacheLength < Config.mb(5)) {
+            if (Config.Readonly_CacheLength < Config.mb(8)) {
 
                 Config.Readonly_CacheLength = 1;
             }
