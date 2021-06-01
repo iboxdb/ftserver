@@ -103,14 +103,16 @@ public class IndexServer extends LocalDatabaseServer {
                 newIndices.remove(newIndices.size() - 1);
 
                 long addr = App.Index.getDatabase().localAddress();
-                newIndices.add(new ReadonlyIndexServer().getInstance(addr).get());
+                newIndices.add(ReadonlyIndexServer.GetReadonly(addr));
                 addr++;
                 log("\r\nSwitch To DB (" + addr + ")");
                 newIndices.add(new IndexServer().getInstance(addr).get());
 
                 for (int i = 0; i < newIndices.size() - 2; i++) {
-                    addr = newIndices.get(i).getDatabase().localAddress();
-                    newIndices.set(i, new ReadonlyIndexServer().getInstance(addr).get());
+
+                    AutoBox auto = newIndices.get(i);
+                    newIndices.set(i, ReadonlyIndexServer.RenewReadonly(auto));
+
                     if (App.IsAndroid) {
                         ReadonlyIndexServer.DeleteOldSwap(addr);
                     }

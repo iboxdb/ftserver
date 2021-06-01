@@ -8,22 +8,55 @@ import static ftserver.App.*;
 
 public class ReadonlyIndexServer extends LocalDatabaseServer {
 
-    private static long lowReadonlyCache = Config.mb(1);
+    private ReadonlyIndexServer() {
+        super();
+    }
+
+    public static class AutoBoxHolder extends AutoBox {
+
+        private final long address;
+
+        public AutoBoxHolder(long addr) {
+            super(null, addr);
+            address = addr;
+        }
+
+        public long getLocalAddress() {
+            return address;
+        }
+    }
+
+    private static final long lowReadonlyCache = Config.mb(1);
 
     public static AutoBox TryReadonly(AutoBox auto) {
-        if (Config.Readonly_CacheLength < lowReadonlyCache) {
-            if (auto.getDatabase().getConfig() instanceof ReadonlyConfig) {
-                ReadonlyIndexServer server = new ReadonlyIndexServer();
-                long resetCache = Config.SwitchToReadonlyIndexLength / 5;
-                if (resetCache < lowReadonlyCache) {
-                    resetCache = lowReadonlyCache + 1;
-                }
-                server.resetCacheLength = resetCache;
-                //App.log("Reset Readonly Cache to " + resetCache);
-                return server.getInstance(auto.getDatabase().localAddress()).get();
+        if (auto instanceof AutoBoxHolder) {
+            ReadonlyIndexServer server = new ReadonlyIndexServer();
+            long resetCache = Config.SwitchToReadonlyIndexLength / 5;
+            if (resetCache < lowReadonlyCache) {
+                resetCache = lowReadonlyCache + 1;
             }
+            server.resetCacheLength = resetCache;
+            //App.log("Reset Readonly Cache to " + resetCache);
+            return server.getInstance(auto.getDatabase().localAddress()).get();
+
         }
         return auto;
+    }
+
+    public static AutoBox GetReadonly(long addr) {
+        if (Config.Readonly_CacheLength < lowReadonlyCache) {
+            return new AutoBoxHolder(addr);
+        }
+        return new ReadonlyIndexServer().getInstance(addr).get();
+    }
+
+    public static AutoBox RenewReadonly(AutoBox auto) {
+        if (auto instanceof AutoBoxHolder) {
+            return auto;
+        }
+        long addr = auto.getDatabase().localAddress();
+        return GetReadonly(addr);
+
     }
 
     private long resetCacheLength = Config.Readonly_CacheLength;
@@ -41,17 +74,12 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         private long address;
 
         public ReadonlyConfig(long address, long cache) {
-            super(GetStreamsImpl(address, cache));
+            super(GetStreamsImpl(address));
             this.address = address;
             this.CacheLength = cache;
         }
 
-        private static File[] GetStreamsImpl(long address, long cache) {
-            if (cache < lowReadonlyCache) {
-                //this Config will be replaced in TryReadonly().
-                //Cache too low can't work.
-                return new File[0];
-            }
+        private static File[] GetStreamsImpl(long address) {
             String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
             if (App.IsAndroid) {
                 return new File[]{new File(pa)};

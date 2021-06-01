@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 1);
+        App.log("AppListener Flag: " + 2);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -40,7 +40,6 @@ public class AppListener implements ServletContextListener {
             Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
 
             if (Config.Readonly_CacheLength < Config.mb(8)) {
-
                 Config.Readonly_CacheLength = 1;
             }
             log("ReadOnly CacheLength = " + (Config.Readonly_CacheLength / 1024L / 1024L) + " MB (" + Config.Readonly_CacheLength + ")");
@@ -80,7 +79,7 @@ public class AppListener implements ServletContextListener {
 
         App.Indices = new ArrayList<AutoBox>();
         for (long l = IndexServer.IndexDBStart; l < start; l++) {
-            App.Indices.add(new ReadonlyIndexServer().getInstance(l).get());
+            App.Indices.add(ReadonlyIndexServer.GetReadonly(l));
         }
         App.Indices.add(new IndexServer().getInstance(start).get());
         log("Current Index DB (" + start + ")");
