@@ -72,6 +72,21 @@ public class IndexAPI {
                 }
             }
 
+            if (ors.get(ors.size() - 1).length() == 0) {
+                ors.remove(ors.size() - 1);
+            }
+            for (int i = 1; i < ors.size(); i++) {
+                StringBuilder sbi = ors.get(i);
+                StringBuilder sbp = ors.get(i - 1);
+                if (sbi.length() == 1) {
+                    char c = sbi.charAt(0);
+                    char pc = sbp.charAt(sbp.length() - 1);
+                    if ((!ENGINE.sUtil.isWord(c)) && (!ENGINE.sUtil.isWord(pc))) {
+                        sbi.insert(0, pc);
+                    }
+                }
+            }
+
             ors.add(0, null); //and box
             ors.add(1, null); //or box
             ors.add(2, null); //and startId
@@ -117,7 +132,7 @@ public class IndexAPI {
     public static long[] Search(List<PageText> outputPages,
             String name, long[] t_startId, long pageCount) {
         name = name.trim();
-        if (name.length() > 150) {
+        if (name.length() == 0 || name.length() > 150) {
             return new long[]{-1, -1, -1};
         }
         long maxTime = 1000 * 2;

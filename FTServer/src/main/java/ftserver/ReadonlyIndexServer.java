@@ -17,11 +17,11 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         private final long address;
 
         public AutoBoxHolder(long addr) {
-            super(null, addr);
+            super(null, 0);
             address = addr;
         }
 
-        public long getLocalAddress() {
+        public final long getLocalAddress() {
             return address;
         }
     }
