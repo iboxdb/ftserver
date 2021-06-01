@@ -1,3 +1,4 @@
+/* iBoxDB FTServer Bruce Yang CL */
 package ftserver;
 
 import iboxdb.localserver.*;
@@ -203,7 +204,7 @@ public class IndexAPI {
 
             for (int i = 0; i < ors.size(); i++) {
                 StringBuilder sbkw = ors.get(i);
-                if (sbkw == null || sbkw.length() < 2) {
+                if (sbkw == null || sbkw.length() < 1) {
                     iters[i] = null;
                     continue;
                 }
