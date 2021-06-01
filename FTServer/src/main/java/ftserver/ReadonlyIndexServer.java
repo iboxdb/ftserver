@@ -37,7 +37,7 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             }
             server.resetCacheLength = resetCache;
             //App.log("Reset Readonly Cache to " + resetCache);
-            return server.getInstance(auto.getDatabase().localAddress()).get();
+            return server.getInstance(((AutoBoxHolder) auto).getLocalAddress()).get();
 
         }
         return auto;
