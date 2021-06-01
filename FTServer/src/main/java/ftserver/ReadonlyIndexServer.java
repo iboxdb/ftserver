@@ -15,6 +15,9 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             if (auto.getDatabase().getConfig() instanceof ReadonlyConfig) {
                 ReadonlyIndexServer server = new ReadonlyIndexServer();
                 long resetCache = Config.SwitchToReadonlyIndexLength / 5;
+                if (resetCache < lowReadonlyCache) {
+                    resetCache = lowReadonlyCache + 1;
+                }
                 server.resetCacheLength = resetCache;
                 //App.log("Reset Readonly Cache to " + resetCache);
                 return server.getInstance(auto.getDatabase().localAddress()).get();
@@ -23,15 +26,12 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         return auto;
     }
 
-    private long resetCacheLength = -1;
+    private long resetCacheLength = Config.Readonly_CacheLength;
 
     @Override
     protected DatabaseConfig
             BuildDatabaseConfig(long address) {
-        ReadonlyConfig cfg = new ReadonlyConfig(address);
-        if (resetCacheLength > 0) {
-            cfg.CacheLength = resetCacheLength;
-        }
+        ReadonlyConfig cfg = new ReadonlyConfig(address, resetCacheLength);
         return cfg;
     }
 
@@ -40,13 +40,18 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
 
         private long address;
 
-        public ReadonlyConfig(long address) {
-            super(GetStreamsImpl(address));
+        public ReadonlyConfig(long address, long cache) {
+            super(GetStreamsImpl(address, cache));
             this.address = address;
-            this.CacheLength = Config.Readonly_CacheLength;
+            this.CacheLength = cache;
         }
 
-        private static File[] GetStreamsImpl(long address) {
+        private static File[] GetStreamsImpl(long address, long cache) {
+            if (cache < lowReadonlyCache) {
+                //this Config will be replaced in TryReadonly().
+                //Cache too low can't work.
+                return new File[0];
+            }
             String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
             if (App.IsAndroid) {
                 return new File[]{new File(pa)};
