@@ -11,6 +11,12 @@ import java.util.ArrayList;
 @WebListener
 public class AppListener implements ServletContextListener {
 
+    public AppListener() {
+        App.log("AppListener Flag: " + 1);
+        App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
+        App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
