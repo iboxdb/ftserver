@@ -52,6 +52,7 @@
             }
             .rt{
                 color: red;
+                font-weight: bolder;
             }
             .rt2{
                 font-weight:bolder;
