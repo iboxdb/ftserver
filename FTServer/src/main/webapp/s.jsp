@@ -53,6 +53,10 @@
             .rt{
                 color: red;
             }
+            .rt2{
+                font-weight:bolder;
+                font-style: italic;
+            }
             .gt{
                 color: green;
             }
@@ -79,12 +83,24 @@
                 var ts = div.getElementsByClassName("stext");
 
                 var kws = txt.split(/[ 　]/);
+                var kwsDo = {};
                 for (var i = 0; i < kws.length; i++) {
                     var kw = String(kws[i]).trim();
                     if (kw.length < 1) {
                         continue;
                     }
-                    var fontText = "<font class='rt'>";
+
+                    if (kwsDo[kw]) {
+                        continue;
+                    }
+                    kwsDo[kw] = kw;
+                    var isword = kw.charCodeAt(0) < 0x3040;
+                    if (kw.length < 3 && isword) {
+                        kw = " " + kw + " ";
+                    }
+                    var fontText = isword ? "<font class='rt2'>" : "<font class='rt'>";
+
+
                     if (fontText.indexOf(kw.toLowerCase()) > -1) {
                         continue;
                     }
