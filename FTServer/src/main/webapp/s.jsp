@@ -68,7 +68,7 @@
                 text-align: initial !important;
             }
             #maindiv{
-                overflow-x: hidden;
+                overflow-x: hidden !important;
             }
         </style> 
         <script>
