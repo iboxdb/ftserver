@@ -139,7 +139,7 @@
                 if (!p.isAndSearch) {
                     HTML.text("*");
                 }
-                HTML.text(p.url);
+                HTML.text(decodeTry(p.url));
                 HTML.text(" ");
                 HTML.text(p.createTime.toString());
 
@@ -156,6 +156,7 @@
     <a href="#btnsearch" ><b><%=  !IsEnd(startId) ? "CONTINUING" : "END"%></b></a>
 
 </div>
+<br>
 <script>
     setTimeout(function () {
         highlight("ldiv<%= IdToString(startId, '_')%>");

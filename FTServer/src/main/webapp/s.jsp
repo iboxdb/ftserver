@@ -45,7 +45,7 @@
                 font-size: 18px; 
             }
             .spartcss{
-                font-weight: bold;
+               
             }
             .rt{
                 color: red;
