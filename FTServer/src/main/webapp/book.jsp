@@ -65,6 +65,7 @@
     String b = request.getParameter("book");
     String s = request.getParameter("start");
     String l = request.getParameter("length");
+    String ex = request.getParameter("ex");
 
     if (b == null) {
         b = "0";
@@ -116,8 +117,9 @@
     <body>
         <h1>Hello World!</h1>
         <p><%= text%></p>
-
-
+        <hr>
+        <p>${param.ex}</p>
+        <hr>
         <%
             HTML.tag("br");
             for (int i = 0; i < 1100; i++) {

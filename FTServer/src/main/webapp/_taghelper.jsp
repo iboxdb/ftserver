@@ -1,3 +1,4 @@
+<%@page import="ftserver.PageText"%>
 <%@page import="ftserver.App"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 
@@ -79,11 +80,7 @@
     }
 
     public String decodeTry(String text) {
-        try {
-            return java.net.URLDecoder.decode(text, "UTF-8");
-        } catch (Throwable ex) {
-            return text;
-        }
+        return PageText.decodeTry(text);
     }
 
     public void log(String msg) {

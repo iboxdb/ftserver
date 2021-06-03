@@ -66,10 +66,19 @@ public class PageText {
         }
 
         if (priority == contextPriority) {
-            return text + " " + url;
+            return text + " " + decodeTry(url);
         }
 
         return text;
+    }
+
+    public static String decodeTry(String text) {
+        try {
+            //Decodes an {@code application/x-www-form-urlencoded} string using
+            return java.net.URLDecoder.decode(text, "UTF-8");
+        } catch (Throwable ex) {
+            return text;
+        }
     }
 
     @NotColumn
