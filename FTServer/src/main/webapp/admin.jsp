@@ -90,7 +90,7 @@
                         <div class="ui">Description:</div>
                         <div class="ui action input">
 
-                            <textarea name="msg" maxlength="200" height="200px"></textarea>
+                            <textarea name="msg" maxlength="800" height="200px"></textarea>
                         </div>
 
                     </div>

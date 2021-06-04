@@ -115,11 +115,15 @@
 
     </head>
     <body>
+        
+        
+        <p>${param.ex}</p>        
+        <hr>
+        
         <h1>Hello World!</h1>
         <p><%= text%></p>
         <hr>
-        <p>${param.ex}</p>
-        <hr>
+        
         <%
             HTML.tag("br");
             for (int i = 0; i < 1100; i++) {

@@ -160,8 +160,9 @@
 <script>
     setTimeout(function () {
         highlight("ldiv<%= IdToString(startId, '_')%>");
-    <% if (!IsEnd(startId)) {%>
-        //startId is a big number, in javascript, have to write big number as a 'String'
+    <% if (!IsEnd(startId)) {
+            //startId is a big number, in javascript, have to write big number as a 'String'
+    %>
         onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);

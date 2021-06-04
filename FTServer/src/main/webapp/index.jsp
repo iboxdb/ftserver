@@ -60,7 +60,7 @@
                 </script>
 
                 <div class="ui message" style="text-align: left; font-size: 20px">
-                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Admin Page Index</a><br>
+                    <a  href="admin.jsp" target="ADMIN_FTSERVER">Add Page Index</a><br>
 
                     <!-- <br>Recent Searches: -->
                     <br>

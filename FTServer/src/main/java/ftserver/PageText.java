@@ -66,7 +66,7 @@ public class PageText {
         }
 
         if (priority == contextPriority) {
-            return text + " " + decodeTry(url);
+            return text + " " + decodeTry(url).replaceAll("-", " ");
         }
 
         return text;
