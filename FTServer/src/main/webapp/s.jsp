@@ -45,7 +45,7 @@
                 font-size: 18px; 
             }
             .spartcss{
-               
+
             }
             .rt{
                 color: red;
@@ -156,15 +156,17 @@
                 }
             }
             function sendlog(url, txt) {
-                if (url) {
-                    try {
-                        var xhr = new XMLHttpRequest();
-                        url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
-                        xhr.open('GET', url, true);
-                        xhr.send(null);
-                    } catch (e) {
-                    }
-                }
+                /*
+                 if (url) {
+                 try {
+                 var xhr = new XMLHttpRequest();
+                 url = "log.jsp?url=" + window.escape(url) + "&txt=" + window.escape(txt);
+                 xhr.open('GET', url, true);
+                 xhr.send(null);
+                 } catch (e) {
+                 }
+                 }
+                 */
                 return true;
             }
         </script>

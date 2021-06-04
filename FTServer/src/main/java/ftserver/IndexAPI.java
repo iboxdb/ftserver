@@ -202,7 +202,7 @@ public class IndexAPI {
                     pt.isAndSearch = true;
                     pages.add(pt);
                 } else {
-                    App.log("Old Version Page Not Showing: " + p.url + " (" + name + ") AND");
+                    //App.log("Old Version Page Not Showing: " + p.url + " (" + name + ") AND");
                 }
             }
 
@@ -266,7 +266,7 @@ public class IndexAPI {
                         pt.isAndSearch = false;
                         outputPages.add(pt);
                     } else {
-                        App.log("Old Version Page Not Showing: " + p.url + " OR ");
+                        //App.log("Old Version Page Not Showing: " + p.url + " OR ");
                     }
                 }
 
