@@ -98,6 +98,10 @@
 
                 <h3>Input HTTP or HTTPS  ://URL</h3>
 
+                The indexing process will continue until all be done, check the Log for details,
+                it needs bandwidth.
+                or close the App to stop it.
+                <br>
                 <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
                 <script>
                     function formsubmit() {

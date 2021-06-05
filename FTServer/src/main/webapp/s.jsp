@@ -79,6 +79,11 @@
                 txt += (" " + extitle);
                 var div = document.getElementById(loadedDivId);
                 var ts = div.getElementsByClassName("stext");
+                var tshtml = [];
+                for (var j = 0; j < ts.length; j++) {
+                    var html = ts[j].innerHTML;
+                    tshtml[j] = " " + html + " ";
+                }
 
                 var kws = txt.split(/[ 　]/);
                 var kwsDo = {};
@@ -92,9 +97,12 @@
                         continue;
                     }
                     kwsDo[kw] = kw;
+                    var kwreg = kw;
                     var isword = kw.charCodeAt(0) < 0x3040;
-                    if (kw.length < 3 && isword) {
-                        kw = " " + kw + " ";
+                    if (isword) {
+                        kwreg = "(\\s+)(" + kw + ")([\\s\\,\\.]+)";
+                    } else {
+                        kwreg = "([^.]+)(" + kw + ")(.+)";
                     }
                     var fontText = isword ? "<font class='rt2'>" : "<font class='rt'>";
 
@@ -106,11 +114,15 @@
                         continue;
                     }
                     for (var j = 0; j < ts.length; j++) {
-                        var html = ts[j].innerHTML;
-                        ts[j].innerHTML =
-                                html.replace(new RegExp(kw, 'gi'),
-                                        fontText + kw + "</font>");
+                        var html = tshtml[j];
+                        tshtml[j] =
+                                html.replace(new RegExp(kwreg, 'gi'),
+                                        "$1" + fontText + "$2" + "</font>" + "$3");
                     }
+                }
+                for (var j = 0; j < ts.length; j++) {
+                    var html = tshtml[j];
+                    ts[j].innerHTML = html;
                 }
             }
         </script>
