@@ -67,7 +67,7 @@
                     <webResources>
                         <resource>
                             <directory>${build.sourceDirectory}</directory>
-                            <targetPath>SourceCode</targetPath>
+                            <targetPath>src/main/java</targetPath>
                         </resource>
                     </webResources>
                 </configuration>
