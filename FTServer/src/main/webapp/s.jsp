@@ -100,7 +100,7 @@
                     var kwreg = kw;
                     var isword = kw.charCodeAt(0) < 0x3040;
                     if (isword) {
-                        kwreg = "(\\s+)(" + kw + ")([\\s\\,\\.]+)";
+                        kwreg = "([\\s]+)(" + kw + ")([\\W]+)";
                     } else {
                         kwreg = "([^.]+)(" + kw + ")(.+)";
                     }
