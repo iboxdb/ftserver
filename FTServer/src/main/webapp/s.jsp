@@ -47,11 +47,11 @@
             .spartcss{
 
             }
-            .rt{
+            B{
                 color: red;
                 font-weight: bolder;
             }
-            .rt2{
+            I{
                 font-weight:bolder;
                 font-style: italic;
             }
@@ -98,26 +98,20 @@
                     }
                     kwsDo[kw] = kw;
                     var kwreg = kw;
+                    var kwreg2 = kw;
                     var isword = kw.charCodeAt(0) < 0x3040;
                     if (isword) {
                         kwreg = "([\\s]+)(" + kw + ")([\\W]+)";
+                        kwreg2 = "$1<i>$2</i>$3";
                     } else {
                         kwreg = "([^.]+)(" + kw + ")(.+)";
+                        kwreg2 = "$1<b>$2</b>$3";
                     }
-                    var fontText = isword ? "<font class='rt2'>" : "<font class='rt'>";
 
-
-                    if (fontText.indexOf(kw.toLowerCase()) > -1) {
-                        continue;
-                    }
-                    if ("</font>".indexOf(kw.toLowerCase()) > -1) {
-                        continue;
-                    }
                     for (var j = 0; j < ts.length; j++) {
                         var html = tshtml[j];
                         tshtml[j] =
-                                html.replace(new RegExp(kwreg, 'gi'),
-                                        "$1" + fontText + "$2" + "</font>" + "$3");
+                                html.replace(new RegExp(kwreg, 'gi'), kwreg2);
                     }
                 }
                 for (var j = 0; j < ts.length; j++) {

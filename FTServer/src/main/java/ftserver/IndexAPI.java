@@ -103,7 +103,7 @@ public class IndexAPI {
                 }
             }
 
-            if (ors.size() > 16 || stringEqual(ors.get(3).toString(), ors.get(4).toString())) {
+            if (ors.size() > 16 || ors.size() < 5 || stringEqual(ors.get(3).toString(), ors.get(4).toString())) {
                 for (int i = 0; i < startId.length; i++) {
                     startId[i] = -1;
                 }
