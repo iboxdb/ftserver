@@ -7,7 +7,12 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <h1>${param.pass1}</h1>
-        <h1>${param.pass2}</h1>
+        <h1><%= request.getParameter("pass1")%></h1>
+        <h1><%= request.getParameter("pass2")%></h1>
+        
+        <%= request.getParameter("ip1")%>
+        <br>
+        <%= request.getParameter("tt1")%>
+
     </body>
 </html>
