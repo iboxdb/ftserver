@@ -101,10 +101,10 @@
                     var kwreg2 = kw;
                     var isword = kw.charCodeAt(0) < 0x3040;
                     if (isword) {
-                        kwreg = "([\\s]+)(" + kw + ")([\\W]+)";
+                        kwreg = "(\\s+)(" + kw + ")(\\W+)";
                         kwreg2 = "$1<i>$2</i>$3";
                     } else {
-                        kwreg = "([^.]+)(" + kw + ")(.+)";
+                        kwreg = "(.+)(" + kw + ")(.+)";
                         kwreg2 = "$1<b>$2</b>$3";
                     }
 
