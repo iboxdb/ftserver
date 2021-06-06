@@ -14,6 +14,7 @@
 <%!
     public static abstract class Tag implements Closeable {
 
+        public abstract void text(String text);
     }
 
     public static class HTMLClass {
@@ -52,6 +53,11 @@
                 }
                 text(">");
 
+            }
+
+            @Override
+            public void text(String text) {
+                HTMLClass.this.text(text);
             }
 
             @Override

@@ -1,6 +1,8 @@
+<%@page import="ftserver.App"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    //SetHead Cookie
+<%@include  file="../_taghelper.jsp" %>
+
+<%    //SetHead Cookie
     Cookie[] reqCookies = request.getCookies();
     if (reqCookies == null) {
         reqCookies = new Cookie[0];
@@ -11,12 +13,12 @@
             testCookie = c;
         }
     }
-    
+
     testCookie = new Cookie(testCookie.getName(), Integer.toString(Integer.valueOf(testCookie.getValue()) + 1));
     testCookie.setMaxAge(Integer.MAX_VALUE);
     response.addCookie(testCookie);
 %>
-<%    
+<%
     Object o = application.getAttribute("android_submit");
     if (o == null) {
         o = 0;
@@ -51,7 +53,8 @@
         <%= request.getParameter("ip1")%>
         <br>
         <%= request.getParameter("tt1")%>
-        <br> Cookies : <br>
+
+        <hr> Cookies : <br>
 
         <%
             for (Cookie c : reqCookies) {
@@ -61,7 +64,21 @@
                 }
             }
         %>
-        <br> Attribute : <br>
+        <hr> Attribute : <br>
         <%= o%>
+        <hr>
+        <jsp:include page="inc.jsp" >
+            <jsp:param name="pass1"  value= "PASS-PASS-01" />
+            <jsp:param name="pass2"  value= "PASS02-数据库引擎" />
+        </jsp:include> 
+        <hr>
+        <%
+            if (App.IsAndroid) {
+                Object o2 = Class.forName("ftserver.android.App");
+                try (Tag h = HTML.tag("h3")) {
+                    h.text(o2.toString());
+                }
+            }
+        %>
     </body>    
 </html>
