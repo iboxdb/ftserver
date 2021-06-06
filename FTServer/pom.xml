@@ -66,8 +66,8 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <webResources>
                         <resource>
-                            <directory>${build.sourceDirectory}</directory>
-                            <targetPath>src/main/java</targetPath>
+                            <directory>${project.build.sourceDirectory}</directory>
+                            <targetPath>META-INF/src/main/java</targetPath>
                         </resource>
                     </webResources>
                 </configuration>
