@@ -59,6 +59,13 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
 
     }
 
+    public static boolean TryClose(AutoBox auto) {
+        if (auto instanceof AutoBoxHolder) {
+            return false;
+        }
+        auto.getDatabase().close();
+        return true;
+    }
     private long resetCacheLength = Config.Readonly_CacheLength;
 
     @Override

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 15);
+        App.log("AppListener Flag: " + 16);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -99,7 +99,7 @@ public class AppListener implements ServletContextListener {
         }
         if (App.Indices != null) {
             for (AutoBox d : App.Indices) {
-                d.getDatabase().close();
+                ReadonlyIndexServer.TryClose(d);
             }
             App.Indices = null;
         }
