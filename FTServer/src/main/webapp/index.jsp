@@ -29,6 +29,14 @@
             .column {
             }
 
+            .message{
+                overflow-x: hidden;
+            }
+
+            .abw{
+                word-wrap: break-word;
+            }
+
         </style> 
 
     </head>
@@ -66,6 +74,9 @@
                     <br>
                     <% for (PageSearchTerm pst : IndexPage.getSearchTerm(10)) {
                             String str = pst.keywords;
+                            if (str.equals(IndexPage.SystemShutdown)) {
+                                continue;
+                            }
                             try (Tag t = HTML.tag("a", "href:", "s.jsp?q=" + encode(str))) {
                                 HTML.text("[" + str + "]");
                             }
@@ -85,9 +96,9 @@
                         }
 
                         HTML.tag("br");
+
                     %>
                     <br>
-
                 </div>
                 <% HTML.text("Load Time: " + (System.currentTimeMillis() - begin) / 1000.0 + "s");
                 %>

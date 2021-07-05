@@ -53,27 +53,8 @@
             }
             .column {
             }
-            .stext{
 
-            }
-            .rt{
-                color: red;
-            }
-            .gt{
-                color: green;
-            }
-            .gtt{
-                color: #4092cc;
-            }
         </style> 
-        <script>
-            function highlight(loadedDivId) {
-
-            }
-            function sendlog(url, txt) {
-
-            }
-        </script>
     </head>
     <body> 
         <div class="grid">
@@ -99,8 +80,16 @@
                 <h3>Input HTTP or HTTPS  ://URL</h3>
 
                 The indexing process will continue until all be done, check the Log for details,
-                it needs bandwidth.
-                or close the App to stop it.
+                it needs bandwidth and time.
+                Close the App can stop it. 
+                <br>
+                Some pages may not finish the Indexing process because the App has stopped, try re-add again. 
+                <br>
+                Some pages were designed to not be indexed, it would never show up.
+                <br>
+                Search Format:<br>
+                [Word1 Word2 Word3] = text has <b>Word1</b> and <b>Word2</b> and <b>Word3</b><br>
+                ["Word1 Word2 Word3"] = text has <b>"Word1 Word2 Word3"</b> as a whole<br>
                 <br>
                 <a href="./"><i class="teal disk outline icon" style="font-size:70px"></i></a>
                 <script>
@@ -113,6 +102,9 @@
                         document.getElementsByName('url')[0].value = "";
                     }
                 </script>
+
+
+
             </div>
         </div>
 

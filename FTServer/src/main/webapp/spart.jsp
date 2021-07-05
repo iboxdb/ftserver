@@ -88,14 +88,20 @@
 
                 continue;
             }
+            int minSize = 200;
+            if (p.keyWord instanceof KeyWordE) {
+                minSize = 300;
+            }
+
             boolean isdesc = p.priority >= PageText.descriptionPriority;
             String content = isdesc ? p.text
-                    : IndexPage.getDesc(p.text, p.keyWord, 150);
+                    : IndexPage.getDesc(p.text, p.keyWord, minSize - 20);
 
-            if (content.length() < 200 && p.page != null) {
-                content += "... " + p.page.getRandomContent(200);
+            if (content.length() < minSize && p.page != null) {
+                content += "... " + p.page.getRandomContent(minSize);
             }
-            String[] keywords = p.keywords.split(" ");
+            String sp = p.keywords.indexOf(',') > 0 ? "," : " ";
+            String[] keywords = p.keywords.split(sp);
 
             //try (Tag h3 = HTML.tag("h3")) 
             {
@@ -121,6 +127,9 @@
                     String str = kw.trim();
                     if (str == null || str.length() < 1) {
                         continue;
+                    }
+                    if (str.indexOf(" ") > 0) {
+                        str = "\"" + str + "\"";
                     }
                     try (Tag t = HTML.tag("a",
                             "href:", "s.jsp?q=" + encode(str),

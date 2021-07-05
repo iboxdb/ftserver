@@ -1,4 +1,4 @@
-/* iBoxDB FTServer Bruce Yang CL */
+/* iBoxDB FTServer Bruce Yang CL-N */
 package ftserver;
 
 import iboxdb.localserver.*;
@@ -18,7 +18,7 @@ public class IndexAPI {
 
         public StartIdParam(long[] id) {
             if (id.length == 1) {
-                startId = new long[]{App.Indices.size() - 1, -1, id[0]};
+                startId = new long[]{App.Indices.length() - 1, -1, id[0]};
             } else {
                 startId = id;
             }
@@ -96,7 +96,7 @@ public class IndexAPI {
             if (startId.length != ors.size()) {
                 startId = new long[ors.size()];
                 startId[0] = -1;
-                startId[1] = App.Indices.size() - 1;//or box
+                startId[1] = App.Indices.length() - 1;//or box
                 startId[2] = -1;
                 for (int i = 3; i < startId.length; i++) {
                     startId[i] = Long.MAX_VALUE;
@@ -132,7 +132,8 @@ public class IndexAPI {
     public static long[] Search(List<PageText> outputPages,
             String name, long[] t_startId, long pageCount) {
         name = name.trim();
-        if (name.length() == 0 || name.length() > 150) {
+        if (name.length() == 0 || name.length() > 150
+                || name.equals(IndexPage.SystemShutdown)) {
             return new long[]{-1, -1, -1};
         }
         long maxTime = 1000 * 2;
@@ -146,8 +147,9 @@ public class IndexAPI {
         while (startId.isAnd()) {
             DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[0]);
-            auto = ReadonlyIndexServer.TryReadonly(auto);
             startId.startId[2] = SearchAnd(auto, outputPages, name, startId.startId[2], pageCount - outputPages.size());
+            App.Indices.tryCloseOutOfCache(auto);
+
             for (PageText pt : outputPages) {
                 if (pt.dbOrder < 0) {
                     pt.dbOrder = startId.startId[0] + IndexServer.IndexDBStart;
@@ -166,8 +168,8 @@ public class IndexAPI {
         while (startId.isOr()) {
             DelayService.delayIndex();
             AutoBox auto = App.Indices.get((int) startId.startId[1]);
-            auto = ReadonlyIndexServer.TryReadonly(auto);
             SearchOr(auto, outputPages, ors, startId.startId, pageCount);
+            App.Indices.tryCloseOutOfCache(auto);
             for (PageText pt : outputPages) {
                 if (pt.dbOrder < 0) {
                     pt.dbOrder = startId.startId[1] + IndexServer.IndexDBStart;
@@ -395,4 +397,14 @@ public class IndexAPI {
         }
         return null;
     }
+
+    public static String lastInputUrl() {
+        ArrayList<Page> pages = App.Item.select(Page.class, "from Page limit 0,2");
+        if (pages.size() < 2) {
+            // App may exit without indexing the Page. 
+            return "";
+        }
+        return pages.get(1).url;
+    }
+
 }

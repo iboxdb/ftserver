@@ -8,11 +8,9 @@ import iboxdb.localserver.*;
 
 public class IndexPage {
 
-    public static void addSearchTerm(String keywords) {
-        addSearchTerm(keywords, false);
-    }
+    public static final String SystemShutdown = "SystemShutdown";
 
-    public static void addSearchTerm(String keywords, boolean isShutdown) {
+    public static void addSearchTerm(String keywords) {
         if (keywords.length() < PageSearchTerm.MAX_TERM_LENGTH) {
             PageSearchTerm pst = new PageSearchTerm();
             pst.time = new Date();
@@ -23,6 +21,9 @@ public class IndexPage {
             if (App.IsAndroid) {
                 huggersMem = 0;
             }
+
+            boolean isShutdown = SystemShutdown.equals(keywords);
+
             if (isShutdown) {
                 huggersMem = 0;
             }
@@ -76,6 +77,9 @@ public class IndexPage {
         if (p == null) {
             return "Temporarily Unreachable";
         } else {
+            if (userDescription != null) {
+                userDescription = Html.replace(userDescription);
+            }
             p.userDescription = userDescription;
             p.show = true;
             p.isKeyPage = isKeyPage;
@@ -83,7 +87,7 @@ public class IndexPage {
             if (textOrder >= 0 && IndexAPI.addPageIndex(textOrder)) {
                 IndexAPI.DisableOldPage(url);
             }
-            long dbaddr = App.Indices.size() + IndexServer.IndexDBStart - 1;
+            long dbaddr = App.Indices.length() + IndexServer.IndexDBStart - 1;
             long indexend = System.currentTimeMillis();
             log("TIME IO:" + (ioend - begin) / 1000.0
                     + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " (" + dbaddr + ") ");

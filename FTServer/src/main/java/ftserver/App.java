@@ -12,7 +12,7 @@ public class App {
     public static AutoBox Index;
 
     //for Readonly PageIndex
-    public static ArrayList<AutoBox> Indices;
+    public static final ReadonlyList Indices = new ReadonlyList();
     
     
     public static boolean IsAndroid;

@@ -115,15 +115,18 @@
 
     </head>
     <body>
-        
-        
+
+
         <p>${param.ex}</p>        
         <hr>
-        
+
         <h1>Hello World!</h1>
         <p><%= text%></p>
         <hr>
-        
+        <div>    
+            <pre>CodeStart<code class="cs">  WinWinWin.GetDatabase().CopyTo(new ShowMirror(bakAddr, bakRoot), buffer) </code></pre>
+        </div>
+        <hr>
         <%
             HTML.tag("br");
             for (int i = 0; i < 1100; i++) {
@@ -140,5 +143,7 @@
                 HTML.tag("br");
             }
         %>
+
+        XEnd
     </body>
 </html>

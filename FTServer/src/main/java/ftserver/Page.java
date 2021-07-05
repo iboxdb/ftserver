@@ -31,17 +31,12 @@ public class Page {
 
     @NotColumn
     public String getRandomContent(int length) {
-        int len = text.length() - 100;
-        if (len <= 20) {
+        int len = text.length() - length;
+        if (len <= 0) {
             return text;
         }
         int s = RAN.nextInt(len);
-        if (s < 0) {
-            s = 0;
-        }
-        if (s > len) {
-            s = len;
-        }
+        
 
         int end = s + length;
         if (end > text.length()) {

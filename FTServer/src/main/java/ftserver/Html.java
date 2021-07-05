@@ -8,8 +8,7 @@ import static ftserver.App.*;
 
 public class Html {
 
-    static String splitWords = " ,.　，。";
-
+    //static String splitWords = " ,.　，。";
     public static Page get(String url, HashSet<String> subUrls) {
         try {
             if (url == null || url.length() > Page.MAX_URL_LENGTH || url.length() < 8) {
@@ -84,14 +83,13 @@ public class Html {
                 return null;
             }
             title = replace(title);
-            if (title.length() > 200) {
-                title = title.substring(0, 200);
+            if (title.length() > 300) {
+                title = title.substring(0, 300);
             }
 
             keywords = getMetaContentByName(doc, "keywords");
-            for (char c : splitWords.toCharArray()) {
-                keywords = keywords.replaceAll("\\" + c, " ");
-            }
+            keywords = keywords.replaceAll("，", ",");
+
             if (keywords.length() > 200) {
                 keywords = keywords.substring(0, 200);
             }
@@ -191,13 +189,14 @@ public class Html {
         return result;
     }
 
-    private static String replace(String content) {
-        return content.replaceAll(Character.toString((char) 8203), "")
-                .replaceAll("&nbsp;", " ")
-                .replaceAll("&gt;", " ")
-                .replaceAll("&lt;", " ")
-                .replaceAll("\t|\r|\n|�|<|>|�|\\$|\\|", " ")
+    public static String replace(String content) {
+        return content
                 .replaceAll("　", " ")
+                .replaceAll(Character.toString((char) 8203), " ")
+                //.replaceAll("&nbsp;", " ")
+                //.replaceAll("&gt;", " ")
+                //.replaceAll("&lt;", " ")
+                .replaceAll("\t|\r|\n|<|>|\\$|\\|", " ")
                 .replaceAll("\\s+", " ")
                 .trim();
     }
@@ -239,6 +238,12 @@ public class Html {
     }
 
     private static void fixSpan(Document doc) {
+        for (String s : new String[]{"script", "style", "textarea", "noscript", "code"}) {
+            for (Element c : new ArrayList<Element>(doc.getElementsByTag(s))) {
+                //c.parent().children().remove(c);
+                c.remove();
+            }
+        }
         for (String s : new String[]{"span", "td", "th", "li", "a", "option", "p",
             "div", "h1", "h2", "h3", "h4", "h5", "pre"}) {
             for (Element e : doc.getElementsByTag(s)) {

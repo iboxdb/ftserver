@@ -8,101 +8,41 @@ import static ftserver.App.*;
 
 public class ReadonlyIndexServer extends LocalDatabaseServer {
 
-    private ReadonlyIndexServer() {
-        super();
-    }
-
-    public static class AutoBoxHolder extends AutoBox {
-
-        private final long address;
-
-        public AutoBoxHolder(long addr) {
-            super(null, 0);
-            address = addr;
-        }
-
-        public final long getLocalAddress() {
-            return address;
-        }
-    }
-
-    private static final long lowReadonlyCache = Config.mb(1);
-
-    public static AutoBox TryReadonly(AutoBox auto) {
-        if (auto instanceof AutoBoxHolder) {
-            ReadonlyIndexServer server = new ReadonlyIndexServer();
-            long resetCache = Config.SwitchToReadonlyIndexLength / 5;
-            if (resetCache < lowReadonlyCache) {
-                resetCache = lowReadonlyCache + 1;
-            }
-            server.resetCacheLength = resetCache;
-            //App.log("Reset Readonly Cache to " + resetCache);
-            return server.getInstance(((AutoBoxHolder) auto).getLocalAddress()).get();
-
-        }
-        return auto;
-    }
-
-    public static AutoBox GetReadonly(long addr) {
-        if (Config.Readonly_CacheLength < lowReadonlyCache) {
-            return new AutoBoxHolder(addr);
-        }
-        return new ReadonlyIndexServer().getInstance(addr).get();
-    }
-
-    public static AutoBox RenewReadonly(AutoBox auto) {
-        if (auto instanceof AutoBoxHolder) {
-            return auto;
-        }
-        long addr = auto.getDatabase().localAddress();
-        return GetReadonly(addr);
-
-    }
-
-    public static boolean TryClose(AutoBox auto) {
-        if (auto instanceof AutoBoxHolder) {
-            return false;
-        }
-        auto.getDatabase().close();
-        return true;
-    }
-    private long resetCacheLength = Config.Readonly_CacheLength;
+    public boolean OutOfCache = false;
 
     @Override
     protected DatabaseConfig
             BuildDatabaseConfig(long address) {
-        ReadonlyConfig cfg = new ReadonlyConfig(address, resetCacheLength);
+        ReadonlyConfig cfg = new ReadonlyConfig(address, OutOfCache);
         return cfg;
     }
 
-    private static class ReadonlyConfig
+    public static class ReadonlyConfig
             extends ReadonlyStreamConfig {
 
         private long address;
+        boolean OutOfCache;
 
-        public ReadonlyConfig(long address, long cache) {
-            super(GetStreamsImpl(address));
+        public ReadonlyConfig(long address, boolean outOfCache) {
+            super(GetStreamsImpl(address, outOfCache));
             this.address = address;
-            this.CacheLength = cache;
-        }
-
-        private static File[] GetStreamsImpl(long address) {
-            String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
-            if (App.IsAndroid) {
-                return new File[]{new File(pa)};
+            this.OutOfCache = outOfCache;
+            this.CacheLength = Config.Readonly_CacheLength;
+            if (this.CacheLength < Config.lowReadonlyCache) {
+                this.CacheLength = Config.SwitchToReadonlyIndexLength / 5 + 1;
             }
-            return new File[]{new File(pa), new File(pa)};
+        }
+
+        private static File[] GetStreamsImpl(long address, boolean outOfCache) {
+            String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
+
+            File[] os = new File[App.IsAndroid || outOfCache ? 1 : 2];
+            for (int i = 0; i < os.length; i++) {
+                os[i] = new File(pa);
+            }
+            return os;
         }
 
     }
 
-    public static void DeleteOldSwap(long address) {
-        String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
-        pa += ".swp";
-        try {
-            new File(pa).delete();
-        } catch (Throwable ex) {
-            log("Can't Delete " + pa);
-        }
-    }
 }

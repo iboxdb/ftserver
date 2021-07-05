@@ -1,4 +1,4 @@
-/* iBoxDB FTServer Bruce Yang CL */
+/* iBoxDB FTServer Bruce Yang CL-N */
 package ftserver.fts;
 
 import iboxdb.localserver.*;

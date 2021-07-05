@@ -306,7 +306,7 @@ public class StringUtil {
             if ((start + len) <= end) {
                 continue;
             }
-            if ((start + len) >= str.length()) {
+            if (start >= str.length()) {
                 continue;
             }
 

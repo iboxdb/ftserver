@@ -58,6 +58,9 @@ public class IndexServer extends LocalDatabaseServer {
             if (App.IsAndroid) {
                 ReadStreamCount = 1;
             }
+            if (CacheLength == Config.SwitchToReadonlyIndexLength) {
+                //ReadStreamCount = 1;
+            }
             //log("DB Cache = " + lenMB + " MB");
             log("DB Switch Length = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
             new Engine().Config(this);
@@ -99,27 +102,14 @@ public class IndexServer extends LocalDatabaseServer {
             super.Flush();
             if (length > Config.SwitchToReadonlyIndexLength) {
 
-                ArrayList<AutoBox> newIndices = new ArrayList<AutoBox>(App.Indices);
-                newIndices.remove(newIndices.size() - 1);
-
+                App.Indices.switchIndexToReadonly();
                 long addr = App.Index.getDatabase().localAddress();
-                newIndices.add(ReadonlyIndexServer.GetReadonly(addr));
                 addr++;
                 log("\r\nSwitch To DB (" + addr + ")");
-                newIndices.add(new IndexServer().getInstance(addr).get());
+                App.Indices.add(addr, false);
 
-                for (int i = 0; i < newIndices.size() - 2; i++) {
+                App.Index = App.Indices.get(App.Indices.length() - 1);
 
-                    AutoBox auto = newIndices.get(i);
-                    newIndices.set(i, ReadonlyIndexServer.RenewReadonly(auto));
-
-                    if (App.IsAndroid) {
-                        ReadonlyIndexServer.DeleteOldSwap(addr);
-                    }
-                }
-
-                App.Indices = newIndices;
-                App.Index = newIndices.get(newIndices.size() - 1);
                 System.gc();
             }
         }

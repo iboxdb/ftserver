@@ -66,8 +66,11 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <webResources>
                         <resource>
-                            <directory>${project.build.sourceDirectory}</directory>
-                            <targetPath>META-INF/src/main/java</targetPath>
+                            <directory>${basedir}</directory>
+                            <targetPath>META-INF/SourceCode/FTServer</targetPath>
+                            <excludes>
+                                <exclude>target/**</exclude>
+                            </excludes>
                         </resource>
                     </webResources>
                 </configuration>

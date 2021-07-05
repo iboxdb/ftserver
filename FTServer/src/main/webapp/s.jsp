@@ -1,5 +1,4 @@
-<%@page import="java.util.logging.Logger"%>
-<%@page import="java.util.logging.Level"%>
+
 <%@page import="ftserver.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@include  file="_taghelper.jsp" %>
@@ -7,8 +6,11 @@
 
 
 <%    final String queryString = request.getQueryString();
-
-    String name = request.getParameter("q").replaceAll("<", "").trim();
+    String s = request.getParameter("q");
+    if (s == null) {
+        return;
+    }
+    String name = s.replaceAll("<", "").trim();
     try {
         IndexPage.addSearchTerm(name);
     } catch (Throwable ex) {
@@ -39,7 +41,7 @@
             .column {
             }
             .stext{
-                font-size: 22px; 
+                font-size: 20px; 
             }
             .stext_s{
                 font-size: 18px; 
