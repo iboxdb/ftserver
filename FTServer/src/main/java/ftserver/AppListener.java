@@ -1,24 +1,28 @@
 package ftserver;
 
 import iboxdb.localserver.*;
-import java.io.File;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import javax.servlet.*;
+import javax.servlet.annotation.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
+
 import static ftserver.App.*;
-import java.util.ArrayList;
 
 @WebListener
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 25);
+        App.log("AppListener Flag: " + 27);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+
+        App.log("Current Path: " + new File("./").getAbsolutePath());
 
         App.IsAndroid = false;
         try {
@@ -92,6 +96,59 @@ public class AppListener implements ServletContextListener {
 
         log("DB Started...");
         IndexPage.start();
+
+        int httpPort = 8080;
+        File pomConfig = new File("pom.xml");
+        if (pomConfig.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(pomConfig);
+                byte[] bs = new byte[fs.available()];
+                fs.read(bs);
+                String str = new String(bs, "UTF-8");
+                fs.close();
+
+                Pattern p = Pattern.compile("<cargo.servlet.port>(\\d+)</cargo.servlet.port>");
+                Matcher m = p.matcher(str);
+
+                if (m.find()) {
+                    App.log("HTTP Port: " + m.group(1));
+                    httpPort = Integer.parseInt(m.group(1));
+                    App.log("-");
+                }
+
+                for (Enumeration<NetworkInterface> en = NetworkInterface
+                        .getNetworkInterfaces(); en.hasMoreElements();) {
+                    NetworkInterface intf = en.nextElement();
+                    for (Enumeration<InetAddress> enumIpAddr = intf
+                            .getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        String ip = inetAddress.getHostAddress();
+
+                        if (ip.contains(":") || ip.contains("%")) {
+                            // IP V6 can't access from Browser, Just for
+                            // showing.
+
+                        } else {
+                            App.log("http://" + ip + ":" + httpPort);
+                        }
+
+                    }
+                }
+
+                //java.awt.Desktop.getDesktop().browse(new URI("http://127.0.0.1:" + httpPort));
+                URI url = new URI("http://127.0.0.1:" + httpPort);
+                if (!App.IsAndroid)
+                try {
+                    Class desktop = Class.forName("java.awt.Desktop");
+                    Object deskA = desktop.getMethod("getDesktop").invoke(null);
+                    deskA.getClass().getMethod("browse", URI.class).invoke(deskA, url);
+                } catch (Throwable de) {
+                    log("Browser " + url.toString());
+                }
+            } catch (Throwable e) {
+
+            }
+        }
     }
 
     @Override
