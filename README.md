@@ -19,7 +19,7 @@ $ cd FTServer
 $ mvn package cargo:run
 ```
 
-5. Open [http://localhost:8080/](http://localhost:8080/)
+5. Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 
 
 ![](FTServer/src/main/webapp/css/fts.png)
@@ -124,6 +124,8 @@ $ vi /etc/security/limits.conf
 root      hard    nofile      500000
 root      soft    nofile      500000
 
+
+[user@localhost ~]$ firewall-cmd --add-port=8080/tcp --permanent
 ```
 
 
