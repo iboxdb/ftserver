@@ -14,7 +14,7 @@ import static ftserver.App.*;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 27);
+        App.log("AppListener Flag: " + 28);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -97,10 +97,11 @@ public class AppListener implements ServletContextListener {
         log("DB Started...");
         IndexPage.start();
 
-        int httpPort = 8080;
-        File pomConfig = new File("pom.xml");
-        if (pomConfig.exists()) {
-            try {
+        try {
+            int httpPort = 8080;
+            File pomConfig = new File("pom.xml");
+            if (pomConfig.exists()) {
+
                 FileInputStream fs = new FileInputStream(pomConfig);
                 byte[] bs = new byte[fs.available()];
                 fs.read(bs);
@@ -145,9 +146,10 @@ public class AppListener implements ServletContextListener {
                 } catch (Throwable de) {
                     log("Browser " + url.toString());
                 }
-            } catch (Throwable e) {
 
             }
+        } catch (Throwable e) {
+
         }
     }
 

@@ -96,7 +96,7 @@ public class IndexPage {
             subUrls.remove(url + "/");
             subUrls.remove(url.substring(0, url.length() - 1));
 
-            runBGTask(subUrls);
+            runBGTask(subUrls, isKeyPage);
 
             return url;
         }
@@ -117,16 +117,20 @@ public class IndexPage {
         });
     }
 
-    private synchronized static void runBGTask(HashSet<String> subUrls) {
+    private synchronized static void runBGTask(HashSet<String> subUrls, boolean isKeyPage) {
 
         if (subUrls == null || isShutdown) {
             return;
         }
         boolean atNight = true;
 
-        int max_background = atNight ? 1000 : 0;
-        if (App.IsAndroid && max_background > 100) {
-            max_background = 100;
+        int max_background = atNight ? 500 : 0;
+        if (App.IsAndroid && max_background > 50) {
+            max_background = 50;
+        }
+
+        if (isKeyPage) {
+            max_background *= 2;
         }
 
         for (final String vurl : subUrls) {
