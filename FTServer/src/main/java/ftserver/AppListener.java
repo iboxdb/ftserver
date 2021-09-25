@@ -14,7 +14,7 @@ import static ftserver.App.*;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 28);
+        App.log("AppListener Flag: " + 29);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -51,9 +51,10 @@ public class AppListener implements ServletContextListener {
 
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         tm = (tm / 1024L / 1024L);
-        log("-Xmx " + tm + " MB");// Test on 4G setting.
-        if (tm < 2000L) {
-            log("Low Memory System, Reset Config");
+        // Test on 4000MB(4GB) setting.
+        log("-Xmx " + tm + " MB");
+        if (tm < 3600) {
+            log("Low Memory System(" + tm + "MB), Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) / Config.DSize + 1;
 
             Config.Readonly_CacheLength = Config.mb(tm / 150) + 1;
@@ -62,13 +63,15 @@ public class AppListener implements ServletContextListener {
             Config.ItemConfig_CacheLength = Config.mb(tm / 30) + 1;
             Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
 
-            if (Config.Readonly_CacheLength < Config.mb(8)) {
+            if (Config.Readonly_CacheLength < Config.lowReadonlyCache) {
                 Config.Readonly_CacheLength = 1;
             }
         }
 
         log("ReadOnly CacheLength = " + (Config.Readonly_CacheLength / 1024L / 1024L) + " MB (" + Config.Readonly_CacheLength + ")");
         log("ReadOnly Max DB Count = " + Config.Readonly_MaxDBCount);
+
+        log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
 
         //Config
         App.Item = new IndexServer().getInstance(IndexServer.ItemDB).get();
