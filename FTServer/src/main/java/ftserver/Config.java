@@ -1,6 +1,6 @@
 package ftserver;
 
-//Default 4GB Setting
+//Default for 4GB Setting
 public final class Config {
 
     public static long mb(long len) {
@@ -14,8 +14,8 @@ public final class Config {
 
     public static long Readonly_CacheLength = mb(32);
 
-    //Set 2000 MB Readonly Index Cache
-    public static long Readonly_MaxDBCount = mb(2000) / mb(32) / DSize;
+    //Set 1400 MB Readonly Index Cache
+    public static long Readonly_MaxDBCount = mb(1400) / mb(32) / DSize;
 
     //HTML Page Cache, this should set bigger, if have more memory. 
     public static long ItemConfig_CacheLength = mb(256);

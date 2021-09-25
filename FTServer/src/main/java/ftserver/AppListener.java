@@ -53,7 +53,7 @@ public class AppListener implements ServletContextListener {
         tm = (tm / 1024L / 1024L);
         // Test on 4000MB(4GB) setting.
         log("-Xmx " + tm + " MB");
-        if (tm < 3600) {
+        if (tm < 3600L) {
             log("Low Memory System(" + tm + "MB), Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) / Config.DSize + 1;
 
