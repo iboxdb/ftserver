@@ -134,7 +134,7 @@
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(600) * 100 + 100;
 
-                length = ran.nextInt(6000);
+                length = ran.nextInt(26000);
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
                 try (Tag t = HTML.tag("a", "href:", url)) {
