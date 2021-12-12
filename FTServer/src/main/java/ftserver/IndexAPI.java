@@ -368,7 +368,7 @@ public class IndexAPI {
                 }
             });
             CommitResult cr = box.commit(huggers);
-            log("MEM:  " + NumberFormat.getInstance().format(cr.GetMemoryLength(box)));
+            log("MEM:  " + NumberFormat.getInstance().format(cr.getMemoryLength(box)));
         }
     }
 

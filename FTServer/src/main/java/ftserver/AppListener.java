@@ -14,7 +14,7 @@ import static ftserver.App.*;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 29);
+        App.log("AppListener Flag: " + 30);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -39,15 +39,18 @@ public class AppListener implements ServletContextListener {
 
         String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
 
+        File mvnConfig = new File(".mvn/jvm.config");
+        if (mvnConfig.exists()) {
+            log("Maven 3 -Xmx Setting " + mvnConfig.getAbsolutePath());
+            if (!App.IsAndroid) {
+                path = ".." + File.separatorChar + dir + File.separatorChar;
+            }
+        }
+
         new File(path).mkdirs();
         log("java.version = " + System.getProperty("java.version"));
         log(String.format("DB Path=%s ", new File(path).getAbsolutePath()));
         DB.root(path);
-
-        File mvnConfig = new File(".mvn/jvm.config");
-        if (mvnConfig.exists()) {
-            log("Maven 3 -Xmx setting " + mvnConfig.getAbsolutePath());
-        }
 
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         tm = (tm / 1024L / 1024L);
