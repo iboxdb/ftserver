@@ -21,6 +21,8 @@ $ mvn package cargo:run
 
 5. Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 
+6. Press [Ctrl-C] to stop the container
+
 
 ![](FTServer/src/main/webapp/css/fts.png)
 

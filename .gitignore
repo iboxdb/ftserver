@@ -3,3 +3,5 @@
 /FTServer/dist/
 /FTServer/nbproject/
 /FTServer/target/
+*.ibx
+*.swp
