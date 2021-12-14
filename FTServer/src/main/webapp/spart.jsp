@@ -103,8 +103,8 @@
             String sp = p.keywords.indexOf(',') > 0 ? "," : " ";
             String[] keywords = p.keywords.split(sp);
 
-            //try (Tag h3 = HTML.tag("h3")) 
-            {
+            try (Tag h3 = HTML.tag("div", "hurl:", p.page.textOrder)) {
+
                 try (Tag div = HTML.tag("div", "class:", "spartcss", "dir:", "auto")) {
                     try (Tag a = HTML.tag("a",
                             "class:", "stext",
@@ -114,46 +114,47 @@
                         HTML.text(p.title);
                     }
                 }
-            }
 
-            try (Tag span = HTML.tag("div", "class:", "stext", "dir:", "auto")) {
-                HTML.text(content);
-            }
-            HTML.tag("br");
+                try (Tag span = HTML.tag("div", "class:", "stext", "dir:", "auto")) {
+                    HTML.text(content);
+                }
+                HTML.tag("br");
 
-            try (Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " ")) {
+                try (Tag div = HTML.tag("div", "class:", (isdesc ? "gt" : "gtt") + " ")) {
 
-                for (String kw : keywords) {
-                    String str = kw.trim();
-                    if (str == null || str.length() < 1) {
-                        continue;
+                    for (String kw : keywords) {
+                        String str = kw.trim();
+                        if (str == null || str.length() < 1) {
+                            continue;
+                        }
+                        if (str.indexOf(" ") > 0) {
+                            str = "\"" + str + "\"";
+                        }
+                        try (Tag t = HTML.tag("a",
+                                "href:", "s.jsp?q=" + encode(str),
+                                "class:", "kw " + (isdesc ? "gt" : "gtt") + " stext_s")) {
+                            HTML.text(" &nbsp; ");
+                            HTML.text(str);
+                            HTML.text(" &nbsp; ");
+                        };
+                        HTML.text(" &nbsp;");
                     }
-                    if (str.indexOf(" ") > 0) {
-                        str = "\"" + str + "\"";
+                    if (keywords.length > 1) {
+                        HTML.tag("br");
                     }
-                    try (Tag t = HTML.tag("a",
-                            "href:", "s.jsp?q=" + encode(str),
-                            "class:", "kw " + (isdesc ? "gt" : "gtt") + " stext_s")) {
-                        HTML.text(" &nbsp; ");
-                        HTML.text(str);
-                        HTML.text(" &nbsp; ");
-                    };
-                    HTML.text(" &nbsp;");
-                }
-                if (keywords.length > 1) {
-                    HTML.tag("br");
+
+                    HTML.text("[" + p.dbOrder + "-" + p.page.textOrder + "] ");
+                    if (!p.isAndSearch) {
+                        HTML.text("*");
+                    }
+                    HTML.text(decodeTry(p.url));
+                    HTML.text(" ");
+                    HTML.text(p.createTime.toString());
+
                 }
 
-                HTML.text("[ " + p.dbOrder + " ] ");
-                if (!p.isAndSearch) {
-                    HTML.text("*");
-                }
-                HTML.text(decodeTry(p.url));
-                HTML.text(" ");
-                HTML.text(p.createTime.toString());
-
+                HTML.tag("br");
             }
-            HTML.tag("br");
         }%>
 </div>
 <div class="ui teal message" id="s<%= IdToString(startId, '_')%>" dir="auto">
@@ -169,6 +170,7 @@
 <script>
     setTimeout(function () {
         highlight("ldiv<%= IdToString(startId, '_')%>");
+        hideMultiText("ldiv<%= IdToString(startId, '_')%>");
     <% if (!IsEnd(startId)) {
             //startId is a big number, in javascript, have to write big number as a 'String'
     %>

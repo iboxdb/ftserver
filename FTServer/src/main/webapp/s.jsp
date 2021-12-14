@@ -74,6 +74,24 @@
             }
         </style> 
         <script>
+            var multiTexts = {};
+            function hideMultiText(loadedDivId) {
+                var div = document.getElementById(loadedDivId);
+                var es = div.getElementsByTagName("div");
+                for (var i = 0; i < es.length; i++) {
+                    var hurl = es[i].getAttribute("hurl");
+                    if (hurl) {
+                        if (multiTexts[hurl]) {
+                            //console.log("hurl hide " + hurl);
+                            es[i].style.display = "none";
+                        } else {
+                            multiTexts[hurl] = hurl;
+                        }
+                    }
+                }
+            }
+        </script>
+        <script>
             var extitle = "";
             function highlight(loadedDivId) {
 
