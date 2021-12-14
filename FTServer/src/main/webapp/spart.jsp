@@ -103,7 +103,7 @@
             String sp = p.keywords.indexOf(',') > 0 ? "," : " ";
             String[] keywords = p.keywords.split(sp);
 
-            try (Tag h3 = HTML.tag("div", "hurl:", p.page.textOrder)) {
+            try (Tag h3 = HTML.tag("div", "hurl:", p.textOrder)) {
 
                 try (Tag div = HTML.tag("div", "class:", "spartcss", "dir:", "auto")) {
                     try (Tag a = HTML.tag("a",
@@ -143,7 +143,7 @@
                         HTML.tag("br");
                     }
 
-                    HTML.text("[" + p.dbOrder + "-" + p.page.textOrder + "] ");
+                    HTML.text("[" + p.dbOrder + "-" + p.textOrder + "] ");
                     if (!p.isAndSearch) {
                         HTML.text("*");
                     }
@@ -173,7 +173,7 @@
         hideMultiText("ldiv<%= IdToString(startId, '_')%>");
     <% if (!IsEnd(startId)) {
             //startId is a big number, in javascript, have to write big number as a 'String'
-    %>
+%>
         onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);
