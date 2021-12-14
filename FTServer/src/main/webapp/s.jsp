@@ -86,6 +86,7 @@
                             es[i].style.display = "none";
                         } else {
                             multiTexts[hurl] = hurl;
+                            es[i].style.display = "";
                         }
                     }
                 }
