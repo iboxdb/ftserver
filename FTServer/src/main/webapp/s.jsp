@@ -7,7 +7,7 @@
 
 <%    final String queryString = request.getQueryString();
     String s = request.getParameter("q");
-    System.out.println(s);
+    //System.out.println(s);
     if (s == null) {
         return;
     }
