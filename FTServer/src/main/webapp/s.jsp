@@ -7,6 +7,7 @@
 
 <%    final String queryString = request.getQueryString();
     String s = request.getParameter("q");
+    System.out.println(s);
     if (s == null) {
         return;
     }
@@ -73,6 +74,27 @@
                 overflow-x: hidden !important;
             }
         </style> 
+        <script>
+            function splitHelper() {
+                try {
+                    var splitWord = ["的"];
+                    var sh = document.getElementById("searchHelp");
+                    var q = document.getElementsByName("q")[0];
+                    var value = new String(q.value);
+                    for (var i = 0; i < splitWord.length; i++) {
+                        value = value.replace(splitWord[i], " ");
+                    }
+                    value = value.trim();
+                    if (value == String(q.value)) {
+                        sh.innerHTML = "";
+                    } else {
+                        var url = "s.jsp?q=" + encodeURI(value);
+                        sh.innerHTML = "<a href='" + url + "' >" + value + "</a>"
+                    }
+                } catch (e) {
+                }
+            }
+        </script>
         <script>
             var multiTexts = {};
             function hideMultiText(loadedDivId) {
@@ -207,11 +229,14 @@
 
                         <div class="ui action input">
 
-                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required onfocus="formfocus()"  dir="auto" />
+                            <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required 
+                                   onfocus="formfocus()"  dir="auto" 
+                                   onchange="splitHelper()" />
                             <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
                         </div>
                     </div>
                 </form> 
+                <div style="text-align:left" id="searchHelp"></div>
                 <script>
                     function formsubmit() {
                         document.getElementById('btnsearch').disabled = "disabled";
@@ -219,6 +244,7 @@
                     function formfocus() {
                         document.getElementById('btnsearch').disabled = undefined;
                     }
+                    splitHelper();
                 </script>
             </div>
         </div>
