@@ -77,7 +77,7 @@
         <script>
             function splitHelper() {
                 try {
-                    var splitWord = ["的"];
+                    var splitWord = [" of ", " a ", "的"];
                     var sh = document.getElementById("searchHelp");
                     var q = document.getElementsByName("q")[0];
                     var value = new String(q.value);
