@@ -75,22 +75,35 @@
             }
         </style> 
         <script>
+            var splitHelperPage = "s.jsp?q=";
             function splitHelper() {
                 try {
+                    var html = "";
                     var splitWord = [" of ", " a ", "的"];
                     var sh = document.getElementById("searchHelp");
                     var q = document.getElementsByName("q")[0];
-                    var value = new String(q.value);
+
+                    var value = new String(q.value).trim();
+                    if (value.length > 1 && value.indexOf(" ") > 0 && value.charAt(0) != '"'
+                            && value.charCodeAt(0) < 0x3040)
+                    {
+                        value = "\"" + value + "\"";
+                        var url = splitHelperPage + encodeURI(value);
+                        html += "<a href='" + url + "' >" + value + ";</a> "
+                    }
+
+                    value = new String(q.value).trim();
                     for (var i = 0; i < splitWord.length; i++) {
                         value = value.replace(splitWord[i], " ");
                     }
                     value = value.trim();
-                    if (value == String(q.value)) {
-                        sh.innerHTML = "";
-                    } else {
-                        var url = "s.jsp?q=" + encodeURI(value);
-                        sh.innerHTML = "<a href='" + url + "' >" + value + "</a>"
+
+                    if (value != String(q.value)) {
+                        var url = splitHelperPage + encodeURI(value);
+                        html += "<a href='" + url + "' >" + value + ";</a> "
                     }
+
+                    sh.innerHTML = html;
                 } catch (e) {
                 }
             }
