@@ -34,7 +34,7 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
         }
 
         private static File[] GetStreamsImpl(long address, boolean outOfCache) {
-            String pa = BoxFileStreamConfig.RootPath + ReadonlyStreamConfig.GetNameByAddrDefault(address);
+            String pa = DatabaseConfig.getFileName(address, null);
 
             File[] os = new File[App.IsAndroid || outOfCache ? 1 : 2];
             for (int i = 0; i < os.length; i++) {
