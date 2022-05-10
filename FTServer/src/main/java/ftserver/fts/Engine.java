@@ -6,8 +6,6 @@ import java.util.*;
 
 public class Engine {
 
-    public final StringUtil sUtil = new StringUtil();
-
     public void Config(DatabaseConfig config) {
         KeyWord.config(config);
     }
@@ -23,8 +21,8 @@ public class Engine {
             return -1;
         }
         long itCount = 0;
-        char[] cs = sUtil.clear(str);
-        ArrayList<KeyWord> map = sUtil.fromString(id, cs, true);
+        char[] cs = StringUtil.Instance.clear(str);
+        ArrayList<KeyWord> map = StringUtil.Instance.fromString(id, cs, true);
 
         for (KeyWord kw : map) {
             if (delay != null) {
@@ -43,8 +41,8 @@ public class Engine {
             return -1;
         }
         long itCount = 0;
-        char[] cs = sUtil.clear(str);
-        ArrayList<KeyWord> map = sUtil.fromString(id, cs, true);
+        char[] cs = StringUtil.Instance.clear(str);
+        ArrayList<KeyWord> map = StringUtil.Instance.fromString(id, cs, true);
 
         Box box = null;
         int ccount = 0;
@@ -134,7 +132,7 @@ public class Engine {
     }
 
     public String getDesc(String str, KeyWord kw, int length) {
-        return sUtil.getDesc(str, kw, length);
+        return StringUtil.Instance.getDesc(str, kw, length);
     }
 
     public Iterable<KeyWord> searchDistinct(final Box box, String str) {
@@ -189,8 +187,8 @@ public class Engine {
         if (startId < 0) {
             return new ArrayList();
         }
-        char[] cs = sUtil.clear(str);
-        ArrayList<KeyWord> map = sUtil.fromString(-1, cs, false);
+        char[] cs = StringUtil.Instance.clear(str);
+        ArrayList<KeyWord> map = StringUtil.Instance.fromString(-1, cs, false);
 
         if (map.size() > KeyWord.MAX_WORD_LENGTH || map.isEmpty()) {
             return new ArrayList();

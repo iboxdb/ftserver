@@ -37,7 +37,7 @@ public class IndexAPI {
         }
 
         protected ArrayList<StringBuilder> ToOrCondition(String name) {
-            String orName = new String(ENGINE.sUtil.clear(name));
+            String orName = new String(StringUtil.Instance.clear(name));
             orName = orName.replaceAll("\"", " ").trim();
 
             ArrayList<StringBuilder> ors = new ArrayList<StringBuilder>();
@@ -52,8 +52,8 @@ public class IndexAPI {
                     }
                 } else if (last.length() == 0) {
                     last.append(c);
-                } else if (!ENGINE.sUtil.isWord(c)) {
-                    if (!ENGINE.sUtil.isWord(last.charAt(last.length() - 1))) {
+                } else if (!StringUtil.Instance.isWord(c)) {
+                    if (!StringUtil.Instance.isWord(last.charAt(last.length() - 1))) {
                         last.append(c);
                         ors.add(new StringBuilder());
                     } else {
@@ -62,7 +62,7 @@ public class IndexAPI {
                         ors.add(last);
                     }
                 } else {
-                    if (!ENGINE.sUtil.isWord(last.charAt(last.length() - 1))) {
+                    if (!StringUtil.Instance.isWord(last.charAt(last.length() - 1))) {
                         last = new StringBuilder();
                         last.append(c);
                         ors.add(last);
@@ -81,7 +81,7 @@ public class IndexAPI {
                 if (sbi.length() == 1) {
                     char c = sbi.charAt(0);
                     char pc = sbp.charAt(sbp.length() - 1);
-                    if ((!ENGINE.sUtil.isWord(c)) && (!ENGINE.sUtil.isWord(pc))) {
+                    if ((!StringUtil.Instance.isWord(c)) && (!StringUtil.Instance.isWord(pc))) {
                         sbi.insert(0, pc);
                     }
                 }

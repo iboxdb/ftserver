@@ -372,7 +372,7 @@ public class MainClass {
             System.out.println("FTS Count: " + c + " ,Time: " + ((System.currentTimeMillis() - begin) / 1000.0));
         }
 
-        StringUtil sutil = new StringUtil();
+        StringUtil sutil = StringUtil.Instance;
         for (int i = 0; i < ts.length; i++) {
             ts[i] = ts[i].toLowerCase() + " ";
             ts[i] = " " + new String(sutil.clear(ts[i])) + " ";
