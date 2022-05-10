@@ -29,7 +29,7 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             this.OutOfCache = outOfCache;
             this.CacheLength = Config.Readonly_CacheLength;
             if (this.CacheLength < Config.lowReadonlyCache) {
-                this.CacheLength = Config.SwitchToReadonlyIndexLength / 5 + 1;
+                this.CacheLength = Config.lowReadonlyCache;
             }
         }
 
