@@ -376,7 +376,7 @@ public class IndexAPI {
         try (Box box = App.Item.cube()) {
             ArrayList<Page> page = new ArrayList<Page>();
 
-            for (Page p : box.select(Page.class, "from Page where url==? limit 1,10", url)) {
+            for (Page p : box.scaler(Page.class, "from Page where url==? limit 1,10", url)) {
                 if (!p.show) {
                     break;
                 }
