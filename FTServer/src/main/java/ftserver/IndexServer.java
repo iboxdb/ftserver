@@ -60,7 +60,7 @@ public class IndexServer extends LocalDatabaseServer {
 
             //log("DB Cache = " + lenMB + " MB");
             log("DB Switch Length = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
-            new Engine().Config(this);
+            Engine.Instance.Config(this);
         }
 
         @Override

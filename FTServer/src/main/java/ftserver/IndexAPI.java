@@ -9,8 +9,6 @@ import java.text.NumberFormat;
 
 public class IndexAPI {
 
-    final static Engine ENGINE = new Engine();
-
     private static class StartIdParam {
         //andBox,orBox, ids...
 
@@ -190,7 +188,7 @@ public class IndexAPI {
         name = name.trim();
 
         try (Box box = auto.cube()) {
-            for (KeyWord kw : ENGINE.searchDistinct(box, name, startId, pageCount)) {
+            for (KeyWord kw : Engine.Instance.searchDistinct(box, name, startId, pageCount)) {
                 pageCount--;
                 startId = kw.I - 1;
 
@@ -227,7 +225,7 @@ public class IndexAPI {
                 }
                 //never set Long.MAX 
                 long subCount = pageCount * 10;
-                iters[i] = ENGINE.searchDistinct(box, sbkw.toString(), startId[i], subCount).iterator();
+                iters[i] = Engine.Instance.searchDistinct(box, sbkw.toString(), startId[i], subCount).iterator();
             }
 
             int orStartPos = 3;
@@ -360,7 +358,7 @@ public class IndexAPI {
     public static void addPageTextIndex(PageText pt, long huggers) {
         try (Box box = App.Index.cube()) {
 
-            ENGINE.indexText(box, pt.id(), pt.indexedText(), false,
+            Engine.Instance.indexText(box, pt.id(), pt.indexedText(), false,
                     new Runnable() {
                 @Override
                 public void run() {

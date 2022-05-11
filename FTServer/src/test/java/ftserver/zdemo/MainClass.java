@@ -34,7 +34,7 @@ public class MainClass {
     public static void test_order() {
         BoxSystem.DBDebug.DeleteDBFiles(3);
         DB db = new DB(3);
-        Engine engine = new Engine();
+        Engine engine = Engine.Instance;
         engine.Config(db.getConfig());
 
         AutoBox auto = db.open();
@@ -182,7 +182,7 @@ public class MainClass {
         for (int tran = 0; tran < 2; tran++) {
             BoxSystem.DBDebug.DeleteDBFiles(3);
             DB db = new DB(3);
-            Engine engine = new Engine();
+            Engine engine = Engine.Instance;
             engine.Config(db.getConfig());
 
             AutoBox auto = db.open();
@@ -320,7 +320,7 @@ public class MainClass {
         }
         final String[] ts = list.toArray(new String[0]);
 
-        final Engine engine = new Engine();
+        final Engine engine = Engine.Instance;
         engine.Config(db.getConfig());
 
         DatabaseConfig dbcfg = db.getConfig();

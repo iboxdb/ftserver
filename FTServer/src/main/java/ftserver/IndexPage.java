@@ -6,6 +6,7 @@ import ftserver.fts.KeyWord;
 import iboxdb.localserver.*;
 
 import static ftserver.App.*;
+import ftserver.fts.Engine;
 
 public class IndexPage {
 
@@ -43,19 +44,19 @@ public class IndexPage {
         if (kw.I == -1) {
             return str;
         }
-        return IndexAPI.ENGINE.getDesc(str, kw, length);
+        return Engine.Instance.getDesc(str, kw, length);
     }
 
     public static ArrayList<String> discover() {
         try (Box box = App.Index.cube()) {
             ArrayList<String> result = new ArrayList<String>();
-            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0061, (char) 0x007A, 2,
+            result.addAll(Engine.Instance.discover(box, (char) 0x0061, (char) 0x007A, 2,
                     (char) 0x4E00, (char) 0x9FFF, 2));
 
-            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0621, (char) 0x064A, 2,
+            result.addAll(Engine.Instance.discover(box, (char) 0x0621, (char) 0x064A, 2,
                     (char) 0x3040, (char) 0x312F, 2));
 
-            result.addAll(IndexAPI.ENGINE.discover(box, (char) 0x0410, (char) 0x044F, 2,
+            result.addAll(Engine.Instance.discover(box, (char) 0x0410, (char) 0x044F, 2,
                     (char) 0xAC00, (char) 0xD7AF, 2));
             return result;
         }

@@ -6,6 +6,12 @@ import java.util.*;
 
 public class Engine {
 
+    public final static Engine Instance = new Engine();
+
+    private Engine() {
+
+    }
+
     public void Config(DatabaseConfig config) {
         KeyWord.config(config);
     }

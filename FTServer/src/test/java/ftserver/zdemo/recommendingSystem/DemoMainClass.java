@@ -10,7 +10,7 @@ public class DemoMainClass {
 
         DB.root("/tmp/");
         Calendar today = java.util.Calendar.getInstance();
-        Engine engine = new Engine();
+        Engine engine = Engine.Instance;
 
         //================== Daily Favor Database ================ 
         /*
