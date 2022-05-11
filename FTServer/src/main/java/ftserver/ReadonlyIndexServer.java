@@ -20,7 +20,7 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             extends ReadonlyStreamConfig {
 
         private long address;
-        boolean OutOfCache;
+        public boolean OutOfCache;
 
         public ReadonlyConfig(long address, boolean outOfCache) {
             super(GetStreamsImpl(address, outOfCache));
