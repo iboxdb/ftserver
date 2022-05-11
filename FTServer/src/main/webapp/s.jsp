@@ -79,12 +79,12 @@
             function splitHelper() {
                 try {
                     var html = "";
-                    var splitWord = [" of ", " a ", "的"];
+                    var splitWord = [" of ", " a ", " to ", "的"];
                     var sh = document.getElementById("searchHelp");
                     var q = document.getElementsByName("q")[0];
 
                     var value = new String(q.value).trim();
-                    if (value.length > 1 && value.indexOf(" ") > 0 && value.charAt(0) != '"'
+                    if (value.length > 1 && value.indexOf(" ") > 0 && value.indexOf('"') < 0
                             && value.charCodeAt(0) < 0x3040)
                     {
                         value = "\"" + value + "\"";
