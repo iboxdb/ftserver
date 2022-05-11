@@ -10,6 +10,7 @@ public final class Config {
 
     public static final long DSize = 1L;
 
+    // it should set bigger than 500MB
     public static long SwitchToReadonlyIndexLength = mb(500L * 1L) / DSize;
 
     public static long Readonly_CacheLength = mb(32);

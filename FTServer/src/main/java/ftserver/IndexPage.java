@@ -2,9 +2,10 @@ package ftserver;
 
 import java.util.*;
 import java.util.concurrent.*;
-import static ftserver.App.*;
 import ftserver.fts.KeyWord;
 import iboxdb.localserver.*;
+
+import static ftserver.App.*;
 
 public class IndexPage {
 

@@ -4,7 +4,6 @@ import iboxdb.localserver.*;
 import iboxdb.localserver.io.*;
 import java.io.*;
 
-import static ftserver.App.*;
 
 public class ReadonlyIndexServer extends LocalDatabaseServer {
 

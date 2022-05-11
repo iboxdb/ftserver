@@ -36,7 +36,7 @@ public class ReadonlyList implements java.io.Closeable {
         if (pos < (list.length - Config.Readonly_MaxDBCount)) {
             AutoBoxHolder o = list[pos];
             if (o.Auto != null) {
-                App.log("Out of Cache " + (pos) + " / " + list.length + " , set Config.Readonly_MaxDBCount bigger");
+                App.log("Out of Cache " + (pos) + " / " + list.length + " ");
                 list[pos] = new AutoBoxHolder(null, o.address);
             }
         }

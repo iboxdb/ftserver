@@ -2,7 +2,6 @@ package ftserver;
 
 import iboxdb.localserver.*;
 import iboxdb.localserver.io.*;
-import java.util.ArrayList;
 import ftserver.fts.Engine;
 
 import static ftserver.App.*;
@@ -52,15 +51,13 @@ public class IndexServer extends LocalDatabaseServer {
 
             CacheLength = Config.SwitchToReadonlyIndexLength;
             SwapFileBuffer = Config.ItemConfig_SwapFileBuffer;
-            if (SwapFileBuffer < FileIncSize) {
-                FileIncSize = SwapFileBuffer;
-            }
+            //this size trigger "SWITCH" in Flush()
+            FileIncSize = Config.ItemConfig_SwapFileBuffer;
+
             if (App.IsAndroid) {
                 ReadStreamCount = 1;
             }
-            if (CacheLength == Config.SwitchToReadonlyIndexLength) {
-                //ReadStreamCount = 1;
-            }
+
             //log("DB Cache = " + lenMB + " MB");
             log("DB Switch Length = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
             new Engine().Config(this);

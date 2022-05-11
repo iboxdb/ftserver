@@ -390,21 +390,4 @@ public class IndexAPI {
         }
     }
 
-    public static Page GetOldPage(String url) {
-        ArrayList<Page> pages = App.Item.select(Page.class, "from Page where url==? limit 0,1", url);
-        if (pages.size() > 0) {
-            return pages.get(0);
-        }
-        return null;
-    }
-
-    public static String lastInputUrl() {
-        ArrayList<Page> pages = App.Item.select(Page.class, "from Page limit 0,2");
-        if (pages.size() < 2) {
-            // App may exit without indexing the Page. 
-            return "";
-        }
-        return pages.get(1).url;
-    }
-
 }
