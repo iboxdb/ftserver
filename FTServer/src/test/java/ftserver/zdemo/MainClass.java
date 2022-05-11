@@ -235,21 +235,21 @@ public class MainClass {
         int istran = 13;
         String split = "。"; //"10000";
         String strkw = "黄蓉 郭靖 洪七公";
-        strkw = "洪七公 黄蓉 郭靖";
-        strkw = "黄蓉 郭靖 公";
-        strkw = "郭靖 黄蓉";
+        //strkw = "洪七公 黄蓉 郭靖";
+        //strkw = "黄蓉 郭靖 公";
+        //strkw = "郭靖 黄蓉";
 
-        strkw = "黄蓉";
-        strkw = "时察";
-        strkw = "的";
-        strkw = "七十二路";
-        strkw = "十八掌";
-        strkw = "日日夜夜无穷无尽的";
-        strkw = "牛家村边绕 日日夜夜无穷无尽的";
-        strkw = "这几天";
-        strkw = "有 这几天";
-        strkw = "这几天 有";
-        strkw = "牛家村边绕";
+        //strkw = "黄蓉";
+        //strkw = "时察";
+        //strkw = "的";
+        //strkw = "七十二路";
+        //strkw = "十八掌";
+        //strkw = "日日夜夜无穷无尽的";
+        //strkw = "牛家村边绕 日日夜夜无穷无尽的";
+        //strkw = "这几天";
+        //strkw = "有 这几天";
+        //strkw = "这几天 有";
+        //strkw = "牛家村边绕";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
@@ -260,19 +260,19 @@ public class MainClass {
         int istran = 0;//10;
         String split = "\\.";
         String strkw = "Harry";
-        strkw = "Harry Philosopher";
-        strkw = "Philosopher";
-        strkw = "\"Harry Philosopher\"";
-        strkw = "\"He looks\"";
-        strkw = "He looks";
-        strkw = "\"he drove toward town he thought\"";
-        strkw = "\"he drove toward\"";
-        strkw = "\"he thought\"";
-        strkw = "\"he thought\" toward";
-        strkw = "toward \"he thought\"";
-        strkw = "he thought";
-        strkw = "he thought toward";
-        strkw = "He";
+        //strkw = "Harry Philosopher";
+        //strkw = "Philosopher";
+        //strkw = "\"Harry Philosopher\"";
+        //strkw = "\"He looks\"";
+        //strkw = "He looks";
+        //strkw = "\"he drove toward town he thought\"";
+        //strkw = "\"he drove toward\"";
+        //strkw = "\"he thought\"";
+        //strkw = "\"he thought\" toward";
+        //strkw = "toward \"he thought\"";
+        //strkw = "he thought";
+        //strkw = "he thought toward";
+        //strkw = "He";
         test_big(book, dbid, rebuild, split, strkw, istran);
     }
 
