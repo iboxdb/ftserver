@@ -25,16 +25,20 @@
 
     String ToKeyWordString(ArrayList<PageText> pages) {
         HashSet<String> hc = new HashSet<String>();
-        for (PageText pg : pages) {
-            if (pg.keyWord != null && pg.keyWord.previous != null) {
-                continue;
-            }
-            if (pg.keyWord instanceof KeyWordE) {
-                hc.add(((KeyWordE) pg.keyWord).K);
-            }
-            if (pg.keyWord instanceof KeyWordN) {
 
-                hc.add(((KeyWordN) pg.keyWord).toKString());
+        ArrayList<KeyWord> kws = new ArrayList<KeyWord>();
+        for (PageText pg : pages) {
+            kws.add(pg.keyWord);
+            if (pg.keyWord instanceof KeyWordN) {
+                kws.add(pg.keyWord.previous);
+            }
+        }
+        for (KeyWord kw : kws) {
+            if (kw instanceof KeyWordE) {
+                hc.add(((KeyWordE) kw).K);
+            }
+            if (kw instanceof KeyWordN) {
+                hc.add(((KeyWordN) kw).toKString());
             }
         }
 
