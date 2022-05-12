@@ -28,11 +28,13 @@
 
         ArrayList<KeyWord> kws = new ArrayList<KeyWord>();
         for (PageText pg : pages) {
-            kws.add(pg.keyWord);
-            if (pg.keyWord instanceof KeyWordN) {
-                kws.add(pg.keyWord.previous);
+            KeyWord kw = pg.keyWord;
+            while (kw instanceof KeyWordN) {
+                kws.add(kw);
+                kw = kw.previous;
             }
         }
+
         for (KeyWord kw : kws) {
             if (kw instanceof KeyWordE) {
                 hc.add(((KeyWordE) kw).K);
@@ -177,7 +179,7 @@
         hideMultiText("ldiv<%= IdToString(startId, '_')%>");
     <% if (!IsEnd(startId)) {
             //startId is a big number, in javascript, have to write big number as a 'String'
-    %>
+%>
         onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);

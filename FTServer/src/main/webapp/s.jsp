@@ -132,7 +132,7 @@
             function highlight(loadedDivId) {
 
                 var txt = document.title.substr(0, document.title.indexOf(','));
-                txt += (" " + extitle);
+                txt = extitle + " " + txt;
                 var div = document.getElementById(loadedDivId);
                 var ts = div.getElementsByClassName("stext");
                 var tshtml = [];
