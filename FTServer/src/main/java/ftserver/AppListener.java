@@ -59,6 +59,7 @@ public class AppListener implements ServletContextListener {
         if (tm < 3600L) {
             log("Low Memory System(" + tm + "MB), Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) / Config.DSize + 1;
+            Config.Index_CacheLength = Config.SwitchToReadonlyIndexLength;
 
             Config.Readonly_CacheLength = Config.mb(tm / 150) + 1;
             Config.Readonly_MaxDBCount = Config.mb(tm / 7) / Config.mb(tm / 150) / Config.DSize + 1;

@@ -49,7 +49,7 @@ public class IndexServer extends LocalDatabaseServer {
 
         public IndexConfig() {
 
-            CacheLength = Config.SwitchToReadonlyIndexLength;
+            CacheLength = Config.Index_CacheLength;
             SwapFileBuffer = Config.ItemConfig_SwapFileBuffer;
             //this size trigger "SWITCH" in Flush()
             FileIncSize = Config.ItemConfig_SwapFileBuffer;
@@ -59,7 +59,7 @@ public class IndexServer extends LocalDatabaseServer {
             }
 
             //log("DB Cache = " + lenMB + " MB");
-            log("DB Switch Length = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
+            log("DB Switch Length = " + (CacheLength / 1024L / 1024L) + " MB");
             Engine.Instance.Config(this);
         }
 

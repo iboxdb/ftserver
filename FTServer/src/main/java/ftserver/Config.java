@@ -12,6 +12,7 @@ public final class Config {
 
     // it should set bigger than 500MB
     public static long SwitchToReadonlyIndexLength = mb(500L * 1L) / DSize;
+    public static long Index_CacheLength = mb(500L * 1L) / DSize;
 
     public static long Readonly_CacheLength = mb(32);
 
@@ -24,7 +25,7 @@ public final class Config {
 
     //this should less than 2/3 MaxMemory
     public static long minCache() {
-        return SwitchToReadonlyIndexLength + Readonly_CacheLength * Readonly_MaxDBCount + ItemConfig_CacheLength
+        return Index_CacheLength + Readonly_CacheLength * Readonly_MaxDBCount + ItemConfig_CacheLength
                 + ItemConfig_SwapFileBuffer * 2;
     }
 

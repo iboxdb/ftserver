@@ -169,7 +169,7 @@
                 + "MEM:" + (java.lang.Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB ";
     %>
     <%=name%>  TIME: <%= content%>
-    <a href="#btnsearch" ><strong><%=  !IsEnd(startId) ? "CONTINUING" : "END"%></strong></a>
+    <a href="#btnsearch" ><strong><%=  !IsEnd(startId) ? "Loading" : "END"%></strong></a>
 
 </div>
 <br>
