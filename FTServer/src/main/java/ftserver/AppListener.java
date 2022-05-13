@@ -72,8 +72,6 @@ public class AppListener implements ServletContextListener {
         log("ReadOnly CacheLength = " + (Config.Readonly_CacheLength / 1024L / 1024L) + " MB (" + Config.Readonly_CacheLength + ")");
         log("ReadOnly Max DB Count = " + Config.Readonly_MaxDBCount);
 
-        log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
-
         //Config
         App.Item = new IndexServer().getInstance(IndexServer.ItemDB).get();
 
@@ -95,10 +93,12 @@ public class AppListener implements ServletContextListener {
             App.Indices.add(l, true);
         }
         App.Indices.add(start, false);
-        log("Current Index DB (" + start + ")");
         App.Index = App.Indices.get(App.Indices.length() - 1);
-
+        
+        log("ReadOnly Index DB (" + start + "), start from " + IndexServer.IndexDBStart);
+        log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
         log("DB Started...");
+        
         IndexPage.start();
 
         try {

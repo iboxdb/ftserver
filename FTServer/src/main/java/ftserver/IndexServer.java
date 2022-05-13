@@ -32,14 +32,15 @@ public class IndexServer extends LocalDatabaseServer {
             if (App.IsAndroid) {
                 ReadStreamCount = 1;
             }
-            log("ItemConfig CacheLength = " + (CacheLength / 1024L / 1024L) + " MB");
-            log("ItemConfig SwapFileBuffer = " + (SwapFileBuffer / 1024L / 1024L) + " MB");
-            log("ItemConfig ReadStreamCount = " + ReadStreamCount);
 
             ensureTable(PageSearchTerm.class, "/PageSearchTerm", "time", "keywords(" + PageSearchTerm.MAX_TERM_LENGTH + ")", "uid");
             ensureTable(Page.class, "Page", "textOrder");
             //the 'textOrder' is used to control url's order
             ensureIndex(Page.class, "Page", "url(" + Page.MAX_URL_LENGTH + ")", "textOrder");
+
+            log("ItemConfig CacheLength = " + (CacheLength / 1024L / 1024L) + " MB");
+            log("ItemConfig SwapFileBuffer = " + (SwapFileBuffer / 1024L / 1024L) + " MB");
+            log("ItemConfig ReadStreamCount = " + ReadStreamCount);
         }
     }
 
@@ -58,9 +59,11 @@ public class IndexServer extends LocalDatabaseServer {
                 ReadStreamCount = 1;
             }
 
-            //log("DB Cache = " + lenMB + " MB");
-            log("DB Switch Length = " + (CacheLength / 1024L / 1024L) + " MB");
             Engine.Instance.Config(this);
+
+            log("IndexConfig CacheLength = " + (CacheLength / 1024L / 1024L) + " MB");
+            log("IndexConfig FileSwitchLength = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
+
         }
 
         @Override
