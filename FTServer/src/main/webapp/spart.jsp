@@ -40,7 +40,10 @@
                 hc.add(((KeyWordE) kw).K);
             }
             if (kw instanceof KeyWordN) {
-                hc.add(((KeyWordN) kw).toKString());
+                String ks = ((KeyWordN) kw).toKString();
+                if (ks.length() > 1) {
+                    hc.add(ks);
+                }
             }
         }
 
@@ -179,7 +182,7 @@
         hideMultiText("ldiv<%= IdToString(startId, '_')%>");
     <% if (!IsEnd(startId)) {
             //startId is a big number, in javascript, have to write big number as a 'String'
-%>
+    %>
         onscroll_loaddiv("s<%= IdToString(startId, '_')%>", "<%= IdToString(startId, '_')%>");
     <%}%>
     }, 100);
