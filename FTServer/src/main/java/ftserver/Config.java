@@ -11,13 +11,13 @@ public final class Config {
     public static final long DSize = 1L;
 
     // it should set bigger than 500MB
-    public static long SwitchToReadonlyIndexLength = mb(500L * 1L) / DSize;
-    public static long Index_CacheLength = mb(500L * 1L) / DSize;
+    public static long SwitchToReadonlyIndexLength = mb(750L * 1L) / DSize;
+    public static long Index_CacheLength = mb(750L * 1L) / DSize;
 
     public static long Readonly_CacheLength = mb(32);
 
-    //Set 1400 MB Readonly Index Cache
-    public static long Readonly_MaxDBCount = mb(1400) / mb(32) / DSize;
+    //Set 1000 MB Readonly Index Cache
+    public static long Readonly_MaxDBCount = mb(1000) / mb(32) / DSize;
 
     //HTML Page Cache, this should set bigger, if have more memory. 
     public static long ItemConfig_CacheLength = mb(256);
