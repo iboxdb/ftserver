@@ -51,10 +51,10 @@ public class EasyOR {
             result.addAll(removeOneCN(cn));
         }
 
-        return result;
+        return filter(result);
     }
 
-    public static String compress(char[] cs) {
+    private static String compress(char[] cs) {
         StringBuilder r = new StringBuilder();
         for (char c : cs) {
             if (r.length() > 0 && r.charAt(r.length() - 1) == ' ' && c == ' ') {
@@ -104,6 +104,19 @@ public class EasyOR {
                     sb.append(" " + sps[j]);
                 }
                 r.add(sb.toString().trim());
+            }
+        }
+        return r;
+    }
+
+    private static ArrayList<String> filter(ArrayList<String> src) {
+        ArrayList<String> r = new ArrayList<String>();
+        for (String s : src) {
+            if (s != null) {
+                String s2 = s.trim();
+                if (s2.length() > 1) {
+                    r.add(s2);
+                }
             }
         }
         return r;
