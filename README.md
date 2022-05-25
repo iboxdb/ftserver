@@ -1,4 +1,4 @@
-## Full Text Search Lightweight Server for Java
+## Full Text Search Engine Server for Java
 
 
 ### User Guide
