@@ -9,7 +9,7 @@ public class EasyOR {
     static String[] removedWords;
 
     static {
-        removedWords = new String[]{"\"", "and", "with", "how", "of", "的", "吗"};
+        removedWords = new String[]{"\"", "and", "with", "how", "of", "the", "的", "吗"};
     }
 
     public static ArrayList<String> toOrCondition(String str) {
@@ -98,7 +98,7 @@ public class EasyOR {
                     if (i == j) {
                         continue;
                     }
-                    if (sps[j].length() < 3) {
+                    if (sps[j].length() < 2) {
                         continue;
                     }
                     sb.append(" " + sps[j]);
