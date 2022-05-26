@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import static ftserver.App.*;
+import ftserver.fts.Engine;
 
 @WebListener
 public class AppListener implements ServletContextListener {
@@ -94,11 +95,16 @@ public class AppListener implements ServletContextListener {
         }
         App.Indices.add(start, false);
         App.Index = App.Indices.get(App.Indices.length() - 1);
-        
+
         log("ReadOnly Index DB (" + start + "), start from " + IndexServer.IndexDBStart);
         log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
+
+        //bigger will more accurate, smaller will faster
+        Engine.KeyWordMaxScan = 10;
+        log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
+
         log("DB Started...");
-        
+
         IndexPage.start();
 
         try {

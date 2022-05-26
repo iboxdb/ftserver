@@ -1,12 +1,14 @@
 /* iBoxDB FTServer Bruce Yang CL-N */
 package ftserver.fts;
 
+import ftserver.App;
 import iboxdb.localserver.*;
 import java.util.*;
 
 public class Engine {
 
     public final static Engine Instance = new Engine();
+    public static int KeyWordMaxScan = Integer.MAX_VALUE;
 
     private Engine() {
 
@@ -228,6 +230,9 @@ public class Engine {
                     KeyWord r1_con = null;
                     long r1_id = -1;
 
+                    long last_r1_con_I = -1;
+                    long last_r1_con_I_count = 0;
+
                     @Override
                     public boolean hasNext() {
                         if (r1 != null && r1.hasNext()) {
@@ -241,6 +246,18 @@ public class Engine {
                             }
                             if (!nw.isLinked) {
                                 r1_id = r1_con.I;
+                            }
+
+                            if (last_r1_con_I == r1_con.I) {
+                                last_r1_con_I_count++;
+                                if (last_r1_con_I_count > Engine.KeyWordMaxScan && nw.size() > 1) {
+                                    nw.isLinked = false;
+                                    nw.isLinkedEnd = false;
+                                    //App.log(System.currentTimeMillis() + " No Join " + nw.toFullString());
+                                }
+                            } else {
+                                last_r1_con_I = r1_con.I;
+                                last_r1_con_I_count = 0;
                             }
 
                             r1 = search(box, nw, r1_con, maxId).iterator();
