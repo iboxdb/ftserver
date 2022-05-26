@@ -99,7 +99,7 @@ public class AppListener implements ServletContextListener {
         log("ReadOnly Index DB (" + start + "), start from " + IndexServer.IndexDBStart);
         log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
 
-        //bigger will more accurate, smaller will faster
+        //bigger will more accurate, smaller faster will jump some pages, 
         Engine.KeyWordMaxScan = 10;
         log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
 

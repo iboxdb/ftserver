@@ -252,8 +252,9 @@ public class Engine {
                                 last_r1_con_I_count++;
 
                                 if (last_r1_con_I_count > Engine.KeyWordMaxScan) {
-                                    nw.isLinked = false;
-                                    nw.isLinkedEnd = false;
+                                    r1_id = r1_con.I;
+                                    //nw.isLinked = false;
+                                    //nw.isLinkedEnd = false;
                                     //App.log(System.currentTimeMillis() + " No Join " + nw.toFullString());
                                 }
                             } else {
