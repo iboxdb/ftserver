@@ -36,7 +36,8 @@ public class EasyOrClass {
         print("数据库空间 最佳性能");        
         print("数据库空间　最佳性能");
         
-        print("杨铁心　杨康 尹志平　欧阳克 穆念慈");
+        print("郭靖　杨康 尹志平　欧阳克 穆念慈");        
+        print("郭靖　杨康 能 尹志平　欧阳克 穆念慈");
     }
 
     private static void print(String msg) {
