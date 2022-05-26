@@ -250,11 +250,8 @@ public class Engine {
 
                             if (last_r1_con_I == r1_con.I) {
                                 last_r1_con_I_count++;
-                                boolean cnLastChar = false;
-                                if (nw instanceof KeyWordN) {
-                                    cnLastChar = ((KeyWordN) nw).size() == 1;
-                                }
-                                if (last_r1_con_I_count > Engine.KeyWordMaxScan && (!cnLastChar)) {
+
+                                if (last_r1_con_I_count > Engine.KeyWordMaxScan) {
                                     nw.isLinked = false;
                                     nw.isLinkedEnd = false;
                                     //App.log(System.currentTimeMillis() + " No Join " + nw.toFullString());
