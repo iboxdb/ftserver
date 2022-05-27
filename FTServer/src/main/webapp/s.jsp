@@ -83,26 +83,6 @@
                     var sh = document.getElementById("searchHelp");
                     var q = document.getElementsByName("q")[0];
 
-                    var value = new String(q.value).trim();
-                    if (value.length > 1 && value.indexOf(" ") > 0 && value.indexOf('"') < 0
-                            && value.charCodeAt(0) < 0x3040)
-                    {
-                        value = "\"" + value + "\"";
-                        var url = splitHelperPage + encodeURI(value);
-                        html += "<a href='" + url + "' >" + value + ";</a> "
-                    }
-
-                    value = new String(q.value).trim();
-                    for (var i = 0; i < splitWord.length; i++) {
-                        value = value.replace(splitWord[i], " ");
-                    }
-                    value = value.trim();
-
-                    if (value != String(q.value)) {
-                        var url = splitHelperPage + encodeURI(value);
-                        html += "<a href='" + url + "' >" + value + ";</a> "
-                    }
-
                     sh.innerHTML = html;
                 } catch (e) {
                 }
