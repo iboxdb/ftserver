@@ -13,27 +13,33 @@ public class IndexPage {
     public static final String SystemShutdown = "SystemShutdown";
 
     public static void addSearchTerm(String keywords) {
-        if (keywords.length() < PageSearchTerm.MAX_TERM_LENGTH) {
-            PageSearchTerm pst = new PageSearchTerm();
-            pst.time = new Date();
-            pst.keywords = keywords;
-            pst.uid = UUID.randomUUID();
-
-            long huggersMem = 1024L * 1024L * 3L;
-            if (App.IsAndroid) {
-                huggersMem = 0;
-            }
-
-            boolean isShutdown = SystemShutdown.equals(keywords);
-
-            if (isShutdown) {
-                huggersMem = 0;
-            }
-            try (Box box = App.Item.cube()) {
-                box.d("/PageSearchTerm").insert(pst);
-                box.commit(huggersMem);
-            }
+        if (keywords == null) {
+            return;
         }
+        if (keywords.length() > PageSearchTerm.MAX_TERM_LENGTH) {
+            keywords = keywords.substring(0, PageSearchTerm.MAX_TERM_LENGTH - 1);
+        }
+
+        PageSearchTerm pst = new PageSearchTerm();
+        pst.time = new Date();
+        pst.keywords = keywords;
+        pst.uid = UUID.randomUUID();
+
+        long huggersMem = 1024L * 1024L * 3L;
+        if (App.IsAndroid) {
+            huggersMem = 0;
+        }
+
+        boolean isShutdown = SystemShutdown.equals(keywords);
+
+        if (isShutdown) {
+            huggersMem = 0;
+        }
+        try (Box box = App.Item.cube()) {
+            box.d("/PageSearchTerm").insert(pst);
+            box.commit(huggersMem);
+        }
+
     }
 
     public static ArrayList<PageSearchTerm> getSearchTerm(int len) {
