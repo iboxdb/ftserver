@@ -186,6 +186,12 @@ public class IndexPage {
                     Runnable act = backgroundThreadQueue.pollFirst();
                     if (act != null) {
                         act.run();
+                    } else {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            log(ex.getMessage());
+                        }
                     }
 
                     if (!isShutdown) {
