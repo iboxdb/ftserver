@@ -10,8 +10,6 @@ import java.util.regex.*;
 
 import static ftserver.App.*;
 import ftserver.fts.Engine;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebListener
 public class AppListener implements ServletContextListener {
