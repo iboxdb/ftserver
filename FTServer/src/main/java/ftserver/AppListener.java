@@ -53,7 +53,8 @@ public class AppListener implements ServletContextListener {
         String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
 
         if (getPomFile().exists() && (!App.IsAndroid)) {
-            path = getPomFile().getAbsolutePath().replace(POMXML, dir + File.separatorChar);
+            path = getPomFile().getAbsolutePath()
+                    .replace(POMXML, ".." + File.separatorChar + dir + File.separatorChar);
         }
 
         new File(path).mkdirs();
