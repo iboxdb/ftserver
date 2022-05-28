@@ -19,7 +19,7 @@ $ cd FTServer
 $ mvn package cargo:run
 ```
 
-5. Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+5. Open [http://127.0.0.1:8088/](http://127.0.0.1:8088/)
 
 6. Press [Ctrl-C] to stop the container
 
@@ -127,7 +127,7 @@ root      hard    nofile      500000
 root      soft    nofile      500000
 
 
-[user@localhost ~]$ firewall-cmd --add-port=8080/tcp --permanent
+[user@localhost ~]$ firewall-cmd --add-port=8088/tcp --permanent
 ```
 
 
