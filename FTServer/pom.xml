@@ -107,14 +107,69 @@
                 <configuration>
                     <container>
                         <containerId>tomcat9x</containerId>
+
+                        <!--
                         <type>embedded</type>
+                        -->
+                        <!-- Standalone -->
+                        <zipUrlInstaller>                            
+                            <url>https://downloads.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>
+                            <url>https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>                            
+                            <url>file:/home/user/Downloads/apache-tomcat-9.0.63.zip</url>                            
+                        </zipUrlInstaller>
+                        
+                           
                     </container>
                     <configuration>
                         <properties>                            
                             <cargo.hostname>localhost</cargo.hostname>
-                            <cargo.servlet.port>8080</cargo.servlet.port>
-                            <cargo.protocol>http</cargo.protocol>
+                            <cargo.servlet.port>8088</cargo.servlet.port>
+                            <cargo.protocol>http</cargo.protocol>   
+                            <cargo.jvmargs>-Xmx5G</cargo.jvmargs> 
+                            <cargo.runtime.args></cargo.runtime.args>                                            
                         </properties>
+
+                        <!--only work in standalone(default) mode, not embedded-->                  
+                        <xmlReplacements>
+                            <xmlReplacement>
+                                <file>conf/server.xml</file>
+                                <xpathExpression>//Server//Service//Connector</xpathExpression>
+                                <attributeName>backlog</attributeName>
+                                <value>2</value>
+                            </xmlReplacement>
+                            
+                            <xmlReplacement>
+                                <file>conf/server.xml</file>
+                                <xpathExpression>//Server//Service//Connector</xpathExpression>
+                                <attributeName>acceptCount</attributeName>
+                                <value>2</value>
+                            </xmlReplacement>
+                            
+                            <xmlReplacement>
+                                <file>conf/server.xml</file>
+                                <xpathExpression>//Server//Service//Connector</xpathExpression>
+                                <attributeName>maxConnections</attributeName>
+                                <value>8</value>
+                            </xmlReplacement>
+                            
+                            <xmlReplacement>
+                                <file>conf/server.xml</file>
+                                <xpathExpression>//Server//Service//Connector</xpathExpression>
+                                <attributeName>maxThreads</attributeName>
+                                <value>8</value>
+                            </xmlReplacement>
+                            
+                        </xmlReplacements>
+                       
+                        <files>
+                            <copy>
+                                <file>${basedir}/pom.xml</file>
+                                <tofile>pom.xml</tofile>
+                                <configfile>false</configfile>
+                                <overwrite>true</overwrite>
+                            </copy>
+                        </files>
+                        
                     </configuration>
                     <deployables>
                         <deployable>
