@@ -108,9 +108,9 @@
                     <container>
                         <containerId>tomcat9x</containerId>
 
-                        <!--
+                        
                         <type>embedded</type>
-                        -->
+                        
                         <!-- set Standalone(better) by removing type-embedded, use one of the following urls -->
                         <zipUrlInstaller>                            
                             <url>https://downloads.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>
@@ -162,16 +162,16 @@
                             
                         </xmlReplacements>
                        
-                       <!--
-                        <files>
-                            <copy>
-                                <file>${basedir}/pom.xml</file>
-                                <tofile>pom.xml</tofile>
-                                <configfile>false</configfile>
-                                <overwrite>true</overwrite>
-                            </copy>
-                        </files>
-                       --> 
+                        <!--
+                         <files>
+                             <copy>
+                                 <file>${basedir}/pom.xml</file>
+                                 <tofile>pom.bak.xml</tofile>
+                                 <configfile>false</configfile>
+                                 <overwrite>true</overwrite>
+                             </copy>
+                         </files>
+                        --> 
                     </configuration>
                     <deployables>
                         <deployable>

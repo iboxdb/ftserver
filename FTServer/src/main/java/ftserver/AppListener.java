@@ -10,6 +10,8 @@ import java.util.regex.*;
 
 import static ftserver.App.*;
 import ftserver.fts.Engine;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebListener
 public class AppListener implements ServletContextListener {
@@ -25,6 +27,10 @@ public class AppListener implements ServletContextListener {
         App.log("=====FTServer=====");
 
         log("Java Version: " + System.getProperty("java.version"));
+        long tm = java.lang.Runtime.getRuntime().maxMemory();
+        tm = (tm / 1024L / 1024L);
+        log("Max Memory(-Xmx): " + tm + " MB");
+
         App.IsAndroid = false;
         try {
             App.IsAndroid = Class.forName("dalvik.system.DexClassLoader") != null;
@@ -38,10 +44,6 @@ public class AppListener implements ServletContextListener {
         log("IsAndroid: " + App.IsAndroid);
 
         App.log("Current Web Path: " + new File("./").getAbsolutePath());
-
-        long tm = java.lang.Runtime.getRuntime().maxMemory();
-        tm = (tm / 1024L / 1024L);
-        log("Max Memory(-Xmx): " + tm + " MB");
 
         File mvnConfig = new File(".mvn/jvm.config");
         if (mvnConfig.exists()) {
@@ -57,7 +59,7 @@ public class AppListener implements ServletContextListener {
         }
 
         new File(path).mkdirs();
-        log(String.format("Current DB Path: %s ", new File(path).getAbsolutePath()));
+        log(String.format("Current DB Path: %s ", getFilePath(new File(path))));
         DB.root(path);
 
         if (tm < 3600L) {
@@ -191,5 +193,13 @@ public class AppListener implements ServletContextListener {
             f = new File("../../../../" + POMXML);
         }
         return f;
+    }
+
+    private String getFilePath(File f) {
+        try {
+            return f.getCanonicalPath();
+        } catch (IOException ex) {
+            return f.getAbsolutePath();
+        }
     }
 }
