@@ -76,10 +76,12 @@
         </style> 
         <script>
             var splitHelperPage = "s.jsp?q=";
-            function splitHelper() {
+            function splitHelper(more) {
                 try {
                     var html = "";
-                    var splitWord = [" of ", " a ", " to ", "的"];
+                    if (more) {
+                        html = "<a>" + more + "</a>";
+                    }
                     var sh = document.getElementById("searchHelp");
                     var q = document.getElementsByName("q")[0];
 
@@ -174,20 +176,29 @@
                     top = top - 500;
                     if (top <= se) {
                         var startId = div_load.startId;
+                        var div_load_bak = div_load;
                         div_load = null;
                         var xhr = new XMLHttpRequest();
                         xhr.onreadystatechange = function () {
                             if (xhr.readyState == XMLHttpRequest.DONE) {
-                                var html = xhr.responseText;
+                                var st = xhr.status;
+                                if (st == 200) {
+                                    var html = xhr.responseText;
+                                    var frag = document.createElement("div");
+                                    frag.innerHTML = html;
+                                    var maindiv = document.getElementById('maindiv');
+                                    maindiv.appendChild(frag);
 
-                                var frag = document.createElement("div");
-                                frag.innerHTML = html;
-                                var maindiv = document.getElementById('maindiv');
-                                maindiv.appendChild(frag);
-
-                                var ss = frag.getElementsByTagName("script");
-                                for (var i = 0; i < ss.length; i++) {
-                                    eval(ss[i].innerHTML);
+                                    var ss = frag.getElementsByTagName("script");
+                                    for (var i = 0; i < ss.length; i++) {
+                                        eval(ss[i].innerHTML);
+                                    }
+                                } else {
+                                    setTimeout(function () {
+                                        div_load = div_load_bak;
+                                        scroll_event();
+                                        //splitHelper("retry 3 " + st);
+                                    }, 2000);
                                 }
                             }
                         }
@@ -223,8 +234,7 @@
                         <div class="ui action input">
 
                             <input name="q" class="large" value="<%=name.replaceAll("\"", "&quot;")%>" required 
-                                   onfocus="formfocus()"  dir="auto" 
-                                   onchange="splitHelper()" />
+                                   onfocus="formfocus()"  dir="auto"   />
                             <input id="btnsearch" type="submit"  class="ui teal right button large" value="Search" /> 
                         </div>
                     </div>
@@ -237,7 +247,6 @@
                     function formfocus() {
                         document.getElementById('btnsearch').disabled = undefined;
                     }
-                    splitHelper();
                 </script>
             </div>
         </div>
