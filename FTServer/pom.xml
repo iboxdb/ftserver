@@ -123,7 +123,7 @@
                     <configuration>
                         <properties>                            
                             <cargo.hostname>localhost</cargo.hostname>
-                            <cargo.servlet.port>8088</cargo.servlet.port>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
                             <cargo.protocol>http</cargo.protocol>   
                             <cargo.jvmargs>-Xmx5G</cargo.jvmargs> 
                             <cargo.runtime.args></cargo.runtime.args>                                            
