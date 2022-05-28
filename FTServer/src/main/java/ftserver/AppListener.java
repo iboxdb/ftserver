@@ -22,42 +22,46 @@ public class AppListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        App.log("=====FTServer=====");
 
-        App.log("Current Path: " + new File("./").getAbsolutePath());
-
+        log("Java Version: " + System.getProperty("java.version"));
         App.IsAndroid = false;
         try {
             App.IsAndroid = Class.forName("dalvik.system.DexClassLoader") != null;
-            sce.getServletContext().setAttribute(App.class.getName(), App.class);
+            if (App.IsAndroid) {
+                System.setProperty("fts.isAndroid", Boolean.toString(App.IsAndroid));
+                sce.getServletContext().setAttribute(App.class.getName(), App.class);
+            }
         } catch (Throwable e) {
 
         }
-        log("IsAndroid = " + App.IsAndroid);
-        System.setProperty("fts.isAndroid", Boolean.toString(App.IsAndroid));
+        log("IsAndroid: " + App.IsAndroid);
 
-        //Path
-        String dir = "DATA_FTS_JAVA_161";
-
-        String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
-
-        File mvnConfig = new File(".mvn/jvm.config");
-        if (mvnConfig.exists()) {
-            log("Maven 3 -Xmx Setting " + mvnConfig.getAbsolutePath());
-            if (!App.IsAndroid) {
-                path = ".." + File.separatorChar + dir + File.separatorChar;
-            }
-        }
-
-        new File(path).mkdirs();
-        log("java.version = " + System.getProperty("java.version"));
-        log(String.format("DB Path=%s ", new File(path).getAbsolutePath()));
-        DB.root(path);
+        App.log("Current Web Path: " + new File("./").getAbsolutePath());
 
         long tm = java.lang.Runtime.getRuntime().maxMemory();
         tm = (tm / 1024L / 1024L);
-        // Test on 4000MB(4GB) setting.
-        log("-Xmx " + tm + " MB");
+        log("Max Memory(-Xmx): " + tm + " MB");
+
+        File mvnConfig = new File(".mvn/jvm.config");
+        if (mvnConfig.exists()) {
+            log("Maven 3 (-Xmx Setting): " + mvnConfig.getAbsolutePath());
+        }
+
+        //DB Path
+        String dir = "DATA_FTS_JAVA_161";
+        String path = System.getProperty("user.home") + File.separatorChar + dir + File.separatorChar;
+
+        if (getPomFile().exists() && (!App.IsAndroid)) {
+            path = getPomFile().getAbsolutePath().replace(POMXML, dir + File.separatorChar);
+        }
+
+        new File(path).mkdirs();
+        log(String.format("Current DB Path: %s ", new File(path).getAbsolutePath()));
+        DB.root(path);
+
         if (tm < 3600L) {
+            // Test on 4000MB(4GB) setting.
             log("Low Memory System(" + tm + "MB), Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) / Config.DSize + 1;
             Config.Index_CacheLength = Config.SwitchToReadonlyIndexLength;
@@ -103,13 +107,12 @@ public class AppListener implements ServletContextListener {
         Engine.KeyWordMaxScan = 10;
         log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
 
-        log("DB Started...");
-
         IndexPage.start();
+        log("=====DB Started=====");
 
         try {
             int httpPort = 8080;
-            File pomConfig = new File("pom.xml");
+            File pomConfig = getPomFile();
             if (pomConfig.exists()) {
 
                 FileInputStream fs = new FileInputStream(pomConfig);
@@ -175,5 +178,18 @@ public class AppListener implements ServletContextListener {
             App.Indices.close();
         }
         log("DB Closed");
+    }
+
+    private String POMXML = "pom.xml";
+
+    private File getPomFile() {
+        File f = new File(POMXML);
+        if (f.exists()) {
+            return f;
+        }
+        if (f.getAbsolutePath().contains("target")) {
+            f = new File("../../../../" + POMXML);
+        }
+        return f;
     }
 }

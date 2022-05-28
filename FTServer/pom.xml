@@ -111,11 +111,11 @@
                         <!--
                         <type>embedded</type>
                         -->
-                        <!-- Standalone -->
+                        <!-- set Standalone(better) by removing type-embedded, use one of the following urls -->
                         <zipUrlInstaller>                            
                             <url>https://downloads.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>
-                            <url>https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>                            
-                            <url>file:/home/user/Downloads/apache-tomcat-9.0.63.zip</url>                            
+                            <url>file:/home/user/Downloads/apache-tomcat-9.0.63.zip</url>
+                            <url>https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.zip</url>                                                                                
                         </zipUrlInstaller>
                         
                            
@@ -131,13 +131,14 @@
 
                         <!--only work in standalone(default) mode, not embedded-->                  
                         <xmlReplacements>
+                            
                             <xmlReplacement>
                                 <file>conf/server.xml</file>
                                 <xpathExpression>//Server//Service//Connector</xpathExpression>
                                 <attributeName>backlog</attributeName>
                                 <value>2</value>
                             </xmlReplacement>
-                            
+                            <!-- Server doesn't want to wait clients, rejects it as soon as possible -->
                             <xmlReplacement>
                                 <file>conf/server.xml</file>
                                 <xpathExpression>//Server//Service//Connector</xpathExpression>
@@ -161,6 +162,7 @@
                             
                         </xmlReplacements>
                        
+                       <!--
                         <files>
                             <copy>
                                 <file>${basedir}/pom.xml</file>
@@ -169,7 +171,7 @@
                                 <overwrite>true</overwrite>
                             </copy>
                         </files>
-                        
+                       --> 
                     </configuration>
                     <deployables>
                         <deployable>
