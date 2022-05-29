@@ -33,7 +33,7 @@
         <dependency>
             <groupId>iboxdb</groupId>
             <artifactId>iboxdb</artifactId>
-            <version>3.2</version>
+            <version>3.3.2</version>
         </dependency>
         
         <dependency>
