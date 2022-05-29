@@ -109,7 +109,8 @@ public class Html {
 
             return page;
         } catch (Throwable e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            log("EMSG:" + e.getMessage());
             return null;
         }
     }
