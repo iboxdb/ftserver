@@ -127,9 +127,13 @@
             <pre>CodeStart<code class="cs">  WinWinWin.GetDatabase().CopyTo(new ShowMirror(bakAddr, bakRoot), buffer) </code></pre>
         </div>
         <hr>
+
+        <a href="css/fts.png"><img src="css/fts.png" /></a>
+        <a href="css/fts.html">PngPng</a>
+
         <%
             HTML.tag("br");
-            for (int i = 0; i < 1100; i++) {
+            for (int i = 0; i < 10; i++) {
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(600) * 100 + 100;
