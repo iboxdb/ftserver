@@ -128,6 +128,8 @@
         </div>
         <hr>
 
+               <a href="./">Front Page</a>
+ 
         <a href="css/fts.png"><img src="css/fts.png" /></a>
         <a href="css/fts.html">PngPng</a>
 
