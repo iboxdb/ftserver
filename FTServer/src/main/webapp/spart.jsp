@@ -137,7 +137,7 @@
                             continue;
                         }
                         if (str.indexOf(" ") > 0) {
-                            str = "\"" + str + "\"";
+                            //str = "\"" + str + "\"";
                         }
                         try (Tag t = HTML.tag("a",
                                 "href:", "s.jsp?q=" + encode(str),
