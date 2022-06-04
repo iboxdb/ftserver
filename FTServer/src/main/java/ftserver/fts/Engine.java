@@ -232,6 +232,7 @@ public class Engine {
 
                     long last_r1_con_I = -1;
                     long last_r1_con_I_count = 0;
+                    long jumpTime = 0;
 
                     @Override
                     public boolean hasNext() {
@@ -254,8 +255,8 @@ public class Engine {
                                 if (last_r1_con_I_count > Engine.KeyWordMaxScan) {
                                     r1_id = r1_con.I;
 
-                                    maxId.jumpTime++;
-                                    if (maxId.jumpTime > Engine.KeyWordMaxScan) {
+                                    jumpTime++;
+                                    if (jumpTime > Engine.KeyWordMaxScan) {
                                         return false;
                                     }
                                 }
@@ -388,7 +389,6 @@ public class Engine {
 
         protected long id = Long.MAX_VALUE;
 
-        protected long jumpTime = 0;
     }
 
 }
