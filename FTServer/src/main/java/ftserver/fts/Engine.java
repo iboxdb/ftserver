@@ -253,9 +253,11 @@ public class Engine {
 
                                 if (last_r1_con_I_count > Engine.KeyWordMaxScan) {
                                     r1_id = r1_con.I;
-                                    //nw.isLinked = false;
-                                    //nw.isLinkedEnd = false;
-                                    //App.log(System.currentTimeMillis() + " No Join " + nw.toFullString());
+
+                                    maxId.jumpTime++;
+                                    if (maxId.jumpTime > Engine.KeyWordMaxScan) {
+                                        return false;
+                                    }
                                 }
                             } else {
                                 last_r1_con_I = r1_con.I;
@@ -386,6 +388,7 @@ public class Engine {
 
         protected long id = Long.MAX_VALUE;
 
+        protected long jumpTime = 0;
     }
 
 }
