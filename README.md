@@ -29,6 +29,8 @@ $ mvn package cargo:run
 
 Input a Full URL to index the Page, then search.
 
+Move page forward by re-indexing the page.
+
 
 #### Search Format
 
@@ -36,7 +38,7 @@ Input a Full URL to index the Page, then search.
 
 ["Word1 Word2 Word3"] => text has **"Word1 Word2 Word3"** as a whole
 
-Search [https http] => get almost all pages
+Search [https] or [http] => get almost all pages
 
 
 
