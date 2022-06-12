@@ -1,6 +1,8 @@
 package ftserver.fts;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
 
@@ -159,4 +161,23 @@ public class StringUtil {
 
     }
 
+    public String fromatFrenchInput(String str) {
+        if (str == null) {
+            return "";
+        }
+        if (str.contains("\"")) {
+            return str;
+        }
+        Pattern p = Pattern.compile("\\s(\\w+)([’'])(\\w+)", Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher m = p.matcher(" " + str.trim() + " ");
+
+        return m.replaceAll(" \"$1$2$3\"").trim();
+
+    }
+
+    public static void main(String[] arg) {
+        String str = "l’étranger ls’étranger S’inscrire S'Étatà d'étranger wouldn't I'm";
+        System.out.println(StringUtil.Instance.fromatFrenchInput(str));
+
+    }
 }

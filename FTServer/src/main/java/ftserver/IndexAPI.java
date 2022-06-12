@@ -83,7 +83,7 @@ public class IndexAPI {
 
     public static long[] Search(List<PageText> outputPages,
             String name, long[] t_startId, long pageCount) {
-        name = name.trim();
+        name = StringUtil.Instance.fromatFrenchInput(name);
         if (name.length() == 0 || name.length() > 150
                 || name.equals(IndexPage.SystemShutdown)) {
             return new long[]{-1, -1, -1};
