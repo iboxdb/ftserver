@@ -312,7 +312,7 @@ public class Engine {
                             return false;
                         }
 
-                        if (currentMaxId > (maxId.id + 1)) {
+                        if (iter == null || currentMaxId > (maxId.id)) {
                             currentMaxId = maxId.id;
                             Object kwk = kw instanceof KeyWordE ? ((KeyWordE) kw).K : ((KeyWordN) kw).K;
                             iter = (Iterator<KW>) box.scaler(kw.getClass(), ql, kwk, maxId.id).iterator();
