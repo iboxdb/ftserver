@@ -176,7 +176,7 @@ public class StringUtil {
     }
 
     public static void main(String[] arg) {
-        String str = "l’étranger ls’étranger S’inscrire S'Étatà d'étranger wouldn't I'm";
+        String str = "l’étranger ls’étranger S’inscrire S'Étatà d'étranger wouldn't I'm l'Europe l’Europe";
         System.out.println(StringUtil.Instance.fromatFrenchInput(str));
 
     }
