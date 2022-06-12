@@ -92,8 +92,8 @@
     String text = content.length() > 500 ? content.substring(300) : content;
     String keywords = "keyword1 keywords2,keyword3 hello";
 
-    title = title.replaceAll("\t|\r|\n|\"", "");
-    description = description.replaceAll("\t|\r|\n|\"", "");
+    title = title.replaceAll("\t|\r|\n|\"", " ");
+    description = description.replaceAll("\t|\r|\n|\"", " ");
 
     if (book == 0) {
         text += "  " + new Date();

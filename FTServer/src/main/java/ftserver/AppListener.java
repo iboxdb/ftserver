@@ -105,7 +105,7 @@ public class AppListener implements ServletContextListener {
         log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
 
         //bigger will more accurate, smaller faster will jump some pages, 
-        Engine.KeyWordMaxScan = 10;
+        Engine.KeyWordMaxScan = 200;
         log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
 
         IndexPage.start();
