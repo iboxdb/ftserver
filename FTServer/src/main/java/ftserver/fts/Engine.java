@@ -1,7 +1,6 @@
 /* iBoxDB FTServer Bruce Yang CL-N */
 package ftserver.fts;
 
-import ftserver.App;
 import iboxdb.localserver.*;
 import java.util.*;
 

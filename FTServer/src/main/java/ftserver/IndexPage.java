@@ -175,12 +175,13 @@ public class IndexPage {
     private static boolean isShutdown = false;
     private final static ConcurrentLinkedDeque<Runnable> backgroundThreadQueue = new ConcurrentLinkedDeque<>();
 
+    public static int HttpGet_SleepTime = 1000;
+
     public static void start() {
         isShutdown = false;
         backgroundThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final long SLEEP_TIME = 0;//2000;
 
                 while (!isShutdown) {
                     Runnable act = backgroundThreadQueue.pollFirst();
@@ -196,7 +197,7 @@ public class IndexPage {
 
                     if (!isShutdown) {
                         try {
-                            Thread.sleep(SLEEP_TIME);
+                            Thread.sleep(HttpGet_SleepTime);
                         } catch (InterruptedException ex) {
                             log(ex.getMessage());
                         }

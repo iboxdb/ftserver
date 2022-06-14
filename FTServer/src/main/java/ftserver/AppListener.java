@@ -15,7 +15,7 @@ import ftserver.fts.Engine;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 32);
+        App.log("AppListener Flag: " + 33);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -108,6 +108,8 @@ public class AppListener implements ServletContextListener {
         Engine.KeyWordMaxScan = 200;
         log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
 
+        IndexPage.HttpGet_SleepTime = 0;
+        log("HttpGet_SleepTime = " + IndexPage.HttpGet_SleepTime + "ms");
         IndexPage.start();
         log("=====DB Started=====");
 
