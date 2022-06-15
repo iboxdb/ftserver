@@ -133,6 +133,18 @@ root      soft    nofile      500000
 ```
 
 
+#### Java Version
+
+```
+//Java 11 Version
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+
+//Java 18 Version
+export JAVA_HOME=/home/user/Downloads/jdk-18.0.1.1
+
+```
+
+
 #### More
 
 [C# ASP.NET Core Version](https://github.com/iboxdb/ftserver-cs)
