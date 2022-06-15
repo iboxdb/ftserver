@@ -155,6 +155,7 @@ public class Lang {
             return true;
         }
 
+        //Korean
         // https://unicode-table.com/en/blocks/hangul-jamo/
         if (c >= 0x1100 && c <= 0x11FF) {
             return true;
@@ -163,13 +164,17 @@ public class Lang {
         if (c >= 0xD7B0 && c <= 0xD7FF) {
             return true;
         }
+        //https://unicode-table.com/en/blocks/hangul-syllables/        
+        if (c >= 0xAC00 && c <= 0xD7AF) {
+            return true;
+        }
+
         //Japanese
         /*
         if (c >= 0x3040 && c <= 0x312F) {
             return true;
         }
          */
-
         // https://unicode-table.com/en/blocks/latin-extended-additional/
         if (c >= 0x1E00 && c <= 0x1EFF) {
             return true;

@@ -10,7 +10,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="description" content="iBoxDB NoSQL Database Full Text Search Server FTS">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Full Text Search Server</title>
+        <title>Full Text Search Engine Server</title>
 
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> 
 

@@ -23,12 +23,12 @@ public class MainClass {
         System.out.println(java.lang.Runtime.getRuntime().maxMemory());
         DB.root("/tmp/");
 
-        //test1();
+        test1();
         //test_order();
         //DemoMainClass.main(args);
         //-Xmx=4G
         //test_big_n();
-        test_big_e();
+        //test_big_e();
     }
 
     public static void test_order() {
@@ -203,6 +203,7 @@ public class MainClass {
             }
 
             String[] teststr = new String[]{
+                "실제로 거의 모든",
                 "هویت",
                 "می‌خواهید نسخه‌های متفاوت",
                 "\"متعدد خارجی دارند و از\"",
