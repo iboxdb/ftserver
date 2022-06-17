@@ -9,7 +9,7 @@ public class EasyOR {
     static String[] removedWords;
 
     static {
-        removedWords = new String[]{"\"", " of ", "的"};
+        removedWords = new String[]{"\"", " of "}; // , "的"
     }
 
     public static ArrayList<String> toOrCondition(String str) {
