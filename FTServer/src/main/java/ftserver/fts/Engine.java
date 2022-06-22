@@ -314,7 +314,7 @@ public class Engine {
                         if (iter == null || currentMaxId > (maxId.id)) {
                             currentMaxId = maxId.id;
                             Object kwk = kw instanceof KeyWordE ? ((KeyWordE) kw).K : ((KeyWordN) kw).K;
-                            iter = (Iterator<KW>) box.scaler(kw.getClass(), ql, kwk, maxId.id).iterator();
+                            iter = (Iterator<KW>) box.scale(kw.getClass(), ql, kwk, maxId.id).iterator();
                         }
 
                         while (iter.hasNext()) {
@@ -376,10 +376,10 @@ public class Engine {
 
     private static <KW extends KeyWord> Iterable<KW> lessMatch(Box box, KW kw) {
         if (kw instanceof KeyWordE) {
-            return (Iterable<KW>) (Object) box.scaler(KeyWordE.class, "from /E where K<=? limit 0, 50", ((KeyWordE) kw).K);
+            return (Iterable<KW>) (Object) box.scale(KeyWordE.class, "from /E where K<=? limit 0, 50", ((KeyWordE) kw).K);
 
         } else {
-            return (Iterable<KW>) (Object) box.scaler(KeyWordN.class, "from /N where K<=? limit 0, 50", ((KeyWordN) kw).K);
+            return (Iterable<KW>) (Object) box.scale(KeyWordN.class, "from /N where K<=? limit 0, 50", ((KeyWordN) kw).K);
         }
     }
 
