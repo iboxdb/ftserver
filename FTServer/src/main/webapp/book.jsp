@@ -128,8 +128,8 @@
         </div>
         <hr>
 
-               <a href="./">Front Page</a>
- 
+        <a href="./">Front Page</a>
+
         <a href="css/fts.png"><img src="css/fts.png" /></a>
         <a href="css/fts.html">PngPng</a>
 
@@ -139,8 +139,9 @@
                 book = ran.nextInt(books.length);
                 start = ran.nextInt((int) base);
                 length = ran.nextInt(600) * 100 + 100;
-
-                length = ran.nextInt(26000);
+                if (book == 0) {
+                    length = ran.nextInt(26000);
+                }
                 String url = "book.jsp?book=" + book + "&start=" + start + "&length=" + length;
 
                 try (Tag t = HTML.tag("a", "href:", url)) {
