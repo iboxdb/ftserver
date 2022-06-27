@@ -203,7 +203,29 @@ public class Engine {
 
         final MaxID maxId = new MaxID();
         maxId.id = startId;
-        return search(box, map.toArray(new KeyWord[0]), maxId);
+        maxId.jumpTime = 0;
+        final Iterator<KeyWord> cd = search(box, map.toArray(new KeyWord[0]), maxId).iterator();
+        return new Iterable<KeyWord>() {
+
+            @Override
+            public Iterator<KeyWord> iterator() {
+                return new EngineIterator<KeyWord>() {
+                    @Override
+                    public boolean hasNext() {
+                        if (cd.hasNext()) {
+                            maxId.jumpTime = 0;
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public KeyWord next() {
+                        return cd.next();
+                    }
+                };
+            }
+        };
     }
 
     private Iterable<KeyWord> search(final Box box, final KeyWord[] kws, MaxID maxId) {
@@ -229,8 +251,6 @@ public class Engine {
                     KeyWord r1_con = null;
                     long r1_id = -1;
 
-                    long jumpTime = 0;
-
                     @Override
                     public boolean hasNext() {
                         if (r1 != null && r1.hasNext()) {
@@ -246,28 +266,10 @@ public class Engine {
                                 r1_id = r1_con.I;
                             }
 
-                            if (nw instanceof KeyWordE && r1_con instanceof KeyWordE) {
-                                if (((KeyWordE) nw).K.equals(((KeyWordE) r1_con).K)) {
-                                    return false;
-                                }
-                            }
-                            if (nw instanceof KeyWordN && r1_con instanceof KeyWordN) {
-                                if (((KeyWordN) nw).K == ((KeyWordN) r1_con).K) {
-                                    return false;
-                                }
-                            }
-
                             r1 = search(box, nw, r1_con, maxId).iterator();
                             if (r1.hasNext()) {
-                                jumpTime = 0;
                                 return true;
-                            } else {
-                                jumpTime++;
-                                if (jumpTime > Engine.KeyWordMaxScan) {
-                                    return false;
-                                }
                             }
-
                         }
                         return false;
                     }
@@ -287,6 +289,17 @@ public class Engine {
 
     private static <KW extends KeyWord> Iterable<KW> search(final Box box,
             final KW kw, final KeyWord con, final Engine.MaxID maxId) {
+
+        if (kw instanceof KeyWordE && con instanceof KeyWordE) {
+            if (((KeyWordE) kw).K.equals(((KeyWordE) con).K)) {
+                return new ArrayList<KW>();
+            }
+        }
+        if (kw instanceof KeyWordN && con instanceof KeyWordN) {
+            if (((KeyWordN) kw).K == ((KeyWordN) con).K) {
+                return new ArrayList<KW>();
+            }
+        }
 
         final String ql = kw instanceof KeyWordE
                 ? "from /E where K==? & I<=?"
@@ -322,6 +335,11 @@ public class Engine {
                             cache = iter.next();
 
                             maxId.id = cache.I;
+                            maxId.jumpTime++;
+                            if (maxId.jumpTime > Engine.KeyWordMaxScan) {
+                                break;
+                            }
+
                             currentMaxId = maxId.id;
                             if (con != null && con.I != maxId.id) {
                                 return false;
@@ -386,6 +404,7 @@ public class Engine {
     static final class MaxID {
 
         protected long id = Long.MAX_VALUE;
+        protected long jumpTime = 0;
 
     }
 

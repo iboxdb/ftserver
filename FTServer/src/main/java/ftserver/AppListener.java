@@ -15,7 +15,7 @@ import ftserver.fts.Engine;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 34);
+        App.log("AppListener Flag: " + 35);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -105,7 +105,7 @@ public class AppListener implements ServletContextListener {
         log("MinCache = " + (Config.minCache() / 1024L / 1024L) + " MB");
 
         //bigger will more accurate, smaller faster will jump some pages, 
-        Engine.KeyWordMaxScan = 2000;
+        Engine.KeyWordMaxScan = 10_000;
         log("KeyWordMaxScan = " + Engine.KeyWordMaxScan);
 
         IndexPage.HttpGet_SleepTime = 0;
