@@ -133,6 +133,8 @@ root      soft    nofile      500000
 
 //Stop OS File Indexing, Faster
 [user@localhost ~]$ tracker daemon -k
+//Remove cache, it has a slow db inside
+[user@localhost ~]$ rm -rf .cache/tracker/
 
 ```
 
