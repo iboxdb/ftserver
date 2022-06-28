@@ -292,11 +292,13 @@ public class Engine {
 
         if (kw instanceof KeyWordE && con instanceof KeyWordE) {
             if (((KeyWordE) kw).K.equals(((KeyWordE) con).K)) {
+                maxId.id = -1;
                 return new ArrayList<KW>();
             }
         }
         if (kw instanceof KeyWordN && con instanceof KeyWordN) {
             if (((KeyWordN) kw).K == ((KeyWordN) con).K) {
+                maxId.id = -1;
                 return new ArrayList<KW>();
             }
         }
