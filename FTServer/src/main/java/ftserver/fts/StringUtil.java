@@ -1,5 +1,6 @@
 package ftserver.fts;
 
+import ftserver.App;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -165,9 +166,10 @@ public class StringUtil {
         if (str == null) {
             return "";
         }
-        if (str.contains("\"")) {
+        if (str.contains("\"") || App.IsAndroid) {
             return str;
         }
+        //UNICODE_CHARACTER_CLASS since 1.7, some android using 1.6
         Pattern p = Pattern.compile("\\s(\\w+)([’'])(\\w+)", Pattern.UNICODE_CHARACTER_CLASS);
         Matcher m = p.matcher(" " + str.trim() + " ");
 
