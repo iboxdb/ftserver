@@ -108,7 +108,7 @@ page... = ...
 return page;
 ```
 
-#### Set Maximum Opened Files
+#### Set Maximum Opened Files Bigger
 
 ```sh
 [user@localhost ~]$ cat /proc/sys/fs/file-max
@@ -127,22 +127,45 @@ $ vi /etc/security/limits.conf
 *         soft    nofile      500000
 root      hard    nofile      500000
 root      soft    nofile      500000
+```
 
 
-[user@localhost ~]$ firewall-cmd --add-port=8088/tcp --permanent
+#### Stop OS File Indexing
 
-//Stop OS File Indexing, Faster
+```sh
+//Faster
 [user@localhost ~]$ tracker daemon -k
 
 //Remove cache, it has a slow db inside
 [user@localhost ~]$ rm -rf .cache/tracker/
-
 ```
 
 
-#### Java Version
+#### Set File Readahead(RA) lower
 
+```sh
+[user@localhost ~]$ sudo blockdev --report
+//if Readahead(RA) bigger than hardware speed, can set it lower.
+//it depends on hardware parameters.
+[user@localhost ~]$ sudo blockdev --setra 128 /dev/sda
+[user@localhost ~]$ sudo blockdev --setra 128 /dev/dm-0
+[user@localhost ~]$ sudo blockdev --setra 128 /dev/dm-1
+[user@localhost ~]$ lsblk -o NAME,RA
+
+[user@localhost ~]$ free -m
+[user@localhost ~]$ sudo sysctl vm.drop_caches=3
 ```
+
+#### Add Firewall Port for remoting access
+
+```sh
+[user@localhost ~]$ firewall-cmd --add-port=8088/tcp --permanent
+```
+
+
+#### Set Java Version
+
+```sh
 //Java 11 Version
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 
