@@ -15,7 +15,7 @@ import ftserver.fts.Engine;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 36);
+        App.log("AppListener Flag: " + 37);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }

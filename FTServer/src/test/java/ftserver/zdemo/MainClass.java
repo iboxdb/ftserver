@@ -218,8 +218,12 @@ public class MainClass {
                     }
                 }
 
-                for (String skw : engine.discover(box,
-                        'n', 's', 2,
+                for (String skw : engine.discoverEN(box,
+                        'n', 's', 2)) {
+                    System.out.println(skw);
+                }
+
+                for (String skw : engine.discoverCN(box,
                         '\u2E80', '\u9fa5', 2)) {
                     System.out.println(skw);
                 }
@@ -235,13 +239,13 @@ public class MainClass {
         boolean rebuild = false;
         int istran = 13;
         String split = "。"; //"10000";
-        
+
         String strkw = "黄蓉 郭靖 洪七公";
         strkw = "洪七公 黄蓉 郭靖";
         strkw = "黄蓉 郭靖 公";
         strkw = "郭靖 黄蓉";
         strkw = "黄蓉";
-        
+
         strkw = "时察";
         strkw = "的";
         strkw = "七十二路";
@@ -262,7 +266,7 @@ public class MainClass {
         int istran = 0;//10;
         String split = "\\.";
         String strkw = "Harry";
-        
+
         strkw = "Harry he";
         strkw = "he Harry";
         strkw = "Harry Philosopher";

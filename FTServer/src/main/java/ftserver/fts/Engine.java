@@ -85,11 +85,11 @@ public class Engine {
         }
     }
 
-    public LinkedHashSet<String> discover(final Box box,
-            char efrom, char eto, int elength,
-            char nfrom, char nto, int nlength) {
+    private Random ran = new Random();
+
+    public LinkedHashSet<String> discoverEN(final Box box,
+            char efrom, char eto, int elength) {
         LinkedHashSet<String> list = new LinkedHashSet<String>();
-        Random ran = new Random();
         if (elength > 0) {
             int len = ran.nextInt(KeyWord.MAX_WORD_LENGTH) + 1;
             char[] cs = new char[len];
@@ -113,6 +113,13 @@ public class Engine {
                 }
             }
         }
+        return list;
+    }
+
+    public LinkedHashSet<String> discoverCN(final Box box,
+            char nfrom, char nto, int nlength) {
+
+        LinkedHashSet<String> list = new LinkedHashSet<String>();
         if (nlength > 0) {
             char[] cs = new char[2];
             for (int i = 0; i < cs.length; i++) {
