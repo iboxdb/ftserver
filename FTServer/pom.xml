@@ -15,8 +15,20 @@
     </properties>
     
     <repositories> 
+       <repository>
+          <id>CentralRepository2</id>
+          <name>Central Packages</name>
+          <url>https://repo1.maven.org/maven2</url>
+        </repository>
+ 
+	<repository>
+          <id>RemoteRepository2</id>
+          <name>Remote Packages</name>
+          <url>https://github.com/iboxdb/teadb/raw/repository</url>
+        </repository>
+
         <repository>
-            <id>localrepository2</id>
+            <id>LocalRepository2</id>
             <name>Local Apache Maven Packages</name>
             <url>file:${basedir}/libs/repository</url>
         </repository>
