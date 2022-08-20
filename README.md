@@ -60,7 +60,7 @@ Search [https] or [http] => get almost all pages
 #### The Results Order
 The results order based on the **id()** number in **class PageText**,  descending order.
 
-A Page has many PageTexts. if don't need multiple Texts, modify **Html.getDefaultTexts(Page)**, returns only one PageText.
+A Page has many PageTexts. if don't need multiple Texts, modify **Html.getDefaultTexts(Page)**, returns only one PageText (the page description text only).
 
 the Page.GetRandomContent() method is used to keep the Search-Page-Content always changing, doesn't affect the real PageText order.
 
@@ -139,6 +139,8 @@ root      soft    nofile      500000
 //Remove cache, it has a slow db inside
 [user@localhost ~]$ rm -rf .cache/tracker/
 ```
+
+[Why does Tracker consume resources on my PC?](https://gnome.pages.gitlab.gnome.org/tracker/faq/#why-does-tracker-consume-resources-on-my-pc)
 
 
 #### Set File Readahead(RA) lower
