@@ -130,17 +130,15 @@ root      soft    nofile      500000
 ```
 
 
-#### Stop OS File Indexing
-
-```sh
-//Faster
-[user@localhost ~]$ tracker daemon -k
-
-//Remove cache, it has a slow db inside
-[user@localhost ~]$ rm -rf .cache/tracker/
-```
+#### Stop Tracker daemon
 
 [Why does Tracker consume resources on my PC?](https://gnome.pages.gitlab.gnome.org/tracker/faq/#why-does-tracker-consume-resources-on-my-pc)
+
+```sh
+[user@localhost ~]$ tracker daemon -k
+
+[user@localhost ~]$ rm -rf .cache/tracker/
+```
 
 
 #### Set File Readahead(RA) lower
