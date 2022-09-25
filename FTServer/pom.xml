@@ -15,12 +15,13 @@
     </properties>
     
     <repositories> 
-       <repository>
+<!-- 
+      <repository>
           <id>central</id>
           <name>Central Packages</name>
           <url>https://repo1.maven.org/maven2</url>
         </repository>
- 
+--> 
 	<repository>
           <id>RemoteRepository2</id>
           <name>Remote Packages</name>
