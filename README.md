@@ -6,9 +6,9 @@
 
 #### Setup
 
-1. [Install Java 11](https://jdk.java.net/)
+1. [Install Java 8+](https://jdk.java.net/)
 
-2. [Install Maven 3](https://maven.apache.org/)
+2. [Install Maven 3+](https://maven.apache.org/)
 
 3. Download this Project.
 
@@ -107,6 +107,15 @@ page.text = replace(doc.body().text());
 page... = ...
 return page;
 ```
+
+#### Configure Cache
+
+Setting JVM Memory from [FTServer/.mvn/jvm.config](FTServer/.mvn/jvm.config) , default is 4GB.
+
+Setting Index Readonly Cache (Readonly_MaxDBCount) from [FTServer/src/main/java/ftserver/Config.java](FTServer/src/main/java/ftserver/Config.java) .
+
+
+
 
 #### Set Maximum Opened Files Bigger
 

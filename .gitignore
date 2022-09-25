@@ -5,4 +5,5 @@
 /FTServer/target/
 *.ibx
 *.swp
+*.log
 DATA_FTS_JAVA_161
