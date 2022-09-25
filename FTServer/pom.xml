@@ -16,7 +16,7 @@
     
     <repositories> 
        <repository>
-          <id>CentralRepository2</id>
+          <id>central</id>
           <name>Central Packages</name>
           <url>https://repo1.maven.org/maven2</url>
         </repository>
