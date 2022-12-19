@@ -65,7 +65,6 @@ A Page has many PageTexts. if don't need multiple Texts, modify **Html.getDefaul
 the Page.GetRandomContent() method is used to keep the Search-Page-Content always changing, doesn't affect the real PageText order.
 
 Use the ID number to control the order instead of loading all pages to memory. 
-Or load top 100 pages to memory then re-order it by favor. 
 
 
 #### Search Method
@@ -115,6 +114,15 @@ Setting JVM Memory from [FTServer/.mvn/jvm.config](FTServer/.mvn/jvm.config) , d
 Setting Index Readonly Cache (Readonly_MaxDBCount) from [FTServer/src/main/java/ftserver/Config.java](FTServer/src/main/java/ftserver/Config.java) .
 
 
+#### Stop Tracker daemon
+
+[Why does Tracker consume resources on my PC?](https://gnome.pages.gitlab.gnome.org/tracker/faq/#why-does-tracker-consume-resources-on-my-pc)
+
+```sh
+[user@localhost ~]$ tracker daemon -k
+
+[user@localhost ~]$ rm -rf .cache/tracker/
+```
 
 
 #### Set Maximum Opened Files Bigger
@@ -136,17 +144,6 @@ $ vi /etc/security/limits.conf
 *         soft    nofile      500000
 root      hard    nofile      500000
 root      soft    nofile      500000
-```
-
-
-#### Stop Tracker daemon
-
-[Why does Tracker consume resources on my PC?](https://gnome.pages.gitlab.gnome.org/tracker/faq/#why-does-tracker-consume-resources-on-my-pc)
-
-```sh
-[user@localhost ~]$ tracker daemon -k
-
-[user@localhost ~]$ rm -rf .cache/tracker/
 ```
 
 
