@@ -46,7 +46,7 @@
         <dependency>
             <groupId>iboxdb</groupId>
             <artifactId>iboxdb</artifactId>
-            <version>3.5</version>
+            <version>3.9.1</version>
         </dependency>
         
         <dependency>

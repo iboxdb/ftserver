@@ -1,0 +1,33 @@
+
+<project>   
+    <repositories> 
+        <repository>
+            <id>RemoteRepository2</id>
+            <name>Remote Packages</name>
+            <url>https://github.com/iboxdb/teadb/raw/repository</url>
+        </repository>
+        <repository>
+            <id>LocalRepository2</id>
+            <name>Local Apache Maven Packages</name>
+            <url>file:${basedir}/libs/repository</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>iboxdb</groupId>
+            <artifactId>iboxdb</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+    </dependencies>
+</project> 
+
+
+if can't connect to RemoteRepository2, use this local deploy, and copy to LocalRepository2.
+
+
+mvn deploy:deploy-file -Dfile=iboxdb-3.9.1.jar -DgroupId=iboxdb -DartifactId=iboxdb -Dversion=3.9.1 -Dpackaging=jar -Durl=file:./repository/ -DrepositoryId=repository -DupdateReleaseInfo=true
+
+
+
+
