@@ -69,6 +69,7 @@ public class AppListener implements ServletContextListener {
 
             Config.Readonly_CacheLength = Config.mb(tm / 150) + 1;
             Config.Readonly_MaxDBCount = Config.mb(tm / 7) / Config.mb(tm / 150) / Config.DSize + 1;
+            Config.ShortCacheLength = Config.Readonly_CacheLength;
 
             Config.ItemConfig_CacheLength = Config.mb(tm / 30) + 1;
             Config.ItemConfig_SwapFileBuffer = (int) Config.mb(tm / 150) + 1;
