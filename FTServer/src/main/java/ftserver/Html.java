@@ -5,6 +5,7 @@ import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 import static ftserver.App.*;
+import ftserver.fts.*;
 
 public class Html {
 
@@ -100,9 +101,15 @@ public class Html {
                 page.text += " " + title;
             }
             if (description.length() > 500) {
+                //En
                 description = description.substring(0, 500);
             }
-
+            if (description.length() > 300) {
+                if (!StringUtil.Instance.isWord(description.charAt(0))) {
+                    //CN
+                    description = description.substring(0, 300);
+                }
+            }
             page.title = title;
             page.keywords = keywords;
             page.description = description;
