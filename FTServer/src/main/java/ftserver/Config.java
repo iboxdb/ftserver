@@ -12,7 +12,7 @@ public final class Config {
 
     //only index description, not full text, faster indexing    
     //if wanting more Pages, dotn't care the content, set it to True
-    public static boolean DescriptionOnly = true;
+    public static boolean DescriptionOnly = false;
 
     public static long Index_CacheLength = mb(800L) / DSize;
 
