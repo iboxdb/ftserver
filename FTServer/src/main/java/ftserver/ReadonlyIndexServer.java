@@ -4,7 +4,6 @@ import iboxdb.localserver.*;
 import iboxdb.localserver.io.*;
 import java.io.*;
 
-
 public class ReadonlyIndexServer extends LocalDatabaseServer {
 
     public boolean OutOfCache = false;
@@ -27,6 +26,9 @@ public class ReadonlyIndexServer extends LocalDatabaseServer {
             this.address = address;
             this.OutOfCache = outOfCache;
             this.CacheLength = Config.Readonly_CacheLength;
+            if (outOfCache) {
+                this.CacheLength = Config.ShortCacheLength;
+            }
             if (this.CacheLength < Config.lowReadonlyCache) {
                 this.CacheLength = Config.lowReadonlyCache;
             }

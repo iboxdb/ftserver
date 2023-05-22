@@ -77,6 +77,7 @@ public class AppListener implements ServletContextListener {
 
         log("ReadOnly CacheLength = " + (Config.Readonly_CacheLength / 1024L / 1024L) + " MB (" + Config.Readonly_CacheLength + ")");
         log("ReadOnly Max DB Count = " + Config.Readonly_MaxDBCount);
+        log("ReadOnly ShortCacheLength = " + (Config.ShortCacheLength / 1024L / 1024L) + " MB ");
 
         //Config
         App.Item = new IndexServer().getInstance(IndexServer.ItemDB).get();

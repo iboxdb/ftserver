@@ -10,7 +10,7 @@ public final class Config {
 
     public static final long DSize = 1L;
 
-    //only index description, not full text    
+    //only index description, not full text, faster indexing    
     public static boolean DescriptionOnly = true;
 
     public static long Index_CacheLength = mb(800L) / DSize;
@@ -20,17 +20,19 @@ public final class Config {
     public static long SwitchToReadonlyIndexLength = mb(DescriptionOnly ? 1024L * 5L : 750L) / DSize;
 
     //Readonly Cache after Switch One Database To Readonly
-    public static long Readonly_CacheLength = SwitchToReadonlyIndexLength / 23;
+    public static long Readonly_CacheLength = SwitchToReadonlyIndexLength / 23L;
 
     //How Many Readonly Databases Having long Cache
     //Set 1000 MB Readonly Index Cache
     public static long Readonly_MaxDBCount = mb(1000) / Readonly_CacheLength / DSize;
 
-    //HTML Page Cache, this should set bigger, if have more memory. 
+    public static long ShortCacheLength = mb(32L * (DescriptionOnly ? 2 : 1));
+
+    //HTML Page Cache, this should set bigger, if having more memory. 
     public static long ItemConfig_CacheLength = mb(256);
     public static int ItemConfig_SwapFileBuffer = (int) mb(20);
 
-    //this should less than 2/3 MaxMemory
+    //this should less than 1/2 MaxMemory
     public static long minCache() {
         return Index_CacheLength + Readonly_CacheLength * Readonly_MaxDBCount + ItemConfig_CacheLength
                 + ItemConfig_SwapFileBuffer * 2;
