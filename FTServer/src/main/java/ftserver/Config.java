@@ -11,13 +11,14 @@ public final class Config {
     public static final long DSize = 1L;
 
     //only index description, not full text, faster indexing    
+    //if wanting more Pages, dotn't care the content, set it to True
     public static boolean DescriptionOnly = true;
 
     public static long Index_CacheLength = mb(800L) / DSize;
 
     //this should set bigger than 500MB. 
-    //for DescriptionOnly, it can set bigger, because it might load 5% to Memory Only 
-    public static long SwitchToReadonlyIndexLength = mb(DescriptionOnly ? 1024L * 5L : 750L) / DSize;
+    //for DescriptionOnly, it can set bigger, because it might load Only 10% to Memory 
+    public static long SwitchToReadonlyIndexLength = mb(DescriptionOnly ? 1024L * 2L : 750L) / DSize;
 
     //Readonly Cache after Switch One Database To Readonly
     public static long Readonly_CacheLength = SwitchToReadonlyIndexLength / 23L;
