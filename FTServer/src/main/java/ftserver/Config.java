@@ -10,14 +10,21 @@ public final class Config {
 
     public static final long DSize = 1L;
 
-    // it should set bigger than 500MB
-    public static long SwitchToReadonlyIndexLength = mb(750L * 1L) / DSize;
-    public static long Index_CacheLength = mb(750L * 1L) / DSize;
+    //only index description, not full text    
+    public static boolean DescriptionOnly = true;
 
-    public static long Readonly_CacheLength = mb(32);
+    public static long Index_CacheLength = mb(800L) / DSize;
 
+    //this should set bigger than 500MB. 
+    //for DescriptionOnly, it can set bigger, because it might load 5% to Memory Only 
+    public static long SwitchToReadonlyIndexLength = mb(DescriptionOnly ? 1024L * 5L : 750L) / DSize;
+
+    //Readonly Cache after Switch One Database To Readonly
+    public static long Readonly_CacheLength = SwitchToReadonlyIndexLength / 23;
+
+    //How Many Readonly Databases Having long Cache
     //Set 1000 MB Readonly Index Cache
-    public static long Readonly_MaxDBCount = mb(1000) / mb(32) / DSize;
+    public static long Readonly_MaxDBCount = mb(1000) / Readonly_CacheLength / DSize;
 
     //HTML Page Cache, this should set bigger, if have more memory. 
     public static long ItemConfig_CacheLength = mb(256);

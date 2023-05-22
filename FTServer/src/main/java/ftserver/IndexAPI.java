@@ -302,6 +302,9 @@ public class IndexAPI {
         ArrayList<PageText> ptlist = Html.getDefaultTexts(page);
         int count = 0;
 
+        if (ptlist.size() == 0) {
+            log("[No Description]");
+        }
         for (PageText pt : ptlist) {
             count++;
             addPageTextIndex(pt, count == ptlist.size() ? 0 : HuggersMemory);

@@ -63,7 +63,7 @@ public class IndexServer extends LocalDatabaseServer {
 
             log("IndexConfig CacheLength = " + (CacheLength / 1024L / 1024L) + " MB");
             log("IndexConfig FileSwitchLength = " + (Config.SwitchToReadonlyIndexLength / 1024L / 1024L) + " MB");
-
+            log("Index Description Only = " + Config.DescriptionOnly + "");
         }
 
         @Override

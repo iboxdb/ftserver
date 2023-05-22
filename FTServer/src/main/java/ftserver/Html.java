@@ -183,10 +183,11 @@ public class Html {
             long p = page.isKeyPage ? PageText.descriptionKeyPriority : PageText.descriptionPriority;
             result.add(getDefaultText(page, PageText.toId(page.textOrder, p)));
         }
-        if (page.text != null && page.text.length() > 0) {
-            result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.contextPriority)));
+        if (!Config.DescriptionOnly) {
+            if (page.text != null && page.text.length() > 0) {
+                result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.contextPriority)));
+            }
         }
-
         return result;
     }
 

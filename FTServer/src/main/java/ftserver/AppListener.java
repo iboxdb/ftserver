@@ -15,7 +15,7 @@ import ftserver.fts.Engine;
 public class AppListener implements ServletContextListener {
 
     public AppListener() {
-        App.log("AppListener Flag: " + 37);
+        App.log("AppListener Flag: " + 38);
         App.log("AppListener ClassLoader: " + getClass().getClassLoader().getClass().getName());
         App.log("Thread ContextClassLoader: " + Thread.currentThread().getContextClassLoader().getClass().getName());
     }
@@ -62,7 +62,7 @@ public class AppListener implements ServletContextListener {
         DB.root(path);
 
         if (tm < 3600L) {
-            // Test on 4000MB(4GB) setting.
+            // Tested on 4000MB(4GB) setting.
             log("Low Memory System(" + tm + "MB), Reset Config");
             Config.SwitchToReadonlyIndexLength = Config.mb(tm / 4) / Config.DSize + 1;
             Config.Index_CacheLength = Config.SwitchToReadonlyIndexLength;
