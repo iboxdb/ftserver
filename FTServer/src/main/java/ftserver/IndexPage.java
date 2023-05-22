@@ -96,6 +96,12 @@ public class IndexPage {
         Page p = Html.get(url, subUrls);
         long ioend = System.currentTimeMillis();
 
+        if (subUrls.size() > 0) {
+            subUrls.remove(url);
+            subUrls.remove(url + "/");
+            subUrls.remove(url.substring(0, url.length() - 1));
+            runBGTask(subUrls, isKeyPage);
+        }
         if (p == null) {
             return "Temporarily Unreachable";
         } else {
@@ -113,13 +119,6 @@ public class IndexPage {
             long indexend = System.currentTimeMillis();
             log("TIME IO:" + (ioend - begin) / 1000.0
                     + " INDEX:" + (indexend - ioend) / 1000.0 + "  TEXTORDER:" + textOrder + " (" + dbaddr + ") ");
-
-            subUrls.remove(url);
-            subUrls.remove(url + "/");
-            subUrls.remove(url.substring(0, url.length() - 1));
-
-            runBGTask(subUrls, isKeyPage);
-
             return url;
         }
     }

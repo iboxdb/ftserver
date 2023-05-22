@@ -107,6 +107,9 @@ public class Html {
             page.keywords = keywords;
             page.description = description;
 
+            if (Config.DescriptionOnly) {
+                page.text = "";
+            }
             return page;
         } catch (Throwable e) {
             //e.printStackTrace();
@@ -183,11 +186,10 @@ public class Html {
             long p = page.isKeyPage ? PageText.descriptionKeyPriority : PageText.descriptionPriority;
             result.add(getDefaultText(page, PageText.toId(page.textOrder, p)));
         }
-        if (!Config.DescriptionOnly) {
-            if (page.text != null && page.text.length() > 0) {
-                result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.contextPriority)));
-            }
+        if (page.text != null && page.text.length() > 0) {
+            result.add(getDefaultText(page, PageText.toId(page.textOrder, PageText.contextPriority)));
         }
+
         return result;
     }
 
