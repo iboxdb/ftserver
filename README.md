@@ -19,6 +19,9 @@ $ cd FTServer
 $ mvn package cargo:run
 ```
 
+set local repository if can't connect to remote repository [FTServer/libs/repository/deploy.txt](FTServer/libs/repository/deploy.txt) .
+
+
 5. Open [http://127.0.0.1:8088/](http://127.0.0.1:8088/)
 
 6. Press [Ctrl-C] to stop the container
@@ -30,6 +33,7 @@ $ mvn package cargo:run
 Input a Full URL to index the Page, then search.
 
 Move page forward by re-indexing the page.
+
 
 
 #### Search Format
@@ -178,8 +182,12 @@ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 //Java 18 Version
 export JAVA_HOME=/home/user/Downloads/jdk-18.0.1.1
 
-```
+//Java 21 Version
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21.0.2.0.13-1.el9.x86_64
 
+$ alternatives --config java
+
+```
 
 #### More
 
