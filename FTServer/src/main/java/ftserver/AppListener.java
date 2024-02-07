@@ -154,20 +154,31 @@ public class AppListener implements ServletContextListener {
                     }
                 }
 
-                //java.awt.Desktop.getDesktop().browse(new URI("http://127.0.0.1:" + httpPort));
                 URI url = new URI("http://127.0.0.1:" + httpPort);
+
+//if GET UnsatisfiedLinkError, download another JDK it has libawt_xawt.so included
+//java.lang.UnsatisfiedLinkError: Can't load library: /usr/lib/jvm/java-11-openjdk-11.0.21.0.9-2.el9.x86_64/lib/libawt_xawt.so
+//-------
+//example:                
+// sudo dnf provides /usr/lib/jvm/java-21-openjdk-21.0.2.0.13-1.el9.x86_64/lib/libawt_xawt.so
+                //log("isDesktopSupported: " + java.awt.Desktop.isDesktopSupported());
+                //java.awt.Desktop.getDesktop().browse(url);
                 if (!App.IsAndroid)
                 try {
                     Class desktop = Class.forName("java.awt.Desktop");
                     Object deskA = desktop.getMethod("getDesktop").invoke(null);
                     deskA.getClass().getMethod("browse", URI.class).invoke(deskA, url);
                 } catch (Throwable de) {
+                    if (de.getCause() != null) {
+                        log(de.getCause().getMessage());
+                        log("try another JDK it has /lib/libawt_xawt.so. :export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21.0.2.0.13-1.el9.x86_64");
+                    }
                     log("Browser " + url.toString());
                 }
 
             }
         } catch (Throwable e) {
-
+            e.printStackTrace();
         }
     }
 
