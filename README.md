@@ -19,9 +19,7 @@ $ cd FTServer
 $ mvn package cargo:run
 ```
 
-set local repository if can't connect to remote repository [FTServer/libs/repository/deploy.txt](FTServer/libs/repository/deploy.txt) .
-
-
+ 
 5. Open [http://127.0.0.1:8088/](http://127.0.0.1:8088/)
 
 6. Press [Ctrl-C] to stop the container
