@@ -30,4 +30,8 @@ mvn deploy:deploy-file -Dfile=iboxdb-3.9.2.jar -DgroupId=iboxdb -DartifactId=ibo
 
 
 
+delete cache
+rm -rf $HOME/.m2/repository/iboxdb/
+
+
 
